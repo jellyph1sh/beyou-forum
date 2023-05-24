@@ -1,0 +1,90 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
+     url('../fonts/Poppins-Semi/Poppins-SemiBold.woff') format('woff');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #32333B;
+}
+
+.containerLogin{
+    background-color: #28292F;
+    border: 3px solid #D36638;
+    padding: 1rem;
+    width: 33rem;
+    min-height: 80vh;
+    border-radius: 20px;
+    align-items: center;
+    gap: 3vh;
+}
+
+.titleLogin {
+    font-family: 'Poppins';
+    font-size: 2.75rem;
+    color: whitesmoke;
+    font-weight: 900;
+}
+
+.subTitleLogin {
+    font-size: 1rem;
+    color: #A6A6A6;
+    font-family: 'Poppins',monospace;
+}
+
+.textCatLogin {
+    font-family: 'Poppins',monospace;
+    font-size: 1rem;
+    color: whitesmoke;
+}
+
+.inputLog {
+    border-radius: 5px;
+    border: 2px solid whitesmoke;
+    width: 30vw;
+    padding: 0.8rem 0;
+    padding-left: 0.5rem;
+    padding-right: 3rem;
+    width: 18rem;
+    background-color: transparent;
+    color: lightgray;
+}
+
+.submitbutton {
+    background-color: transparent;
+    border-radius: 5px;
+    border: 3px solid #D36638 ;
+    color: #ADADAD;
+    padding: 0.5rem 2rem;
+    font-weight: 900;
+
+}
+.formStyleLog {
+    gap: 3vh;
+}
+
+.remember {
+    color: lightgray;
+    font-size: 1rem;
+    font-family: 'Poppins',monospace;
+}
+
+input[type="checkbox"]  {
+    accent-color: #D36638;
+}
+.submitbutton:hover {
+    background-color: #D36638;
+    cursor: pointer;
+    transition: 0.8s;
+}
+
+.rememberContainer {
+    gap: 2vw;
+    margin-top: 5vh;
+    /* border: 1px solid white; */
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8vh;
+}
