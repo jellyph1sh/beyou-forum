@@ -22,6 +22,8 @@ nav{
     width: max-content;
     padding: 0 2vw;
     left: 0;
+    top: 0;
+    height: 100%;
     z-index: 999;
     background-color: #28292F;
 }
@@ -50,6 +52,65 @@ nav{
 
 .linkPages {
     align-items: center;
+}
+
+/*--------------------- Texts ---------------------*/
+
+.labelNav, #toggle{
+    display: none;
+    color: white;
+}
+
+.underlineNav {
+    height: 0.2rem;
+    border-radius: 999px;
+    background-color: #A0A0A0;
+}
+
+.titleCatNav {
+    margin: 1rem;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    font-family: 'Poppins-regular';
+    color: whitesmoke;
+}
+
+.nameCatNav {
+    width: max-content;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    font-family: 'Poppins-regular',sans-serif;
+    color: whitesmoke;
+}
+
+.websiteName {
+    font-family: 'Poppins',sans-serif;
+    color: #FFFFFF;
+}
+
+.websiteName:hover {
+    cursor: pointer;
+}
+
+.googleSpan {
+    color: white;
+}
+
+.iconAccountStyle {
+    width: 2rem;
+    height: 2rem;
+}
+
+.btnCatContainer span {
+    justify-self: flex-start;
+}
+
+.marginCat {
+    margin-bottom: 5vh;
+}
+
+a {
+    text-decoration: none;
 }
 
 /*--------------------- Responsive ---------------------*/
@@ -121,61 +182,3 @@ nav{
     }
 }
 
-/*--------------------- Texts ---------------------*/
-
-.labelNav, #toggle{
-    display: none;
-    color: white;
-}
-
-.underlineNav {
-    height: 0.2rem;
-    border-radius: 999px;
-    background-color: #A0A0A0;
-}
-
-.titleCatNav {
-    margin: 1rem;
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    font-family: 'Poppins-regular';
-    color: whitesmoke;
-}
-
-.nameCatNav {
-    width: max-content;
-    margin-left: 0.5rem;
-    font-size: 0.9rem;
-    font-family: 'Poppins-regular',sans-serif;
-    color: whitesmoke;
-}
-
-.websiteName {
-    font-family: 'Poppins',sans-serif;
-    color: #FFFFFF;
-}
-
-.websiteName:hover {
-    cursor: pointer;
-}
-
-.googleSpan {
-    color: white;
-}
-
-.iconAccountStyle {
-    width: 2rem;
-    height: 2rem;
-}
-
-.btnCatContainer span {
-    justify-self: flex-start;
-}
-
-.marginCat {
-    margin-bottom: 5vh;
-}
-
-a {
-    text-decoration: none;
-}

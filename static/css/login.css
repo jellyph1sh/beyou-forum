@@ -36,6 +36,9 @@ body {
     .formStyleLog {
         width: 70%;
     }
+    .formStyleRegister{
+        width: 70%;
+    }
 }
 
 @media  screen and (min-width : 1200px) {
@@ -44,7 +47,7 @@ body {
     }
     .containerLogin {   
         width: 35rem;
-        height: max-content;
+        height: 100%;
         margin-left: 15vw;
         gap: 3vh;
         min-height: 80vh;
@@ -56,6 +59,9 @@ body {
         width: 90%;
     }
     .formStyleLog {
+        width: 70%;
+    }
+    .formStyleRegister {
         width: 70%;
     }
 }
@@ -112,7 +118,6 @@ body {
 }
 
 .textCatLogin {
-
     font-size: 1rem;
     font-family: 'Poppins',monospace;
     color: whitesmoke;
@@ -130,6 +135,10 @@ body {
 
 .formStyleLog {
     gap: 3vh;
+}
+
+.formStyleRegister {
+    gap: 1vh;
 }
 
 .remember {
