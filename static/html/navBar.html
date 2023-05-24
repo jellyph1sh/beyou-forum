@@ -1,0 +1,41 @@
+{{ define "navBar"}}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+     <nav>
+        <label class="labelNav" for="toggle">☰</label>
+        <input type="checkbox" id="toggle">
+        <div class="linkPages columnContainer">
+            <h1 class="websiteName"><span class="colorWebsiteName">Bword</span> Studio</h1>
+            <span class="underlineNav"></span>
+            <h3 class="titleCatNav">GLOBAL</h3>
+            <div class="columnContainer containerCatNav">
+                <div class="btnCatContainer rowContainer">
+                    <span class="googleSpan material-symbols-outlined"> tag </span>
+                    <h1 class="nameCatNav">Most viewed hashtags</h1>
+                </div>
+                <div class="btnCatContainer rowContainer">
+                    <span class="googleSpan material-symbols-outlined">thumb_up</span>
+                    <h1 class="nameCatNav">Most liked topics</h1>
+                </div>
+                <div class="btnCatContainer rowContainer">
+                    <span class="googleSpan material-symbols-outlined"> visibility </span>
+                    <h1 class="nameCatNav">Most viewed topics</h1>
+                </div>
+            </div>
+            <span class="underlineNav"></span>
+            <h3 class="titleCatNav">MY FOLLOWS</h3>
+            <div class="btnCatContainer marginCat rowContainer">
+                <span class="googleSpan material-symbols-outlined"> favorite </span>
+                    <h1 class="nameCatNav">Topics followed</h1>
+            </div>
+            <span class="underlineNav"></span>
+            <h3 class="titleCatNav">MY PROFILE</h3>
+            <div class="btnCatContainer marginCat rowContainer">
+                <img class="iconAccountStyle" src="./img/PP.png" alt="Account_Icon">
+                <h1 class="nameCatNav">My Account</h1>
+            </div>
+        </div>
+    </nav>
+{{end}}
