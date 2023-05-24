@@ -1,3 +1,5 @@
+/*--------------------- Fonts ---------------------*/
+
 @font-face {
     font-family: 'Poppins';
     src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
@@ -9,58 +11,82 @@
      url('../fonts/Poppins-Reg/Poppins-Regular.woff') format('woff');
 }
 
+/*--------------------- Containers ---------------------*/
+
 .containerLoginPage{
     display: flex;
     flex-direction: row;
 }
   
-nav{
-    z-index: 999;
-    padding: 1rem 0rem;
-   
-    background-color: #28292F;
+nav{    
     width: max-content;
     padding: 0 2vw;
-   
-   
     left: 0;
-  
+    z-index: 999;
+    background-color: #28292F;
 }
 
-.labelNav, #toggle
-{
-    color: white;
-    display: none;
+.btnCatContainer {
+    align-items: center;
+    width: 14rem;
+    padding: 0rem 1rem;
+    gap: 1vw;
+    border-radius: 10px;
+    background-color: #32333B;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
 }
+
+.btnCatContainer:hover {
+    cursor: pointer;
+    transition: 0.5s;
+    background-color: #44454F;
+}
+
+.containerCatNav {
+    margin-bottom: 5vh;
+    gap: 5vh;
+}
+
+.linkPages {
+    align-items: center;
+}
+
+/*--------------------- Responsive ---------------------*/
 
 @media screen and (min-width : 900px) {
     nav {
         position: absolute;
         min-height: 100vh;
+        margin-right: 8rem;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
-        margin-right: 8rem;
     }
+
     .titleCatNav {
         width: 100%;
     }
+
     .linkPages {
         gap: 0.5vh;
+    }
+
+    .underlineNav {
+        width: 100%;
     }
 }
 
 @media all and (max-width: 900px){
     .containerLoginPage{
         flex-direction: column;
-        
     }
 
     .underlineNav {
         width: 80vw;
     }
+
     nav {
         position: sticky;
-  
         width: 100%;
         padding: 0;
     }
@@ -70,7 +96,6 @@ nav{
         flex-direction: column;
         align-items: center;
     }
-
     nav .linkPages a {
         width: 50%;
     }
@@ -78,11 +103,10 @@ nav{
     .labelNav {
         display: flex;
         justify-content: center;
-    
         padding-left: 1vw;
         padding-bottom: 0.4rem;
-        cursor: pointer;
         font-size: 2.4rem;
+        cursor: pointer;
     }
 
     a{
@@ -96,50 +120,34 @@ nav{
         display: flex;
     }
 }
-.underlineNav {
-    background-color: #A0A0A0;
-    border-radius: 999px;
-    height: 0.2rem;
-    width: 100%;
+
+/*--------------------- Texts ---------------------*/
+
+.labelNav, #toggle{
+    display: none;
+    color: white;
 }
 
-.linkPages {
-    align-items: center;
+.underlineNav {
+    height: 0.2rem;
+    border-radius: 999px;
+    background-color: #A0A0A0;
 }
 
 .titleCatNav {
-    color: whitesmoke;
+    margin: 1rem;
     font-size: 0.6rem;
     text-transform: uppercase;
     font-family: 'Poppins-regular';
-
-    margin: 1rem;
-}
-
-.btnCatContainer {
-    border-radius: 10px;
-    background-color: #32333B;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    align-items: center;
-
-    gap: 1vw;
-    padding: 0rem 1rem;
-    width: 14rem
-
-}
-
-.btnCatContainer:hover {
-    background-color: #44454F;
-    cursor: pointer;
-    transition: 0.5s;
+    color: whitesmoke;
 }
 
 .nameCatNav {
-    color: whitesmoke;
-    font-size: 0.9rem;
     width: max-content;
     margin-left: 0.5rem;
+    font-size: 0.9rem;
     font-family: 'Poppins-regular',sans-serif;
+    color: whitesmoke;
 }
 
 .websiteName {
@@ -153,11 +161,6 @@ nav{
 
 .googleSpan {
     color: white;
-}
-
-.containerCatNav {
-    gap: 5vh;
-    margin-bottom: 5vh;
 }
 
 .iconAccountStyle {
@@ -176,5 +179,3 @@ nav{
 a {
     text-decoration: none;
 }
-
-

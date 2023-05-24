@@ -1,14 +1,20 @@
+/*--------------------- Fonts ---------------------*/
+
 @font-face {
     font-family: 'Poppins';
     src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
      url('../fonts/Poppins-Semi/Poppins-SemiBold.woff') format('woff');
 }
 
+/*--------------------- Global ---------------------*/
+
 body {
     margin: 0;
     padding: 0;
     background-color: #32333B;
 }
+
+/*--------------------- Responsive ---------------------*/
 
 @media  screen and (min-width : 900px) and (max-width : 1200px) {
     .containerLoginPage {
@@ -35,12 +41,11 @@ body {
     .containerLoginPage {
         justify-content: center;
     }
-
     .containerLogin {   
         width: 35rem;
         height: 80vh;
-        gap: 3vh;
         margin-left: 15vw;
+        gap: 3vh;
     }
     .titleLogin {
         font-size: 2.75rem;
@@ -49,7 +54,7 @@ body {
         width: 90%;
     }
     .formStyleLog {
-           width: 70%;
+        width: 70%;
     }
 }
 
@@ -63,93 +68,91 @@ body {
     }
 }
 
+/*--------------------- Containers ---------------------*/
+
 .containerLoginPage {
     display: flex;
     flex-direction: row;
     align-items: center;
-   
     min-height: 100vh;
 }
 
 .containerLogin{
-    background-color: #28292F;
-    border: 3px solid #D36638;
+    align-items: center;
     padding: 1rem;
     border-radius: 20px;
-    align-items: center;
-
+    background-color: #28292F;
+    border: 3px solid #D36638;
 }
 
-.titleLogin {
-    font-family: 'Poppins';
+.rememberContainer {
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5vh;
+    padding-bottom: 8vh;
+    gap: 2vw;
+}
 
-    color: whitesmoke;
+/*--------------------- Texts ---------------------*/
+
+.titleLogin {
     font-weight: 900;
+    font-family: 'Poppins';
+    color: whitesmoke;
 }
 
 .subTitleLogin {
     text-align: center;
     font-size: 1rem;
-    color: #A6A6A6;
     font-family: 'Poppins',monospace;
+    color: #A6A6A6;
 }
 
 .textCatLogin {
-    font-family: 'Poppins',monospace;
+
     font-size: 1rem;
+    font-family: 'Poppins',monospace;
     color: whitesmoke;
 }
 
 .inputLog {
-    border-radius: 5px;
-    border: 2px solid whitesmoke;
- 
     padding: 0.8rem 0;
     padding-left: 0.5rem;
     padding-right: 3rem;
-    background-color: transparent;
+    border-radius: 5px;
+    border: 2px solid whitesmoke;
     color: lightgray;
+    background-color: transparent;
 }
 
 .submitbutton {
-    background-color: transparent;
-    border-radius: 5px;
-    border: 3px solid #D36638 ;
-    color: #ADADAD;
     padding: 0.5rem 2rem;
+    border-radius: 5px;
     font-weight: 900;
     font-family: 'Poppins-regular';
+    border: 3px solid #D36638 ;
+    color: #ADADAD;
+    background-color: transparent;
 }
 .formStyleLog {
     gap: 3vh;
- 
 }
 
 .remember {
-    color: lightgray;
+    text-align: center;
     font-size: 1rem;
     font-family: 'Poppins',monospace;
-    text-align: center;
+    color: lightgray;
 }
 
 input[type="checkbox"]  {
     accent-color: #D36638;
 }
 .submitbutton:hover {
-    background-color: #D36638;
     cursor: pointer;
     transition: 0.8s;
+    background-color: #D36638;
 }
-
-.rememberContainer {
-    gap: 2vw;
-    margin-top: 5vh;
-    /* border: 1px solid white; */
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 8vh;
-}
-
 
 .colorWebsiteName {
     color: #D36638;
