@@ -44,6 +44,9 @@ nav{
     .titleCatNav {
         width: 100%;
     }
+    .linkPages {
+        gap: 0.5vh;
+    }
 }
 
 @media all and (max-width: 900px){
@@ -57,7 +60,7 @@ nav{
     }
     nav {
         position: sticky;
-        top: 0;
+  
         width: 100%;
         padding: 0;
     }
@@ -91,7 +94,6 @@ nav{
 
     #toggle:checked + .linkPages {
         display: flex;
-        margin-bottom: 20rem;
     }
 }
 .underlineNav {
@@ -107,7 +109,7 @@ nav{
 
 .titleCatNav {
     color: whitesmoke;
-    font-size: 0.5rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     font-family: 'Poppins-regular';
 
