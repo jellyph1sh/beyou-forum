@@ -137,6 +137,8 @@ nav{
 .nameCatNav {
     color: whitesmoke;
     font-size: 0.9rem;
+    width: max-content;
+    margin-left: 0.5rem;
     font-family: 'Poppins-regular',sans-serif;
 }
 
@@ -145,9 +147,12 @@ nav{
     color: #FFFFFF;
 }
 
+.websiteName:hover {
+    cursor: pointer;
+}
+
 .googleSpan {
     color: white;
-
 }
 
 .containerCatNav {
@@ -166,6 +171,10 @@ nav{
 
 .marginCat {
     margin-bottom: 5vh;
+}
+
+a {
+    text-decoration: none;
 }
 
 
