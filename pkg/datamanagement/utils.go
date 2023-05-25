@@ -83,15 +83,25 @@ type DataContainer struct {
 	Report Report
 }
 
+type DataForOnePost struct {
+	NbLike     int
+	AuthorName string
+	Is_valid   bool
+	Content    string
+	Comentary  []int
+	NBDislike  int
+	TopicName  string
+}
+
 /*don't forget to close the *sql.Rows when you use this func */
-func readDB(table, query string) *sql.Rows {
+func readDB(query string) *sql.Rows {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
 		fmt.Println("Could not open database : \n", err)
 		return nil
 	}
-	row, err := db.Query("SELECT * FROM User;")
+	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Invalid request :")
 		log.Fatal(err)
