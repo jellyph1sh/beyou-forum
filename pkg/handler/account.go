@@ -6,6 +6,6 @@ import (
 )
 
 func Account(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./static/html/account.html"))
-	t.Execute(w, nil)
+	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
+	t.ExecuteTemplate(w, "account", nil)
 }

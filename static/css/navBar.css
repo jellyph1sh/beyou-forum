@@ -113,6 +113,10 @@ a {
     text-decoration: none;
 }
 
+.colorWebsiteName {
+    color: #D36638; 
+}
+
 /*--------------------- Responsive ---------------------*/
 
 @media screen and (min-width : 900px) {

@@ -1,12 +1,45 @@
+{{ define "account"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>account</title>
+    <link rel="stylesheet" href="../css/account.css">
+    <link rel="stylesheet" href="../css/easyCss.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Account</title>
 </head>
 <body>
-    <h1>account</h1>
+    <div class="containerAccountPage">
+        {{ template "navBar"}}
+        <div class="columnContainer containerAccountComp">
+            <h1 class="mainCatAccount marginContentAccount">Account settings</h1>
+            <span class="underlineAccountPage"></span>
+            <div class="columnContainer accountCompContGlobal marginContentAccount">
+                <span class="backgroundAccountCont"></span>
+                <div class="accountCompCont rowContainer">
+                    <img class="imgAccount" src="../img/PP.png" alt="pp">
+                    <h2 class="usernameAccount">XxDarkSasukexX</h2>
+                    <div class="columnContainer containerEmail">
+                        <h3 class="accountCompEmail">Email adress</h3>
+                        <div class="rowContainer containerEditEmail">
+                            <h3 class="accountCompEmailUser">kevin.chaffaux@gmail.com</h3>
+                            <span class="googleEditIcon material-symbols-outlined"> edit </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="mainCatAccount marginContentAccount">Password settings</h1>
+            <span class="underlineAccountPage"></span>
+            <h2 class="accountInformationMsg marginContentAccount">YOUR NEW PASSWORD NEED TO CONTAINS AT LEAST 8 CHARACTERS</h2>
+            <input type="submit" class="btnChangePassword marginContentAccount" value="Change password">
+            <h2 class="accountInformationMsg marginContentAccount">DELETE ACCOUNT</h2>
+            <span class="underlineAccountPage"></span>
+            <input type="submit" class="marginContentAccount btnDeleteAccount" value="Delete account">
+           
+        </div>
+    </div>
 </body>
 </html>
+{{end}}
