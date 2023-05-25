@@ -6,6 +6,6 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./static/html/register.html"))
-	t.Execute(w, nil)
+	t := template.Must(template.ParseFiles("./static/html/register.html", "./static/html/navBar.html"))
+	t.ExecuteTemplate(w, "register", nil)
 }
