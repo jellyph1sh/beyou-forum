@@ -11,6 +11,12 @@
     <title>Account</title>
 </head>
 <body>
+    <script>
+        function DeletePopup() {
+          document.getElementById('popup').style.visibility = 'visible';
+        }
+    </script>
+      
     <div class="containerAccountPage">
         {{ template "navBar"}}
         <div class="columnContainer containerAccountComp">
@@ -18,7 +24,7 @@
             <span class="underlineAccountPage"></span>
             <div class="columnContainer accountCompContGlobal marginContentAccount">
                 <span class="backgroundAccountCont"></span>
-                <div class="accountCompCont rowContainer">
+                <div class="accountCompCont">
                     <img class="imgAccount" src="../img/PP.png" alt="pp">
                     <h2 class="usernameAccount">XxDarkSasukexX</h2>
                     <div class="columnContainer containerEmail">
@@ -36,8 +42,21 @@
             <input type="submit" class="btnChangePassword marginContentAccount" value="Change password">
             <h2 class="accountInformationMsg marginContentAccount">DELETE ACCOUNT</h2>
             <span class="underlineAccountPage"></span>
-            <input type="submit" class="marginContentAccount btnDeleteAccount" value="Delete account">
-           
+            <button onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
+            <div id="popup" class="columnContainer ">
+                <div class="deletePopup">
+                    <div class="popup-content columnContainer">
+                    <h2 class="titleDelPop">Are you sure ?</h2>
+                    <p class="textPopDel">Are you sure you want to delete your account, this <br>
+                        action will delete permanently your account.</p>
+                    </div>
+                    <div class="rowContainer delPopBtnCont">
+                        <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
+                        <input class="delPopBtn delPopBtnDelete" type="submit" name="deleteAccount" value="Delete">
+                    </div>
+                </div>
+            </div>
+              
         </div>
     </div>
 </body>
