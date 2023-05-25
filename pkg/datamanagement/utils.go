@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
@@ -14,7 +14,7 @@ const (
 	dbname   = ""
 )
 
-type user struct {
+type User struct {
 	id            int
 	name          string
 	first_name    string
