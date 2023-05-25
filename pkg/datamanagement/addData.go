@@ -26,13 +26,13 @@ func AddLineIntoTargetTable(data DataContainer, table string, nbValues int) {
 		res, err = insertUserInUser.Exec(data.User.ID, data.User.Name, data.User.First_name, data.User.User_name, data.User.Email, data.User.Password, data.User.Is_admin, data.User.Is_valid, data.User.Description, data.User.Profile_image, data.User.Creation_date)
 		break
 	case table == "Post":
-		res, err = insertUserInUser.Exec(data.Post.ID, strings.Trim(strings.Join(strings.Fields(fmt.Sprint(data.Post.Like)), ","), "[]"), data.Post.Author_id, data.Post.Is_valid, data.Post.Content, strings.Trim(strings.Join(strings.Fields(fmt.Sprint(data.Post.Comentary)), ","), "[]"), strings.Trim(strings.Join(strings.Fields(fmt.Sprint(data.Post.Dislike)), ","), "[]"), data.Post.Topic)
+		res, err = insertUserInUser.Exec(data.Post.ID, strings.Join(strings.Fields(fmt.Sprint(data.Post.Like)), ","), data.Post.Author_id, data.Post.Is_valid, data.Post.Content, strings.Join(strings.Fields(fmt.Sprint(data.Post.Comentary)), ","), strings.Join(strings.Fields(fmt.Sprint(data.Post.Dislike)), ","), data.Post.Topic)
 		break
 	case table == "Topic":
 		res, err = insertUserInUser.Exec(data.Topic.ID, data.Topic.Title, data.Topic.Description, data.Topic.Is_valid, data.Topic.Follow, data.Topic.Creator)
 		break
 	case table == "Tag":
-		res, err = insertUserInUser.Exec(data.Tag.ID, data.Tag.Title, data.Tag.Title, strings.Trim(strings.Join(strings.Fields(fmt.Sprint(data.Tag.Like)), ","), "[]"))
+		res, err = insertUserInUser.Exec(data.Tag.ID, data.Tag.Title, data.Tag.Title, strings.Join(strings.Fields(fmt.Sprint(data.Tag.Like)), ","))
 		break
 	case table == "Ban":
 		res, err = insertUserInUser.Exec(data.Ban.ID, data.Ban.Word, data.Ban.Admin, data.Ban.Comment)
