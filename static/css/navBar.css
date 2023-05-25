@@ -135,9 +135,17 @@ a {
     .underlineNav {
         width: 100%;
     }
+    .containerHeaderNav {
+        gap: 3vw;
+    }
 }
 
 @media all and (max-width: 900px){
+    .containerHeaderNav {
+        display: flex ;
+        flex-direction: row;
+        width: 100vw;
+    }
     .containerLoginPage{
         flex-direction: column;
     }
@@ -163,10 +171,13 @@ a {
 
     .labelNav {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: flex-start;
         padding-left: 1vw;
-        padding-bottom: 0.4rem;
+        margin-left: 5vw;
+        margin-top: 1.4rem;
         font-size: 2.4rem;
+        gap: 6px;
         cursor: pointer;
     }
 
@@ -180,5 +191,66 @@ a {
     #toggle:checked + .linkPages {
         display: flex;
     }
+    .websiteName {
+        width: 75vw;
+    }
 }
+
+/*--------------------- Burger Menu ---------------------*/
+
+.burger{
+    width: 2.5rem;
+    height: 0.3rem;
+    border-radius: 999px;
+    background-color: #A0A0A0;
+}
+
+.labelNav:hover #burger1 {
+    animation: burgerMenuAnimationTop 1s ease;
+    animation-fill-mode: forwards;
+}
+.labelNav:hover  #burger2 {
+    animation: burgerMenuAnimationMiddle 1s ease;
+    animation-fill-mode: forwards;
+}
+.labelNav:hover  #burger3 {
+    animation: burgerMenuAnimationBottom 1s ease;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes burgerMenuAnimationMiddle {
+    0% {
+        transform: translateX(0);
+        opacity: 0;
+        margin-top: 0;
+    }
+    100% {
+        margin-top: -18.144px;
+        transform: translateX(20px);
+        opacity: 0;
+        padding-top: 18.144px;
+    }
+}
+@keyframes burgerMenuAnimationTop {
+    0% {
+         margin-top: 0;
+    }
+    100% {
+        margin-top: 13.1px;
+        transform: rotate(45deg);
+    }
+}
+
+@keyframes burgerMenuAnimationBottom {
+    0% {
+         margin-top: 0;
+    }
+    100% {
+        margin-top: -22.3px;
+        transform: rotate(-45deg);
+        margin-bottom: 15px;
+    }
+}
+
 
