@@ -1,7 +1,9 @@
 package datamanagement
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -55,6 +57,19 @@ type tag struct {
 	like    []int
 }
 
-func dsn() string {
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbname)
+/*don't forget to close the *sql.Rows when you use this func */
+func readDB(table, query string) *sql.Rows {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	defer db.Close()
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return nil
+	}
+	row, err := db.Query("SELECT * FROM User;")
+	if err != nil {
+		fmt.Println("Invalid request :")
+		log.Fatal(err)
+		return nil
+	}
+	return row
 }
