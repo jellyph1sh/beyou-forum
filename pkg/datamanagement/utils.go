@@ -58,16 +58,16 @@ type Tag struct {
 }
 
 type Ban struct {
-	ID     int
-	Word   string
-	Admin  int
+	ID      int
+	Word    string
+	Admin   int
 	Comment string
 }
 
 type Report struct {
-	ID         int
-	ID_post    int
-	ID_user    int
+	ID      int
+	ID_post int
+	ID_user int
 	Comment string
 }
 
@@ -98,7 +98,7 @@ func readDB(table, query string) *sql.Rows {
 }
 
 func buildQueryAddData(table string, nbValues int) string {
-	result := "INSERT INTO " + table + " Values ("
+	result := "INSERT INTO " + table + " Values (?"
 	for i := 1; i < nbValues; i++ {
 		result += ",?"
 	}
