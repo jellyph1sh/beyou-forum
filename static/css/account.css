@@ -36,6 +36,15 @@
         padding: 1rem;
         margin: 1rem;
     }
+    .backgroundPwd {
+        width: 32rem;
+    }
+    .inputPwd {
+        width: 90.5%;
+    }
+    .googleSpan {
+        right: 38vw;
+    }
 }
 
 @media screen and (min-width:900px) and (max-width:1200px) {
@@ -54,6 +63,15 @@
     .containerEmail {
         padding: 1rem;
         margin: 1rem;
+    }
+    .backgroundPwd {
+        width: 32rem;
+    }
+    .inputPwd {
+        width: 90.5%;
+    }
+    .googleSpan {
+        right: 30vw;
     }
 }
 
@@ -74,6 +92,15 @@
     .containerEmail {
         padding: 1rem;
         margin: 1rem;
+    }
+    .backgroundPwd {
+        width: 355px;
+    }
+    .inputPwd {
+        width: 87.5%;
+    }
+    .googleSpan {
+        right: 30vw;
     }
 }
 
@@ -97,6 +124,15 @@
     .containerEmail {
         margin: 0.8rem;
         padding: 0.8rem;
+    }
+    .backgroundPwd {
+        width: 355px;
+    }
+    .inputPwd {
+        width: 87.5%;
+    }
+    .googleSpan {
+        right: 25vw;
     }
 }
 
@@ -242,9 +278,9 @@ body {
     margin: 1rem;
 }
 
-/*--------------------- Popup ---------------------*/
+/*--------------------- Popup del ---------------------*/
 
-#popup {
+#popupDel {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -310,4 +346,132 @@ body {
 .textPopDel{
     color: #A0A0A0;
     font-family: 'Poppins-regular';
+}
+
+/*--------------------- Popup Password ---------------------*/
+
+#popupPwd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.backgroundPwd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15rem;
+    overflow: hidden;
+    opacity: 0.5;
+    background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.hidContainer {
+    position: relative;   
+    width:max-content; 
+    height:max-content;
+    overflow:hidden;
+}
+
+.containerContentEdit {
+    justify-content: center;
+    width: 100%;
+    margin: 1rem;
+    gap: 2vh;
+}
+
+.circle1 {
+    position: absolute;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 999px;
+    border: 1.5px solid rgba(211, 102, 56, 0.5);
+    background: linear-gradient(180deg, rgba(211, 102, 56, 0.5) 0%, rgba(211, 102, 56, 0) 100%);
+}
+
+.circle2 {
+    position:absolute;
+    width: 20rem;
+    height: 20rem;
+    border: 1.5px solid rgba(211, 102, 56, 0.2);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(211, 102, 56, 0.2) 0%, rgba(211, 102, 56, 0) 100%);
+}
+
+.circle3{
+    position: absolute;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(211, 102, 56, 0.1) 0%, rgba(211, 102, 56, 0) 100%);
+}
+
+.editPwdPopup {
+    border-radius: 10px;
+    background-color: #212225;
+}
+
+.nameEditPop {
+    color: #BFBFBF;
+    font-family: 'Poppins-regular';
+    font-size: 1rem;
+}
+
+.inputPwd {
+    height: 3rem;
+    padding-left: 1rem;
+    border-radius: 5px;
+    border: none;
+    color: #A0A0A0;
+    background: rgba(217, 217, 217, 0.05);
+}
+
+.containerContentEdit input[type="password"]:focus {
+    outline: none;
+}
+
+.confirmBtn {
+    margin-top: 2vh;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 2px solid #774128;
+    color: #C1BEBE ;
+    font-family: 'Poppins';
+    background: linear-gradient(94.97deg, rgba(211, 102, 56, 0.473) 0%, rgba(211, 102, 56, 0.178) 100%, rgba(211, 102, 56, 0.38) 100%);
+}
+
+.confirmBtn:hover {
+    transition: .6s;
+    cursor: pointer;
+    background-color: #774128;
+}
+
+a .googleSpan{
+    position: fixed;
+    align-self: flex-start;
+    margin-top: 10px;
+    z-index: 999;
+    color: #C1BEBE ;
+}
+
+a .googleSpan:hover {
+    cursor: pointer;
+}
+
+.titlePwdPop {
+    position: absolute;
+    text-align: center;
+    margin-top: -430px;
+    font-family: 'Poppins';
+    color: #CBCBCB;
 }
