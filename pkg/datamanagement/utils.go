@@ -16,6 +16,9 @@ const (
 	dbname   = ""
 )
 
+type Display struct {
+	Logout bool
+}
 type User struct {
 	id            int
 	name          string
