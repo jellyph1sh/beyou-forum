@@ -41,6 +41,6 @@ func IsUserExist(userInput string, password string) bool {
 		if (name == userInput || email == userInput) && password == passwordInSha256 {
 			return true
 		}
-		// fmt.Println("Student: ", name)
 	}
+	return false
 }
