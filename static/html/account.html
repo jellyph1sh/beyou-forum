@@ -57,22 +57,24 @@
                         </div>
                     </div>
                     <div class="columnContainer containerContentEdit">
-                        <div class="columnContainer">
-                            <h2 class="nameEditPop">Current password</h2>
-                            <input class="inputPwd" type="password" name="currentPwd">
+                        <form action="" method="post">
+                            <div class="columnContainer">
+                                <h2 class="nameEditPop">Current password</h2>
+                                <input class="inputPwd" type="password" name="currentPwd">
+                            </div>
+                            <div class="columnContainer">
+                                <h2 class="nameEditPop">New password</h2>
+                                <input class="inputPwd" type="password" name="currentPwd">
+                            </div>
+                            <div class="columnContainer">
+                                <h2 class="nameEditPop">Confirm new password</h2>
+                                <input class="inputPwd" type="password" name="currentPwd">
+                            </div>
                         </div>
-                        <div class="columnContainer">
-                            <h2 class="nameEditPop">New password</h2>
-                            <input class="inputPwd" type="password" name="currentPwd">
+                        <div class="rowContainer alignCenter">
+                            <input type="submit" class="confirmBtn" value="Confirm">
                         </div>
-                        <div class="columnContainer">
-                            <h2 class="nameEditPop">Confirm new password</h2>
-                            <input class="inputPwd" type="password" name="currentPwd">
-                        </div>
-                    </div>
-                    <div class="rowContainer alignCenter">
-                        <input type="submit" class="confirmBtn" value="Confirm">
-                    </div>
+                    </form>
                 </div>
             </div>
             <h2 class="accountInformationMsg marginContentAccount">DELETE ACCOUNT</h2>
@@ -87,7 +89,9 @@
                     </div>
                     <div class="rowContainer delPopBtnCont">
                         <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
-                        <input class="delPopBtn delPopBtnDelete" type="submit" name="deleteAccount" value="Delete">
+                        <form action="" method="post">
+                            <input class="delPopBtn delPopBtnDelete" type="submit" name="deleteAccount" value="Delete">
+                        </form> 
                     </div>
                 </div>
             </div>
