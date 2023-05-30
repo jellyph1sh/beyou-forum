@@ -34,8 +34,8 @@
                     <div class="columnContainer containerEmail">
                         <h3 class="accountCompEmail">Email address</h3>
                         <div class="rowContainer containerEditEmail">
-                            <form action="" method="post" class="rowContainer alignCenter">
-                                <input type="email" placeholder="{{ .Email }}" class="accountCompEmailUser"></h3>
+                            <form action="" method="post"  class="rowContainer alignCenter">
+                                <input name="editMail" type="email" placeholder="{{ .Email }}" class="accountCompEmailUser"></h3>
                                 <button type="submit"><span class="googleEditIcon material-symbols-outlined"> edit </span></button>
                             </form>
                         </div>
@@ -60,22 +60,22 @@
                         </div>
                     </div>
                     <div class="columnContainer containerContentEdit">
-                        <form action="" method="post">
+                        <form action="" method="post" name="changePassword">
                             <div class="columnContainer">
                                 <h2 class="nameEditPop">Current password</h2>
-                                <input class="inputPwd" type="password" name="currentPwd">
+                                <input class="inputPwd" required type="password" name="currentPwd">
                             </div>
                             <div class="columnContainer">
                                 <h2 class="nameEditPop">New password</h2>
-                                <input class="inputPwd" type="password" name="currentPwd">
+                                <input class="inputPwd" required type="password" name="changedPwd">
                             </div>
                             <div class="columnContainer">
                                 <h2 class="nameEditPop">Confirm new password</h2>
-                                <input class="inputPwd" type="password" name="currentPwd">
+                                <input class="inputPwd" required type="password" name="changedPwd">
                             </div>
                         </div>
                         <div class="rowContainer alignCenter">
-                            <input type="submit" class="confirmBtn" value="Confirm">
+                            <input type="submit" class="confirmBtn" name="changePassword" value="Confirm">
                         </div>
                     </form>
                 </div>
@@ -92,8 +92,8 @@
                     </div>
                     <div class="rowContainer delPopBtnCont">
                         <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
-                        <form action="" method="post">
-                            <input class="delPopBtn delPopBtnDelete" type="submit" name="deleteAccount" value="Delete">
+                        <form action="" method="post" name="delAccount">
+                            <input class="delPopBtn delPopBtnDelete" type="submit" name="delAccount" value="Delete">
                         </form> 
                     </div>
                 </div>
