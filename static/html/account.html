@@ -29,13 +29,13 @@
             <div class="columnContainer accountCompContGlobal marginContentAccount">
                 <span class="backgroundAccountCont"></span>
                 <div class="accountCompCont">
-                    <img class="imgAccount" src="../img/PP.png" alt="pp">
-                    <h2 class="usernameAccount">XxDarkSasukexX</h2>
+                    <img class="imgAccount" src="{{ .Profile_picture }}" alt="pp">
+                    <h2 class="usernameAccount">{{ .Username }}</h2>
                     <div class="columnContainer containerEmail">
                         <h3 class="accountCompEmail">Email address</h3>
                         <div class="rowContainer containerEditEmail">
                             <form action="" method="post" class="rowContainer alignCenter">
-                                <input type="text" placeholder="kevin.chaffaux@gmail.com" class="accountCompEmailUser"></h3>
+                                <input type="email" placeholder="{{ .Email }}" class="accountCompEmailUser"></h3>
                                 <button type="submit"><span class="googleEditIcon material-symbols-outlined"> edit </span></button>
                             </form>
                         </div>
@@ -80,7 +80,7 @@
                     </form>
                 </div>
             </div>
-            <h2 class="accountInformationMsg marginContentAccount">DELETE ACCOUNT</h2>
+            <h2 class="accountInformationMsg marginContentAccount marginh2Del">DELETE ACCOUNT</h2>
             <span class="underlineAccountPage"></span>
             <button onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
             <div id="popupDel" class="columnContainer ">
