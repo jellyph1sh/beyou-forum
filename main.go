@@ -9,7 +9,6 @@ import (
 var port = ":8080"
 
 func main() {
-	// datamanagement.IsUserExist("", "")
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
