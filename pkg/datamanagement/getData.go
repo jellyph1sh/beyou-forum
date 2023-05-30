@@ -3,13 +3,14 @@ package datamanagement
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func GetDataForOnePost(idPost int) DataForOnePost {
 	result := DataForOnePost{}
-	query := "SELECT like,valid_post,content,commentary,dislike,title,user_name FROM Post LEFT JOIN User ON Post.author = User.id LEFT JOIN Topic ON Post.topic = Topic.id;"
+	query := "SELECT like,valid_post,content,commentary,dislike,title,user_name FROM Post LEFT JOIN User ON Post.author = User.id LEFT JOIN Topic ON Post.topic = Topic.id WHERE Post.id = " + strconv.Itoa(idPost) + ";"
 	row := readDB(query)
 	var like string
 	var dislike string
@@ -29,5 +30,15 @@ func GetDataForOnePost(idPost int) DataForOnePost {
 	result.NbLike = len(likeInt)
 	result.NBDislike = len(dislikeInt)
 	result.Comentary = commentaryInt
+	return result
+}
+
+func GetProfileData(idUser int) User {
+	result := User{}
+	query := "SELECT user_name,email,profile_img FROM User WHERE id = " + strconv.Itoa(idUser) + ";"
+	row := readDB(query)
+	for row.Next() {
+		row.Scan(&result.User_name, &result.Email, &result.Profile_image)
+	}
 	return result
 }
