@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"forum/pkg/datamanagement"
 	"forum/pkg/handler"
 	"net/http"
 )
@@ -17,6 +18,8 @@ func main() {
 	// fmt.Println(datamanagement.GetDataForOnePost(1))
 	// profileTest := datamanagement.GetProfileData(1)
 	// fmt.Println(profileTest.User_name, profileTest.Email, profileTest.Profile_image)
+	// sortTopic := datamanagement.GetSortTopic()
+	// fmt.Println(sortTopic[0].Like, sortTopic[1].Like, sortTopic[2].Like)
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
