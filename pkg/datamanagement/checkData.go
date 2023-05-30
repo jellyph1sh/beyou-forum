@@ -11,7 +11,9 @@ import (
 )
 
 func IsUserExist(userInput string, password string) bool {
-	passwordInSha256 := sha256.Sum256([]byte(password))
+	passwordByte := []byte(password)
+	passwordInSha256 := sha256.Sum256(passwordByte)
+	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		fmt.Println("Could not open database : \n", err)
@@ -31,14 +33,14 @@ func IsUserExist(userInput string, password string) bool {
 		var first_name string
 		var user_name string
 		var email string
-		var password [32]byte
+		var password string
 		var is_admin bool
 		var is_valid bool
 		var description string
 		var profile_image string
 		var creation_date time.Time
 		row.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
-		if (name == userInput || email == userInput) && password == passwordInSha256 {
+		if (name == userInput || email == userInput) && password == stringPasswordInSha256 {
 			return true
 		}
 	}
