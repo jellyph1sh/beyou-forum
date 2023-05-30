@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"forum/pkg/datamanagement"
 	"forum/pkg/handler"
 	"net/http"
 )
@@ -15,7 +14,7 @@ func main() {
 	// tagTest := datamanagement.DataContainer{Tag: datamanagement.Tag{ID: 1, Title: "tagTitle", Creator: 1, Like: []int{5, 1}}}
 	// userTest := datamanagement.DataContainer{User: datamanagement.User{ID: 1, Name: "admin", First_name: "admin", User_name: "admin", Email: "admin@gmail.com", Password: "pwd", Is_admin: true, Is_valid: true, Description: "the admin", Profile_image: "admin_img", Creation_date: time.Now()}}
 	// datamanagement.AddLineIntoTargetTable(topicTest, "Topic", 6)
-	fmt.Println(datamanagement.GetDataForOnePost(1))
+	// fmt.Println(datamanagement.GetDataForOnePost(1))
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
