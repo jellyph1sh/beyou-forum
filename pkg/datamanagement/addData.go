@@ -24,16 +24,16 @@ func AddLineIntoTargetTable(data DataContainer, table string, nbValues int) {
 	var res sql.Result
 	switch true {
 	case table == "User":
-		res, err = insertUserInUser.Exec(data.User.ID, data.User.Name, data.User.First_name, data.User.User_name, data.User.Email, data.User.Password, data.User.Is_admin, data.User.Is_valid, data.User.Description, data.User.Profile_image, data.User.Creation_date)
+		res, err = insertUserInUser.Exec(data.User.ID, data.User.Name, data.User.First_name, data.User.User_name, data.User.Email, data.User.Password, data.User.Is_admin, data.User.Is_valid, data.User.Description, data.User.Profile_image, data.User.Creation_date, strings.Join(strings.Fields(fmt.Sprint(data.User.post_like)), ","), strings.Join(strings.Fields(fmt.Sprint(data.User.post_dislike)), ","), strings.Join(strings.Fields(fmt.Sprint(data.User.topic_like)), ","))
 		break
 	case table == "Post":
-		res, err = insertUserInUser.Exec(data.Post.ID, strings.Join(strings.Fields(fmt.Sprint(data.Post.Like)), ","), data.Post.Author_id, data.Post.Is_valid, data.Post.Content, strings.Join(strings.Fields(fmt.Sprint(data.Post.Comentary)), ","), strings.Join(strings.Fields(fmt.Sprint(data.Post.Dislike)), ","), data.Post.Topic)
+		res, err = insertUserInUser.Exec(data.Post.ID, data.Post.Like, data.Post.Author_id, data.Post.Is_valid, data.Post.Content, strings.Join(strings.Fields(fmt.Sprint(data.Post.Comentary)), ","), data.Post.Dislike, data.Post.Topic, data.Post.Date)
 		break
 	case table == "Topic":
-		res, err = insertUserInUser.Exec(data.Topic.ID, data.Topic.Title, data.Topic.Description, data.Topic.Is_valid, strings.Join(strings.Fields(fmt.Sprint(data.Topic.Follow)), ","), data.Topic.Creator)
+		res, err = insertUserInUser.Exec(data.Topic.ID, data.Topic.Title, data.Topic.Description, data.Topic.Is_valid, strings.Join(strings.Fields(fmt.Sprint(data.Topic.Follow)), ","), data.Topic.Creator, data.Topic.Like)
 		break
 	case table == "Tag":
-		res, err = insertUserInUser.Exec(data.Tag.ID, data.Tag.Title, data.Tag.Title, strings.Join(strings.Fields(fmt.Sprint(data.Tag.Like)), ","))
+		res, err = insertUserInUser.Exec(data.Tag.ID, data.Tag.Title, data.Tag.Title)
 		break
 	case table == "Ban":
 		res, err = insertUserInUser.Exec(data.Ban.ID, data.Ban.Word, data.Ban.Admin, data.Ban.Comment)

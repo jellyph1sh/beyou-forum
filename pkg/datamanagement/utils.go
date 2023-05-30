@@ -31,17 +31,21 @@ type User struct {
 	Description   string
 	Profile_image string
 	Creation_date time.Time
+	post_like     []int
+	post_dislike  []int
+	topic_like    []int
 }
 
 type Post struct {
 	ID        int
-	Like      []int
+	Like      int
 	Author_id int
 	Is_valid  bool
 	Content   string
 	Comentary []int
-	Dislike   []int
+	Dislike   int
 	Topic     int
+	Date      time.Time
 }
 
 type Topic struct {
@@ -51,13 +55,13 @@ type Topic struct {
 	Is_valid    bool
 	Follow      []int
 	Creator     int
+	Like        int
 }
 
 type Tag struct {
 	ID      int
 	Title   string
 	Creator int
-	Like    []int
 }
 
 type Ban struct {
