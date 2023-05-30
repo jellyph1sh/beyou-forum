@@ -9,7 +9,7 @@ import (
 
 func GetDataForOnePost(idPost int) DataForOnePost {
 	result := DataForOnePost{}
-	query := "SELECT like,is_valid,content,commentary,dislike,title,user_name FROM Post LEFT JOIN User ON Post.author_id = User.id LEFT JOIN Topic ON Post.topic = Topic.id;"
+	query := "SELECT like,valid_post,content,commentary,dislike,title,user_name FROM Post LEFT JOIN User ON Post.author = User.id LEFT JOIN Topic ON Post.topic = Topic.id;"
 	row := readDB(query)
 	var like string
 	var dislike string

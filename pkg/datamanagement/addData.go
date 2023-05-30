@@ -29,7 +29,7 @@ func AddLineIntoTargetTable(data DataContainer, table string, nbValues int) {
 		res, err = insertUserInUser.Exec(data.Post.ID, strings.Join(strings.Fields(fmt.Sprint(data.Post.Like)), ","), data.Post.Author_id, data.Post.Is_valid, data.Post.Content, strings.Join(strings.Fields(fmt.Sprint(data.Post.Comentary)), ","), strings.Join(strings.Fields(fmt.Sprint(data.Post.Dislike)), ","), data.Post.Topic)
 		break
 	case table == "Topic":
-		res, err = insertUserInUser.Exec(data.Topic.ID, data.Topic.Title, data.Topic.Description, data.Topic.Is_valid, data.Topic.Follow, data.Topic.Creator)
+		res, err = insertUserInUser.Exec(data.Topic.ID, data.Topic.Title, data.Topic.Description, data.Topic.Is_valid, strings.Join(strings.Fields(fmt.Sprint(data.Topic.Follow)), ","), data.Topic.Creator)
 		break
 	case table == "Tag":
 		res, err = insertUserInUser.Exec(data.Tag.ID, data.Tag.Title, data.Tag.Title, strings.Join(strings.Fields(fmt.Sprint(data.Tag.Like)), ","))
