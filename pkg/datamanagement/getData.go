@@ -18,6 +18,7 @@ func GetDataForOnePost(idPost int) DataForOnePost {
 	for row.Next() { // Iterate and fetch the records from result cursor
 		row.Scan(&like, &result.Is_valid, &result.Content, &commentary, &dislike, &result.TopicName, &result.AuthorName)
 	}
+	row.Close()
 	var likeInt []int
 	var dislikeInt []int
 	var commentaryInt []int
@@ -40,5 +41,26 @@ func GetProfileData(idUser int) User {
 	for row.Next() {
 		row.Scan(&result.User_name, &result.Email, &result.Profile_image)
 	}
+	row.Close()
+	return result
+}
+
+func GetSortTopic() []Topic {
+	result := []Topic{}
+	query := "SELECT * FROM Topic ORDER BY like;"
+	row := readDB(query)
+	for row.Next() {
+		var topic Topic
+		var follow string
+		row.Scan(&topic.ID, &topic.Title, &topic.Description, &topic.Is_valid, &follow, &topic.Creator, &topic.Like)
+		if len(follow) != 0 {
+			err := json.Unmarshal([]byte(follow), &topic.Follow)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		result = append(result, topic)
+	}
+	row.Close()
 	return result
 }
