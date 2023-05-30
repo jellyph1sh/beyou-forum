@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"forum/pkg/datamanagement"
 	"forum/pkg/handler"
 	"net/http"
 )
@@ -16,8 +15,8 @@ func main() {
 	// userTest := datamanagement.DataContainer{User: datamanagement.User{ID: 1, Name: "admin", First_name: "admin", User_name: "admin", Email: "admin@gmail.com", Password: "pwd", Is_admin: true, Is_valid: true, Description: "the admin", Profile_image: "admin_img", Creation_date: time.Now(), Post_like: []int{}, Post_dislike: []int{}, Topic_like: []int{}}}
 	// datamanagement.AddLineIntoTargetTable(userTest, "User", 14)
 	// fmt.Println(datamanagement.GetDataForOnePost(1))
-	profileTest := datamanagement.GetProfileData(1)
-	fmt.Println(profileTest.User_name, profileTest.Email, profileTest.Profile_image)
+	// profileTest := datamanagement.GetProfileData(1)
+	// fmt.Println(profileTest.User_name, profileTest.Email, profileTest.Profile_image)
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))

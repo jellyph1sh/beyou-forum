@@ -15,6 +15,7 @@ func AddLineIntoTargetTable(data DataContainer, table string, nbValues int) {
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
+  
 	insertUserInUser, err := db.Prepare(buildQueryAddData(table, nbValues))
 	if err != nil {
 		fmt.Println("Could not prepare request :", "\n", err)
