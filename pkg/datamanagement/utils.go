@@ -31,9 +31,9 @@ type User struct {
 	Description   string
 	Profile_image string
 	Creation_date time.Time
-	post_like     []int
-	post_dislike  []int
-	topic_like    []int
+	Post_like     []int
+	Post_dislike  []int
+	Topic_like    []int
 }
 
 type Post struct {
