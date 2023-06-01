@@ -61,7 +61,7 @@ func UpdateLike(table string, data DataContainer, add bool, id int) {
 		return
 	}
 	var updateLike *sql.Stmt
-	if add {
+	if add || table == "Topic" {
 		updateLike, err = db.Prepare("UPDATE " + table + " SET like=like+1 WHERE id = ?;")
 	} else {
 		updateLike, err = db.Prepare("UPDATE " + table + " SET dislike=like+1 WHERE id = ?;")
