@@ -84,3 +84,38 @@ func GetSortPost() []Post {
 	row.Close()
 	return result
 }
+
+func GetUserByName(search string) []User {
+	result := []User{}
+	query := "SELECT * FROM User WHERE user_name LIKE '%" + search + "%';"
+	row := readDB(query)
+	for row.Next() {
+		var user User
+		var Post_like string
+		var Post_dislike string
+		var Topic_like string
+		row.Scan(&user.ID, &user.Name, &user.First_name, &user.User_name, &user.Email, &user.Password, &user.Is_admin, &user.Is_valid, &user.Description, &user.Profile_image, &user.Creation_date, Post_like, Post_dislike, Topic_like)
+		if len(Post_like) != 0 {
+			err := json.Unmarshal([]byte(Post_like), &user.Post_like)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		if len(Post_dislike) != 0 {
+			err := json.Unmarshal([]byte(Post_dislike), &user.Post_dislike)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		if len(Topic_like) != 0 {
+			err := json.Unmarshal([]byte(Topic_like), &user.Topic_like)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+
+		result = append(result, user)
+	}
+	row.Close()
+	return result
+}

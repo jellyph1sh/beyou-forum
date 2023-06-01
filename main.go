@@ -16,6 +16,8 @@ func main() {
 	// postTest3 := datamanagement.DataContainer{Post: datamanagement.Post{ID: 3, Like: 10000, Author_id: 1, Is_valid: true, Content: "Post test3", Comentary: []int{}, Dislike: 2, Topic: 1}}
 	// tagTest := datamanagement.DataContainer{Tag: datamanagement.Tag{ID: 1, Title: "tagTitle", Creator: 1, Like: []int{5, 1}}}
 	// userTest := datamanagement.DataContainer{User: datamanagement.User{ID: 1, Name: "admin", First_name: "admin", User_name: "admin", Email: "admin@gmail.com", Password: "pwd", Is_admin: true, Is_valid: true, Description: "the admin", Profile_image: "admin_img", Creation_date: time.Now(), Post_like: []int{}, Post_dislike: []int{}, Topic_like: []int{}}}
+	// userTest2 := datamanagement.DataContainer{User: datamanagement.User{ID: 2, Name: "admin2", First_name: "admin", User_name: "admin", Email: "admin@gmail.com", Password: "pwd", Is_admin: true, Is_valid: true, Description: "the admin", Profile_image: "admin_img", Creation_date: time.Now(), Post_like: []int{}, Post_dislike: []int{}, Topic_like: []int{}}}
+	// userTest3 := datamanagement.DataContainer{User: datamanagement.User{ID: 3, Name: "admin3", First_name: "admin", User_name: "admin", Email: "admin@gmail.com", Password: "pwd", Is_admin: true, Is_valid: true, Description: "the admin", Profile_image: "admin_img", Creation_date: time.Now(), Post_like: []int{}, Post_dislike: []int{}, Topic_like: []int{}}}
 	// datamanagement.AddLineIntoTargetTable(postTest, "Post", 9)
 	// datamanagement.AddLineIntoTargetTable(postTest2, "Post", 9)
 	// datamanagement.AddLineIntoTargetTable(postTest3, "Post", 9)
@@ -24,7 +26,8 @@ func main() {
 	// fmt.Println(profileTest.User_name, profileTest.Email, profileTest.Profile_image)
 	// sortTopic := datamanagement.GetSortTopic()
 	// fmt.Println(sortTopic[0].Like, sortTopic[1].Like, sortTopic[2].Like)4
-	fmt.Println(datamanagement.GetSortPost())
+	// fmt.Println(datamanagement.GetSortPost())
+	fmt.Println(datamanagement.GetUserByName())
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
