@@ -9,7 +9,7 @@ import (
 var port = ":8080"
 
 func main() {
-	// topicTest := datamanagement.DataContainer{Topic: datamanagement.Topic{ID: 1, Title: "topic test", Description: "le topic test", Is_valid: true, Follow: []int{1}, Creator: 1}}
+	// topicTest := datamanagement.DataContainer{Topic: datamanagement.Topic{ID: 1, Title: "topic test", Description: "le topic test", Is_valid: true, Follow: []int{1}, Creator: 1, Like: 0}}
 	// postTest := datamanagement.DataContainer{Post: datamanagement.Post{ID: 1, Like: 15, Author_id: 1, Is_valid: true, Content: "Post test", Comentary: []int{}, Dislike: 2, Topic: 1}}
 	// postTest2 := datamanagement.DataContainer{Post: datamanagement.Post{ID: 2, Like: 30, Author_id: 1, Is_valid: true, Content: "Post test2", Comentary: []int{}, Dislike: 100, Topic: 1}}
 	// postTest3 := datamanagement.DataContainer{Post: datamanagement.Post{ID: 3, Like: 10000, Author_id: 1, Is_valid: true, Content: "Post test3", Comentary: []int{}, Dislike: 2, Topic: 1}}
@@ -26,7 +26,6 @@ func main() {
 	// sortTopic := datamanagement.GetSortTopic()
 	// fmt.Println(sortTopic[0].Like, sortTopic[1].Like, sortTopic[2].Like)4
 	// fmt.Println(datamanagement.GetSortPost())
-	// fmt.Println(datamanagement.GetUserByName("admin"))
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
