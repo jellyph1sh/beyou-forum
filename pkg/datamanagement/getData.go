@@ -47,7 +47,7 @@ func GetProfileData(idUser int) User {
 
 func GetSortTopic() []Topic {
 	result := []Topic{}
-	query := "SELECT * FROM Topic ORDER BY like;"
+	query := "SELECT * FROM Topic ORDER BY like DESC;"
 	row := readDB(query)
 	for row.Next() {
 		var topic Topic
@@ -60,6 +60,26 @@ func GetSortTopic() []Topic {
 			}
 		}
 		result = append(result, topic)
+	}
+	row.Close()
+	return result
+}
+
+func GetSortPost() []Post {
+	result := []Post{}
+	query := "SELECT * FROM Post ORDER BY like - dislike DESC;"
+	row := readDB(query)
+	for row.Next() {
+		var post Post
+		var comentary string
+		row.Scan(&post.ID, &post.Like, &post.Author_id, &post.Is_valid, &post.Content, comentary, &post.Dislike, &post.Topic, &post.Date)
+		if len(comentary) != 0 {
+			err := json.Unmarshal([]byte(comentary), &post.Comentary)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		result = append(result, post)
 	}
 	row.Close()
 	return result
