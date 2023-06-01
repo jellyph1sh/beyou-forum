@@ -20,10 +20,20 @@ type Display struct {
 	Logout bool
 }
 
+type Dislikes struct {
+	PostID int
+	UserID int
+}
+
 type Follows struct {
 	FollowID int
 	TopicID  int
 	UserID   int
+}
+
+type Likes struct {
+	PostID int
+	UserID int
 }
 
 type Posts struct {
