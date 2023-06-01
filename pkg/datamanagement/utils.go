@@ -94,7 +94,9 @@ type WordsBlacklist struct {
 }
 
 type DataContainer struct {
+	Dislikes   Dislikes
 	Follows    Follows
+	Likes      Likes
 	Posts      Posts
 	Reports    Reports
 	Tags       Tags
