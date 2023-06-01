@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"forum/pkg/datamanagement"
 	"net/http"
 	"text/template"
 )
@@ -13,7 +14,8 @@ type AccountPage struct {
 }
 
 func Account(w http.ResponseWriter, r *http.Request) {
-	p := AccountPage{Username: "XxDarkSasukexX", Email: "XxDarkSasukexX@gmail.com", Profile_picture: "../img/PP.png"}
+	currentUser := datamanagement.GetProfileData(1)
+	p := AccountPage{Username: currentUser.User_name, Email: currentUser.Email, Profile_picture: currentUser.Profile_image}
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
 	delAccount := r.FormValue("delAccount")
 	editMail := r.FormValue("editMail")
