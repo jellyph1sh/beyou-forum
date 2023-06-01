@@ -19,82 +19,79 @@ const (
 type Display struct {
 	Logout bool
 }
-type User struct {
-	ID            int
-	Name          string
-	First_name    string
-	User_name     string
-	Email         string
-	Password      string
-	Is_admin      bool
-	Is_valid      bool
-	Description   string
-	Profile_image string
-	Creation_date time.Time
-	Post_like     []int
-	Post_dislike  []int
-	Topic_like    []int
+
+type Follows struct {
+	FollowID int
+	TopicID  int
+	UserID   int
 }
 
-type Post struct {
-	ID        int
-	Like      int
-	Author_id int
-	Is_valid  bool
-	Content   string
-	Comentary []int
-	Dislike   int
-	Topic     int
-	Date      time.Time
+type Posts struct {
+	PostID       int
+	Content      string
+	AuthorID     int
+	TopicID      int
+	Likes        int
+	Dislikes     int
+	CreationDate time.Time
+	IsValidPost  bool
 }
 
-type Topic struct {
-	ID          int
+type Reports struct {
+	ReportID     int
+	PostID       int
+	ReportUserID int
+	Comment      string
+}
+
+type Tags struct {
+	TagID     int
+	Title     string
+	CreatorID int
+}
+
+type Topics struct {
+	TopicID     int
 	Title       string
 	Description string
-	Is_valid    bool
-	Follow      []int
-	Creator     int
-	Like        int
+	CreatorID   int
+	Upvotes     int
+	ValidTopic  bool
 }
 
-type Tag struct {
-	ID      int
-	Title   string
-	Creator int
+type TopicsTags struct {
+	TopicID int
+	TagID   int
 }
 
-type Ban struct {
-	ID      int
-	Word    string
-	Admin   int
-	Comment string
+type Users struct {
+	UserID         int
+	Username       string
+	Email          string
+	Password       string
+	Firstname      string
+	Lastname       string
+	Description    string
+	CreationDate   time.Time
+	ProfilePicture string
+	IsAdmin        bool
+	ValidUser      bool
 }
 
-type Report struct {
-	ID      int
-	ID_post int
-	ID_user int
-	Comment string
+type WordsBlacklist struct {
+	WordID int
+	Word   string
 }
 
 type DataContainer struct {
-	User   User
-	Post   Post
-	Topic  Topic
-	Tag    Tag
-	Ban    Ban
-	Report Report
-}
-
-type DataForOnePost struct {
-	NbLike     int
-	AuthorName string
-	Is_valid   bool
-	Content    string
-	Comentary  []int
-	NBDislike  int
-	TopicName  string
+	Follows    Follows
+	Posts      Posts
+	Reports    Reports
+	Tags       Tags
+	Topics     Topics
+	TopicsTags TopicsTags
+	Users
+	WordsBlacklist
 }
 
 /*don't forget to close the *sql.Rows when you use this func */
