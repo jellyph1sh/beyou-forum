@@ -139,3 +139,39 @@ func GetPostByTopic(topic string) []Post {
 	row.Close()
 	return result
 }
+
+func GetAllFromTable(table string) []DataContainer {
+	row := readDB("SELECT * FROM " + table + ";")
+	var result []DataContainer
+	for row.Next() {
+		var line DataContainer
+		switch true {
+		case table == "User":
+			row.Scan(&line.User.ID, &line.User.Name, &line.User.First_name, &line.User.User_name, &line.User.Email, &line.User.Password, &line.User.Is_admin, &line.User.Is_valid, &line.User.Description, &line.User.Profile_image, &line.User.Creation_date)
+			break
+		case table == "Post":
+			var comentary string
+			row.Scan(&line.Post.ID, &line.Post.Like, &line.Post.Author_id, &line.Post.Is_valid, &line.Post.Content, comentary, &line.Post.Dislike, &line.Post.Topic, &line.Post.Date)
+			if len(comentary) != 0 {
+				err := json.Unmarshal([]byte(comentary), &line.Post.Comentary)
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
+			break
+		case table == "Topic":
+			var follow string
+			row.Scan(&line.Topic.ID, &line.Topic.Title, &line.Topic.Description, &line.Topic.Is_valid, follow, &line.Topic.Creator, &line.Topic.Like)
+			if len(follow) != 0 {
+				err := json.Unmarshal([]byte(follow), &line.Topic.Follow)
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
+			break
+		case table == "Tag":
+		}
+	}
+
+	return result
+}
