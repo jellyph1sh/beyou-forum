@@ -17,7 +17,7 @@ func IsUserExist(userEmail string, userProfilName string) bool {
 		return false
 	}
 	defer db.Close()
-	QUERY := "SELECT * FROM User WHERE ( user_name = '" + string(userProfilName) + "' OR email = '" + string(userEmail) + "');"
+	QUERY := "SELECT * FROM Users WHERE ( Username = '" + string(userProfilName) + "' OR Email = '" + string(userEmail) + "');"
 	row, err := db.Query(QUERY)
 	if err != nil {
 		fmt.Println("Invalid request :")
@@ -42,7 +42,7 @@ func IsRegister(userInput string, password string) (bool, int) {
 		return false, 1
 	}
 	defer db.Close()
-	QUERY := "SELECT * FROM User WHERE ( user_name = '" + string(userInput) + "' OR email = '" + string(userInput) + "' ) AND password = '" + string(stringPasswordInSha256) + "';"
+	QUERY := "SELECT * FROM Users WHERE ( Username = '" + string(userInput) + "' OR Email = '" + string(userInput) + "' ) AND Password = '" + string(stringPasswordInSha256) + "';"
 	row, err := db.Query(QUERY)
 	if err != nil {
 		fmt.Println("Invalid request :")

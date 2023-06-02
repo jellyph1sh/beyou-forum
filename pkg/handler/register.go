@@ -13,9 +13,8 @@ type register struct {
 	isValid bool
 }
 
-func CreateUser(ID int, userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
+func CreateUser(userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
 	nUser := datamanagement.Users{}
-	nUser.UserID = ID
 	nUser.Username = userName
 	nUser.Email = userEmail
 	nUser.Password = stringPasswordInSha256
@@ -41,11 +40,11 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		passwordByte := []byte(userPassword)
 		passwordInSha256 := sha256.Sum256(passwordByte)
 		stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
-		nUser := CreateUser(11, userName, userName, userName, userEmail, stringPasswordInSha256)
+		nUser := CreateUser(userName, userName, userName, userEmail, stringPasswordInSha256)
 		nDataContainer := datamanagement.DataContainer{}
 		nDataContainer.Users = nUser
 		// QUERY := "INSERT INTO  User VALUES (7,'" + userName + "','" + userName + "','" + userName + "','" + userEmail + "','" + stringPasswordInSha256 + "'," + "false, true,'','','" + time.Now().String() + "');"
-		datamanagement.AddLineIntoTargetTable(nDataContainer, "User", 11)
+		datamanagement.AddLineIntoTargetTable(nDataContainer, "Users", 11)
 	} else {
 		registerDisplay.isValid = false
 		fmt.Println("nofvjnorlsfn")

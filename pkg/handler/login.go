@@ -17,7 +17,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// do login
 		// expiration := time.Now().Add(365 * 24 * time.Hour)
 		// cookie := http.Cookie{Name: "username", Value: "astaxie", Expires: expiration}
-		cookie := http.Cookie{Name: "IdUser", Value: string(idUser)}
+		cookie := http.Cookie{Name: "IdUser", Value: fmt.Sprint(idUser)}
 		http.SetCookie(w, &cookie)
 	} else {
 		fmt.Println("pas register")
