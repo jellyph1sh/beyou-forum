@@ -18,43 +18,53 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	var res sql.Result
 	switch true {
 	case table == "Users":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 10))
+		query := "INSERT INTO " + table + "(UserName,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES(?,?,?,?,?,?,?,?,?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
 		break
 	case table == "Posts":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 7))
+		query := "INSERT INTO " + table + "(Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
 		break
 	case table == "Topics":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 6))
+		query := "INSERT INTO " + table + "(Title,Descrition,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Topics.Title, data.Topics.Description, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
 		break
 	case table == "Tags":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 2))
+		query := "INSERT INTO " + table + "(Title,CreatorID) VALUES(?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Tags.Title, data.Tags.CreatorID)
 		break
 	case table == "WordsBlacklist":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 1))
+		query := "INSERT INTO " + table + "(word) VALUES(?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.WordsBlacklist.Word)
 		break
 	case table == "Reports":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 3))
+		query := "INSERT INTO " + table + "(PostID,ReportUserID,Comment) VALUES (?,?,?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Reports.PostID, data.Reports.ReportUserID, data.Reports.Comment)
 		break
 	case table == "Follows":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 2))
+		query := "INSERT INTO " + table + "(TopicID,UserID) VALUES (?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Follows.TopicID, data.Follows.UserID)
 		break
 	case table == "Likes":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 2))
+		query := "INSERT INTO " + table + " VALUES (?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Likes.PostID, data.Likes.UserID)
 		break
 	case table == "Dislikes":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 2))
+		query := "INSERT INTO " + table + " VALUES (?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.Dislikes.PostID, data.Dislikes.UserID)
 		break
 	case table == "TopicsTags":
-		insertDataInTable, err = db.Prepare(buildQueryAddData(table, 2))
+		query := "INSERT INTO " + table + " VALUES (?,?);"
+		insertDataInTable, err = db.Prepare(query)
 		res, err = insertDataInTable.Exec(data.TopicsTags.TopicID, data.TopicsTags.TagID)
 		break
 	default:
