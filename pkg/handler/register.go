@@ -43,8 +43,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		nUser := CreateUser(userName, userName, userName, userEmail, stringPasswordInSha256)
 		nDataContainer := datamanagement.DataContainer{}
 		nDataContainer.Users = nUser
-		// QUERY := "INSERT INTO  User VALUES (7,'" + userName + "','" + userName + "','" + userName + "','" + userEmail + "','" + stringPasswordInSha256 + "'," + "false, true,'','','" + time.Now().String() + "');"
-		datamanagement.AddLineIntoTargetTable(nDataContainer, "Users", 11)
+		datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
 	} else {
 		registerDisplay.isValid = false
 		fmt.Println("nofvjnorlsfn")
