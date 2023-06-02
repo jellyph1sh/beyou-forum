@@ -86,31 +86,23 @@ func GetAllFromTable(table string) []DataContainer {
 	for row.Next() {
 		var line DataContainer
 		switch true {
-		case table == "User":
-			row.Scan(&line.User.ID, &line.User.Name, &line.User.First_name, &line.User.User_name, &line.User.Email, &line.User.Password, &line.User.Is_admin, &line.User.Is_valid, &line.User.Description, &line.User.Profile_image, &line.User.Creation_date)
+		case table == "Users":
+			row.Scan(&line.Users.UserID, &line.Users.Username, &line.Users.Email, &line.Users.Password, &line.Users.Firstname, &line.Users.Lastname, &line.Users.Description, &line.Users.CreationDate, &line.Users.ProfilePicture, &line.Users.IsAdmin, &line.Users.ValidUser)
 			break
-		case table == "Post":
-			var comentary string
-			row.Scan(&line.Post.ID, &line.Post.Like, &line.Post.Author_id, &line.Post.Is_valid, &line.Post.Content, comentary, &line.Post.Dislike, &line.Post.Topic, &line.Post.Date)
-			if len(comentary) != 0 {
-				err := json.Unmarshal([]byte(comentary), &line.Post.Comentary)
-				if err != nil {
-					fmt.Println(err)
-				}
-			}
+		case table == "Posts":
+			row.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate, &line.Posts.IsValidPost)
 			break
-		case table == "Topic":
-			var follow string
-			row.Scan(&line.Topic.ID, &line.Topic.Title, &line.Topic.Description, &line.Topic.Is_valid, follow, &line.Topic.Creator, &line.Topic.Like)
-			if len(follow) != 0 {
-				err := json.Unmarshal([]byte(follow), &line.Topic.Follow)
-				if err != nil {
-					fmt.Println(err)
-				}
-			}
+		case table == "Topics":
+			row.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
 			break
-		case table == "Tag":
+		case table == "Tags":
+			row.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)
+			break
+		case table == "Reports":
+			row.Scan(&line.Reports.ReportID, &line.Reports.PostID, &line.Reports.ReportUserID, &line.Reports.Comment)
+			break
 		}
+		result = append(result, line)
 	}
 
 	return result
