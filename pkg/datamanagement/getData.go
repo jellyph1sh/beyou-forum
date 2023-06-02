@@ -30,19 +30,6 @@ func GetProfileData(idUser int) Users {
 	return result
 }
 
-func GetSortTopic() []Topics {
-	result := []Topics{}
-	query := "SELECT * FROM Topics ORDER BY Upvotes DESC;"
-	row := readDB(query)
-	for row.Next() {
-		var topic Topics
-		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
-		result = append(result, topic)
-	}
-	row.Close()
-	return result
-}
-
 func GetSortPost() []Posts {
 	result := []Posts{}
 	query := "SELECT * FROM Posts ORDER BY Likes - Dislikes DESC;"
@@ -110,6 +97,10 @@ func GetAllFromTable(table string) []DataContainer {
 	return result
 }
 
+/*
+typofsort: 'a-z' - 'z-a' - 'DESC-Upvote' - 'ASC-Upvote' - 'creator'
+*/
+
 func SortTopic(typOfSort string) []Topics {
 	var result []Topics
 	var row *sql.Rows
@@ -175,5 +166,41 @@ func FilterTopic(condition string, data DataFilter) []Topics {
 		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
+	return result
+}
+
+/*
+typofsort: 'a-z' - 'z-a' - 'like' - 'dislike' - 'creator'
+*/
+func SortPost(typOfSort string) []Posts {
+	var result []Posts
+	var row *sql.Rows
+	switch typOfSort {
+	case "a-z":
+		row = readDB("SELECT * FROM Posts ORDER BY Title ASC;")
+		break
+	case "z-a":
+		row = readDB("SELECT * FROM Posts ORDER BY Title DESC;")
+		break
+	case "like":
+		row = readDB("SELECT * FROM Posts ORDER BY Likes DESC;")
+		break
+	case "dislike":
+		row = readDB("SELECT * FROM Posts ORDER BY Dislikes DESC;")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Posts ORDER BY CreatorID DESC;")
+		break
+	default:
+		fmt.Println("invalid type of sort")
+		return result
+	}
+
+	for row.Next() {
+		var line Posts
+		row.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
+		result = append(result, line)
+	}
+
 	return result
 }
