@@ -3,7 +3,6 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,23 +22,23 @@ func AddLineIntoTargetTable(data DataContainer, table string, nbValues int) {
 	}
 	var res sql.Result
 	switch true {
-	case table == "User":
-		res, err = insertUserInUser.Exec(data.User.ID, data.User.Name, data.User.First_name, data.User.User_name, data.User.Email, data.User.Password, data.User.Is_admin, data.User.Is_valid, data.User.Description, data.User.Profile_image, data.User.Creation_date, strings.Join(strings.Fields(fmt.Sprint(data.User.Post_like)), ","), strings.Join(strings.Fields(fmt.Sprint(data.User.Post_dislike)), ","), strings.Join(strings.Fields(fmt.Sprint(data.User.Topic_like)), ","))
+	case table == "Users":
+		res, err = insertUserInUser.Exec(data.Users.UserID, data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
 		break
-	case table == "Post":
-		res, err = insertUserInUser.Exec(data.Post.ID, data.Post.Like, data.Post.Author_id, data.Post.Is_valid, data.Post.Content, strings.Join(strings.Fields(fmt.Sprint(data.Post.Comentary)), ","), data.Post.Dislike, data.Post.Topic, data.Post.Date)
+	case table == "Posts":
+		res, err = insertUserInUser.Exec(data.Posts.PostID, data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
 		break
-	case table == "Topic":
-		res, err = insertUserInUser.Exec(data.Topic.ID, data.Topic.Title, data.Topic.Description, data.Topic.Is_valid, strings.Join(strings.Fields(fmt.Sprint(data.Topic.Follow)), ","), data.Topic.Creator, data.Topic.Like)
+	case table == "Topics":
+		res, err = insertUserInUser.Exec(data.Topics.TopicID, data.Topics.Title, data.Topics.Description, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
 		break
-	case table == "Tag":
-		res, err = insertUserInUser.Exec(data.Tag.ID, data.Tag.Title, data.Tag.Title)
+	case table == "Tags":
+		res, err = insertUserInUser.Exec(data.Tags.TagID, data.Tags.Title, data.Tags.CreatorID)
 		break
-	case table == "Ban":
-		res, err = insertUserInUser.Exec(data.Ban.ID, data.Ban.Word, data.Ban.Admin, data.Ban.Comment)
+	case table == "WordsBlacklist":
+		res, err = insertUserInUser.Exec(data.WordsBlacklist.WordID, data.WordsBlacklist.Word)
 		break
-	case table == "Report":
-		res, err = insertUserInUser.Exec(data.Report.ID, data.Report.ID_post, data.Report.ID_post, data.Report.Comment)
+	case table == "Reports":
+		res, err = insertUserInUser.Exec(data.Reports.ReportID, data.Reports.PostID, data.Reports.ReportUserID, data.Reports.Comment)
 		break
 	default:
 		fmt.Println("No data to add")
