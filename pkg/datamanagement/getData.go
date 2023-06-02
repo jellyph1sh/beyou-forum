@@ -101,7 +101,7 @@ func GetAllFromTable(table string) []DataContainer {
 typofsort: 'a-z' - 'z-a' - 'DESC-Upvote' - 'ASC-Upvote' - 'creator'
 */
 
-func SortTopic(typOfSort string) []Topics {
+func SortTopics(typOfSort string) []Topics {
 	var result []Topics
 	var row *sql.Rows
 	switch typOfSort {
@@ -138,7 +138,7 @@ func SortTopic(typOfSort string) []Topics {
 condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'
 refer a number in data for these conditions
 */
-func FilterTopic(condition string, data DataFilter) []Topics {
+func FilterTopics(condition string, data DataFilter) []Topics {
 	var result []Topics
 	var row *sql.Rows
 	switch condition {
@@ -169,10 +169,47 @@ func FilterTopic(condition string, data DataFilter) []Topics {
 	return result
 }
 
+func FilterPosts(condition string, data DataFilter) []Posts {
+	var result []Posts
+	var row *sql.Rows
+	switch condition {
+	case "min like":
+		row = readDB("SELECT * FROM Posts WHERE Likes >= " + string(data.number) + ";")
+		break
+	case "max like":
+		row = readDB("SELECT * FROM Posts WHERE Like <= " + string(data.number) + ";")
+		break
+	case "min dislike":
+		row = readDB("SELECT * FROM Posts WHERE Dislikes >= " + string(data.number) + ";")
+		break
+	case "max dislike":
+		row = readDB("SELECT * FROM Posts WHERE Dislike <= " + string(data.number) + ";")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Posts WHERE CreatorID = " + string(data.number) + ";")
+		break
+	case "max follow":
+		row = readDB("SELECT * FROM Posts WHERE Follows >= " + string(data.number) + ";")
+		break
+	case "min follow":
+		row = readDB("SELECT * FROM Posts WHERE Follows <= " + string(data.number) + ";")
+		break
+	default:
+		fmt.Println("Invalid condition")
+		return result
+	}
+	for row.Next() {
+		var line Posts
+		row.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
+		result = append(result, line)
+	}
+	return result
+}
+
 /*
 typofsort: 'a-z' - 'z-a' - 'like' - 'dislike' - 'creator'
 */
-func SortPost(typOfSort string) []Posts {
+func SortPosts(typOfSort string) []Posts {
 	var result []Posts
 	var row *sql.Rows
 	switch typOfSort {
