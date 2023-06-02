@@ -15,7 +15,17 @@ type AccountPage struct {
 
 func Account(w http.ResponseWriter, r *http.Request) {
 	currentUser := datamanagement.GetProfileData(1)
-	p := AccountPage{Username: currentUser.User_name, Email: currentUser.Email, Profile_picture: currentUser.Profile_image}
+	profile_picture := currentUser.ProfilePicture
+	p := AccountPage{currentUser.Email, currentUser.Username, profile_picture}
+	if p.Profile_picture == "" {
+		p.Profile_picture = "../img/PP_wb.png"
+	}
+	if p.Username == "" {
+		p.Username = "Guest"
+	}
+	if p.Email == "" {
+		p.Email = "No email for guest"
+	}
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
 	delAccount := r.FormValue("delAccount")
 	editMail := r.FormValue("editMail")
