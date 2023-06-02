@@ -16,6 +16,10 @@ const (
 	dbname   = ""
 )
 
+type DataFilter struct {
+	number int
+}
+
 type Display struct {
 	Logout bool
 }
