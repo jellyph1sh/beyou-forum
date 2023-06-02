@@ -52,23 +52,23 @@ func AddLineIntoTargetTable(data DataContainer, table string, nbValues int) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateLike(table string, data DataContainer, add bool, id int) {
+func UpdateUpvotes(table string, data DataContainer, add bool, id int) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
-	var updateLike *sql.Stmt
-	if add || table == "Topic" {
-		updateLike, err = db.Prepare("UPDATE " + table + " SET like=like+1 WHERE id = ?;")
+	var updateUpvotes *sql.Stmt
+	if add || table == "Topics" {
+		updateUpvotes, err = db.Prepare("UPDATE " + table + " SET Upvotes=Upvotes+1 WHERE id = ?;")
 	} else {
-		updateLike, err = db.Prepare("UPDATE " + table + " SET dislike=like+1 WHERE id = ?;")
+		updateUpvotes, err = db.Prepare("UPDATE " + table + " SET Upvotes=Upvotes-1 WHERE id = ?;")
 	}
 	if err != nil {
 		fmt.Println(err)
 	}
-	res, err := updateLike.Exec(id)
+	res, err := updateUpvotes.Exec(id)
 	affected, _ := res.RowsAffected()
-	fmt.Println(affected, " ", table, " has got a new like/dislike")
+	fmt.Println(affected, " ", table, " has got a new upvotes/unupvotes")
 }

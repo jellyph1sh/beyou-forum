@@ -20,7 +20,7 @@ func IsUserExist(userInput string, password string) bool {
 		return false
 	}
 	defer db.Close()
-	row, err := db.Query("SELECT * FROM User;")
+	row, err := db.Query("SELECT * FROM Users;")
 	if err != nil {
 		fmt.Println("Invalid request :")
 		log.Fatal(err)
@@ -28,19 +28,19 @@ func IsUserExist(userInput string, password string) bool {
 	}
 	defer row.Close()
 	for row.Next() { // Iterate and fetch the records from result cursor
-		var id int
-		var name string
-		var first_name string
-		var user_name string
-		var email string
-		var password string
-		var is_admin bool
-		var is_valid bool
-		var description string
-		var profile_image string
-		var creation_date time.Time
-		row.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
-		if (name == userInput || email == userInput) && password == stringPasswordInSha256 {
+		var UserID int
+		var Username string
+		var Email string
+		var Password string
+		var Firstname string
+		var Lastname string
+		var Description string
+		var CreationDate time.Time
+		var ProfilePicture string
+		var IsAdmin bool
+		var ValidUser bool
+		row.Scan(&UserID, &Username, &Email, &Password, &Firstname, &Lastname, &Description, &CreationDate, &ProfilePicture, &IsAdmin, &ValidUser)
+		if (Lastname == userInput || Email == userInput) && Password == stringPasswordInSha256 {
 			return true
 		}
 	}
