@@ -1,6 +1,8 @@
 package datamanagement
 
 import (
+	"database/sql"
+	"fmt"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -105,5 +107,49 @@ func GetAllFromTable(table string) []DataContainer {
 		result = append(result, line)
 	}
 
+	return result
+}
+
+func SortTopic(typOfSort string) []Topics {
+	var result []Topics
+	var row *sql.Rows
+	switch typOfSort {
+	case "a-z":
+		row = readDB("SELECT * FROM Topics ORDER BY Title ASC;")
+		break
+	case "z-a":
+		row = readDB("SELECT * FROM Topics ORDER BY Title DESC;")
+		break
+	case "DESC-Upvote":
+		row = readDB("SELECT * FROM Topics ORDER BY Upvotes DESC;")
+		break
+	case "ASC-Upvote":
+		row = readDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Topics ORDER BY CreatorID DESC;")
+		break
+	default:
+		fmt.Println("invalid type of sort")
+		return result
+	}
+
+	for row.Next() {
+		var line Topics
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		result = append(result, line)
+	}
+
+	return result
+}
+
+func FilterTopic(condition string) []Topics {
+	var result []Topics
+	row := readDB("SELECT * FROM Topics " + condition)
+	for row.Next() {
+		var line Topics
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		result = append(result, line)
+	}
 	return result
 }
