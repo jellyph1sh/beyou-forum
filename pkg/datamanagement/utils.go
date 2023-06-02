@@ -66,6 +66,7 @@ type Topics struct {
 	Description string
 	CreatorID   int
 	Upvotes     int
+	Follows     int
 	ValidTopic  bool
 }
 
