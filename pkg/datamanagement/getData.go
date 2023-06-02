@@ -143,9 +143,33 @@ func SortTopic(typOfSort string) []Topics {
 	return result
 }
 
-func FilterTopic(condition string) []Topics {
+/*
+condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'
+refer a number in data for these conditions
+*/
+func FilterTopic(condition string, data DataFilter) []Topics {
 	var result []Topics
-	row := readDB("SELECT * FROM Topics " + condition)
+	var row *sql.Rows
+	switch condition {
+	case "min upvote":
+		row = readDB("SELECT * FROM Topics WHERE Upvotes >= " + string(data.number) + ";")
+		break
+	case "max upvote":
+		row = readDB("SELECT * FROM Topics WHERE Upvotes <= " + string(data.number) + ";")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Topics WHERE CreatorID = " + string(data.number) + ";")
+		break
+	case "max follow":
+		row = readDB("SELECT * FROM Topics WHERE Follows >= " + string(data.number) + ";")
+		break
+	case "min follow":
+		row = readDB("SELECT * FROM Topics WHERE Follows <= " + string(data.number) + ";")
+		break
+	default:
+		fmt.Println("Invalid condition")
+		return result
+	}
 	for row.Next() {
 		var line Topics
 		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
