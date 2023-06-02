@@ -10,7 +10,7 @@ import (
 var port = ":8080"
 
 func main() {
-	topicTest := datamanagement.DataContainer{Topics: datamanagement.Topics{TopicID: 1, Title: "topic test", Description: "le topic test", CreatorID: 1, Follows: 1, ValidTopic: true}}
+	topicTest := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: "topic test", Description: "le topic test", CreatorID: 1, Follows: 1, ValidTopic: true}}
 	datamanagement.AddLineIntoTargetTable(topicTest, "Topics")
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
