@@ -143,19 +143,19 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 	var row *sql.Rows
 	switch condition {
 	case "min upvote":
-		row = readDB("SELECT * FROM Topics WHERE Upvotes >= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Topics WHERE Upvotes >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "max upvote":
-		row = readDB("SELECT * FROM Topics WHERE Upvotes <= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Topics WHERE Upvotes <= " + fmt.Sprint(data.number) + ";")
 		break
 	case "creator":
-		row = readDB("SELECT * FROM Topics WHERE CreatorID = " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Topics WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
 		break
 	case "max follow":
-		row = readDB("SELECT * FROM Topics WHERE Follows >= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Topics WHERE Follows >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "min follow":
-		row = readDB("SELECT * FROM Topics WHERE Follows <= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Topics WHERE Follows <= " + fmt.Sprint(data.number) + ";")
 		break
 	default:
 		fmt.Println("Invalid condition")
@@ -174,25 +174,25 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 	var row *sql.Rows
 	switch condition {
 	case "min like":
-		row = readDB("SELECT * FROM Posts WHERE Likes >= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE Likes >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "max like":
-		row = readDB("SELECT * FROM Posts WHERE Like <= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE Like <= " + fmt.Sprint(data.number) + ";")
 		break
 	case "min dislike":
-		row = readDB("SELECT * FROM Posts WHERE Dislikes >= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE Dislikes >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "max dislike":
-		row = readDB("SELECT * FROM Posts WHERE Dislike <= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE Dislike <= " + fmt.Sprint(data.number) + ";")
 		break
 	case "creator":
-		row = readDB("SELECT * FROM Posts WHERE CreatorID = " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
 		break
 	case "max follow":
-		row = readDB("SELECT * FROM Posts WHERE Follows >= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE Follows >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "min follow":
-		row = readDB("SELECT * FROM Posts WHERE Follows <= " + string(data.number) + ";")
+		row = readDB("SELECT * FROM Posts WHERE Follows <= " + fmt.Sprint(data.number) + ";")
 		break
 	default:
 		fmt.Println("Invalid condition")
