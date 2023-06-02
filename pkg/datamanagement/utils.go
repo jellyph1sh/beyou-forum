@@ -16,6 +16,10 @@ const (
 	dbname   = ""
 )
 
+type DataFilter struct {
+	number int
+}
+
 type Display struct {
 	Logout bool
 }
@@ -130,4 +134,10 @@ func buildQueryAddData(table string, nbValues int) string {
 		result += ",?"
 	}
 	return result + ");"
+}
+
+func CheckPrepareQuery(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
 }

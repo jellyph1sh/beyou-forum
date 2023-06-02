@@ -27,11 +27,15 @@ body {
         gap: 3vh;
         min-height: 80vh;
     }
+    .containerRegister {
+        width: 33rem;
+        height: max-content;
+        gap: 3vh;
+        min-height: 80vh;
+      
+    }
     .titleLogin {
         font-size: 2.75rem;
-    }
-    .inputLog {
-        width: 80%;
     }
     .formStyleLog {
         width: 70%;
@@ -52,17 +56,30 @@ body {
         gap: 3vh;
         min-height: 80vh;
     }
+    .containerRegister{
+        width: 38rem;
+        height: 100%;
+        margin-left: 15vw;
+        gap: 3vh;
+        min-height: 80vh;
+    }
+    .containerName {
+        justify-content: space-between;
+        display: flex;
+        flex-direction: row;
+    }
+    .titleRegister {
+        font-size: 2.35rem;
+    }
+    
     .titleLogin {
         font-size: 2.75rem;
-    }
-    .inputLog {
-        width: 90%;
     }
     .formStyleLog {
         width: 70%;
     }
     .formStyleRegister {
-        width: 70%;
+        width: 80%;
     }
 }
 
@@ -70,6 +87,15 @@ body {
     .containerLogin {     
         height: 100%;
         margin-top: 5vh;
+    }
+    .containerRegister{
+        height: 100%;
+        margin-top: 5vh;
+        padding: 0 3vw;
+    }
+    .containerName {
+        display: flex;
+        flex-direction: column;
     }
     .inputLog {
         width: 70vw;
@@ -86,6 +112,11 @@ body {
     user-select: none;
 }
 
+.containerLoginPage{
+    display: flex;
+    flex-direction: row;
+}
+
 .containerLogin{
     align-items: center;
     padding: 1rem;
@@ -93,6 +124,14 @@ body {
     background-color: #28292F;
     border: 3px solid #D36638;
 }
+
+.containerRegister{
+    align-items: center;
+    border-radius: 20px;
+    background-color: #28292F;
+    border: 3px solid #D36638;
+}
+
 
 .rememberContainer {
     align-items: center;
@@ -103,6 +142,12 @@ body {
 }
 
 /*--------------------- Texts ---------------------*/
+
+.titleRegister {
+    font-weight: 900;
+    font-family: 'Poppins';
+    color: whitesmoke;
+}
 
 .titleLogin {
     font-weight: 900;
@@ -137,9 +182,7 @@ body {
     gap: 3vh;
 }
 
-.formStyleRegister {
-    gap: 1vh;
-}
+
 
 .remember {
     text-align: center;
@@ -148,11 +191,6 @@ body {
     color: lightgray;
     margin-left: 0.5rem;
 }
-
-.colorWebsiteName {
-    color: #D36638; 
-}
-
 
 /*--------------------- Submit Button ---------------------*/
 

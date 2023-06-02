@@ -1,6 +1,8 @@
 package datamanagement
 
 import (
+	"database/sql"
+	"fmt"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -23,19 +25,6 @@ func GetProfileData(idUser int) Users {
 	row := readDB(query)
 	for row.Next() {
 		row.Scan(&result.UserID, &result.Username, &result.Email, &result.Password, &result.Firstname, &result.Lastname, &result.Description, &result.CreationDate, &result.ProfilePicture, &result.IsAdmin, &result.ValidUser)
-	}
-	row.Close()
-	return result
-}
-
-func GetSortTopic() []Topics {
-	result := []Topics{}
-	query := "SELECT * FROM Topics ORDER BY Upvotes DESC;"
-	row := readDB(query)
-	for row.Next() {
-		var topic Topics
-		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
-		result = append(result, topic)
 	}
 	row.Close()
 	return result
@@ -102,6 +91,151 @@ func GetAllFromTable(table string) []DataContainer {
 			row.Scan(&line.Reports.ReportID, &line.Reports.PostID, &line.Reports.ReportUserID, &line.Reports.Comment)
 			break
 		}
+		result = append(result, line)
+	}
+
+	return result
+}
+
+/*
+typofsort: 'a-z' - 'z-a' - 'DESC-Upvote' - 'ASC-Upvote' - 'creator'
+*/
+
+func SortTopics(typOfSort string) []Topics {
+	var result []Topics
+	var row *sql.Rows
+	switch typOfSort {
+	case "a-z":
+		row = readDB("SELECT * FROM Topics ORDER BY Title ASC;")
+		break
+	case "z-a":
+		row = readDB("SELECT * FROM Topics ORDER BY Title DESC;")
+		break
+	case "DESC-Upvote":
+		row = readDB("SELECT * FROM Topics ORDER BY Upvotes DESC;")
+		break
+	case "ASC-Upvote":
+		row = readDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Topics ORDER BY CreatorID DESC;")
+		break
+	default:
+		fmt.Println("invalid type of sort")
+		return result
+	}
+
+	for row.Next() {
+		var line Topics
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		result = append(result, line)
+	}
+
+	return result
+}
+
+/*
+condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'
+refer a number in data for these conditions
+*/
+func FilterTopics(condition string, data DataFilter) []Topics {
+	var result []Topics
+	var row *sql.Rows
+	switch condition {
+	case "min upvote":
+		row = readDB("SELECT * FROM Topics WHERE Upvotes >= " + fmt.Sprint(data.number) + ";")
+		break
+	case "max upvote":
+		row = readDB("SELECT * FROM Topics WHERE Upvotes <= " + fmt.Sprint(data.number) + ";")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Topics WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
+		break
+	case "max follow":
+		row = readDB("SELECT * FROM Topics WHERE Follows >= " + fmt.Sprint(data.number) + ";")
+		break
+	case "min follow":
+		row = readDB("SELECT * FROM Topics WHERE Follows <= " + fmt.Sprint(data.number) + ";")
+		break
+	default:
+		fmt.Println("Invalid condition")
+		return result
+	}
+	for row.Next() {
+		var line Topics
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		result = append(result, line)
+	}
+	return result
+}
+
+func FilterPosts(condition string, data DataFilter) []Posts {
+	var result []Posts
+	var row *sql.Rows
+	switch condition {
+	case "min like":
+		row = readDB("SELECT * FROM Posts WHERE Likes >= " + fmt.Sprint(data.number) + ";")
+		break
+	case "max like":
+		row = readDB("SELECT * FROM Posts WHERE Like <= " + fmt.Sprint(data.number) + ";")
+		break
+	case "min dislike":
+		row = readDB("SELECT * FROM Posts WHERE Dislikes >= " + fmt.Sprint(data.number) + ";")
+		break
+	case "max dislike":
+		row = readDB("SELECT * FROM Posts WHERE Dislike <= " + fmt.Sprint(data.number) + ";")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Posts WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
+		break
+	case "max follow":
+		row = readDB("SELECT * FROM Posts WHERE Follows >= " + fmt.Sprint(data.number) + ";")
+		break
+	case "min follow":
+		row = readDB("SELECT * FROM Posts WHERE Follows <= " + fmt.Sprint(data.number) + ";")
+		break
+	default:
+		fmt.Println("Invalid condition")
+		return result
+	}
+	for row.Next() {
+		var line Posts
+		row.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
+		result = append(result, line)
+	}
+	return result
+}
+
+/*
+typofsort: 'a-z' - 'z-a' - 'like' - 'dislike' - 'creator'
+*/
+func SortPosts(typOfSort string) []Posts {
+	var result []Posts
+	var row *sql.Rows
+	switch typOfSort {
+	case "a-z":
+		row = readDB("SELECT * FROM Posts ORDER BY Title ASC;")
+		break
+	case "z-a":
+		row = readDB("SELECT * FROM Posts ORDER BY Title DESC;")
+		break
+	case "like":
+		row = readDB("SELECT * FROM Posts ORDER BY Likes DESC;")
+		break
+	case "dislike":
+		row = readDB("SELECT * FROM Posts ORDER BY Dislikes DESC;")
+		break
+	case "creator":
+		row = readDB("SELECT * FROM Posts ORDER BY CreatorID DESC;")
+		break
+	default:
+		fmt.Println("invalid type of sort")
+		return result
+	}
+
+	for row.Next() {
+		var line Posts
+		row.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
 		result = append(result, line)
 	}
 

@@ -1,12 +1,113 @@
+{{ define "account"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>account</title>
+    <link rel="stylesheet" href="../css/account.css">
+    <link rel="stylesheet" href="../css/easyCss.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Account</title>
 </head>
 <body>
-    <h1>account</h1>
+    <script>
+        function DeletePopup() {
+          document.getElementById('popupDel').style.visibility = 'visible';
+        }
+        function EditPasswordPopup(){
+            document.getElementById('popupPwd').style.visibility = 'visible';
+        }
+    </script>  
+    <div class="containerAccountPage">
+        {{ template "navBar"}}
+        <div class="columnContainer containerAccountComp">
+            <h1 class="mainCatAccount marginContentAccount">Account settings</h1>
+            <span class="underlineAccountPage"></span>
+            <div class="columnContainer accountCompContGlobal marginContentAccount">
+                <span class="backgroundAccountCont"></span>
+                <div class="accountCompCont">
+                    <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
+                    <h2 class="usernameAccount">{{ .Username }}</h2>
+                    <div class="columnContainer containerEmail">
+                        <h3 class="accountCompEmail">Email address</h3>
+                        <div class="rowContainer containerEditEmail">
+                            <form action="" method="post"  class="rowContainer alignCenter">
+                                <input name="editMail" type="email" placeholder="{{ .Email }}" class="accountCompEmailUser"></h3>
+                                <button type="submit"><span class="googleEditIcon material-symbols-outlined"> edit </span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="containerBio columnContainer">
+                    <h2 class="bioTitle">Clic on bio to edit</h2>
+                    <form action="" method="post"  class="formBio">
+                        <input name="editBio"  cols="40" rows="5" type="text" placeholder="{{ .Description }}" class="accountCompEmailUser"></h3>
+                    </form>
+                </div>
+                
+            </div>
+            <h1 class="mainCatAccount marginContentAccount">Password settings</h1>
+            <span class="underlineAccountPage"></span>
+            <h2 class="accountInformationMsg marginContentAccount">YOUR NEW PASSWORD NEED TO CONTAINS AT LEAST 8 CHARACTERS</h2>
+            <button onclick="EditPasswordPopup()" type="submit" class="btnChangePassword marginContentAccount">Change password</button>
+            <div id="popupPwd" class="columnContainer ">
+                <a href="/account" class="rowContainer flexExit">
+                    <span class="googleSpan material-symbols-outlined">close</span>
+                </a>
+                <h1 class="titlePwdPop">Edit<br>password<br>menu</h1>
+                <div class="editPwdPopup">
+                    <div class="hidContainer">      
+                        <div class="backgroundPwd">
+                            <i class="circle1"></i >
+                            <i class="circle2"></i >
+                            <i class="circle3"></i >
+                        </div>
+                    </div>
+                    <div class="columnContainer containerContentEdit">
+                        <form action="" method="post" name="changePassword">
+                            <div class="columnContainer">
+                                <h2 class="nameEditPop">Current password</h2>
+                                <input class="inputPwd" required type="password" name="currentPwd">
+                            </div>
+                            <div class="columnContainer">
+                                <h2 class="nameEditPop">New password</h2>
+                                <input class="inputPwd" required type="password" name="changedPwd">
+                            </div>
+                            <div class="columnContainer">
+                                <h2 class="nameEditPop">Confirm new password</h2>
+                                <input class="inputPwd" required type="password" name="changedPwd">
+                            </div>
+                        </div>
+                        <div class="rowContainer alignCenter">
+                            <input type="submit" class="confirmBtn" name="changePassword" value="Confirm">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <h2 class="accountInformationMsg marginContentAccount marginh2Del">DELETE ACCOUNT</h2>
+            <span class="underlineAccountPage"></span>
+            <button onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
+            <div id="popupDel" class="columnContainer ">
+                <div class="deletePopup">
+                    <div class="popup-content columnContainer">
+                    <h2 class="titleDelPop">Are you sure ?</h2>
+                    <p class="textPopDel">Are you sure you want to delete your account, this <br>
+                        action will delete permanently your account.</p>
+                    </div>
+                    <div class="rowContainer delPopBtnCont">
+                        <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
+                        <form action="" method="post" name="delAccount">
+                            <input class="delPopBtn delPopBtnDelete" type="submit" name="delAccount" value="Delete">
+                        </form> 
+                    </div>
+                </div>
+            </div>
+              
+        </div>
+    </div>
 </body>
 </html>
+{{end}}
