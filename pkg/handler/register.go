@@ -13,19 +13,19 @@ type register struct {
 	isValid bool
 }
 
-func CreateUser(ID int, userName string, userFirstName string, userMainName string, userEmail string, stringPasswordInSha256 string) datamanagement.User {
-	nUser := datamanagement.User{}
-	nUser.ID = ID
-	nUser.Name = userName
-	nUser.First_name = userFirstName
-	nUser.User_name = userMainName
+func CreateUser(ID int, userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
+	nUser := datamanagement.Users{}
+	nUser.UserID = ID
+	nUser.Username = userName
 	nUser.Email = userEmail
 	nUser.Password = stringPasswordInSha256
-	nUser.Is_admin = false
-	nUser.Is_valid = true
+	nUser.Firstname = userFirstName
+	nUser.Lastname = userLastName
 	nUser.Description = ""
-	nUser.Profile_image = ""
-	nUser.Creation_date = time.Now()
+	nUser.CreationDate = time.Now()
+	nUser.ProfilePicture = ""
+	nUser.IsAdmin = false
+	nUser.ValidUser = true
 	return nUser
 }
 
@@ -43,7 +43,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
 		nUser := CreateUser(11, userName, userName, userName, userEmail, stringPasswordInSha256)
 		nDataContainer := datamanagement.DataContainer{}
-		nDataContainer.User = nUser
+		nDataContainer.Users = nUser
 		// QUERY := "INSERT INTO  User VALUES (7,'" + userName + "','" + userName + "','" + userName + "','" + userEmail + "','" + stringPasswordInSha256 + "'," + "false, true,'','','" + time.Now().String() + "');"
 		datamanagement.AddLineIntoTargetTable(nDataContainer, "User", 11)
 	} else {
