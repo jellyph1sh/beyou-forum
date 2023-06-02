@@ -79,3 +79,31 @@ func GetPostByTopic(topic string) []Posts {
 	row.Close()
 	return result
 }
+
+func GetAllFromTable(table string) []DataContainer {
+	row := readDB("SELECT * FROM " + table + ";")
+	var result []DataContainer
+	for row.Next() {
+		var line DataContainer
+		switch true {
+		case table == "Users":
+			row.Scan(&line.Users.UserID, &line.Users.Username, &line.Users.Email, &line.Users.Password, &line.Users.Firstname, &line.Users.Lastname, &line.Users.Description, &line.Users.CreationDate, &line.Users.ProfilePicture, &line.Users.IsAdmin, &line.Users.ValidUser)
+			break
+		case table == "Posts":
+			row.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate, &line.Posts.IsValidPost)
+			break
+		case table == "Topics":
+			row.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
+			break
+		case table == "Tags":
+			row.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)
+			break
+		case table == "Reports":
+			row.Scan(&line.Reports.ReportID, &line.Reports.PostID, &line.Reports.ReportUserID, &line.Reports.Comment)
+			break
+		}
+		result = append(result, line)
+	}
+
+	return result
+}
