@@ -69,7 +69,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(table string, data DataContainer, add bool, id int) {
+func UpdateUpvotes(table string, data DataContainer, id int) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
@@ -77,11 +77,7 @@ func UpdateUpvotes(table string, data DataContainer, add bool, id int) {
 		return
 	}
 	var updateUpvotes *sql.Stmt
-	if add || table == "Topics" {
-		updateUpvotes, err = db.Prepare("UPDATE " + table + " SET Upvotes=Upvotes+1 WHERE id = ?;")
-	} else {
-		updateUpvotes, err = db.Prepare("UPDATE " + table + " SET Upvotes=Upvotes-1 WHERE id = ?;")
-	}
+	updateUpvotes, err = db.Prepare("UPDATE Topic SET Upvotes=Upvotes+1 WHERE id = ?;")
 	if err != nil {
 		fmt.Println(err)
 	}
