@@ -18,10 +18,10 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	var res sql.Result
 	switch true {
 	case table == "Users":
-		query := "INSERT INTO " + table + "(UserName,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES(?,?,?,?,?,?,?,?,?,?);"
+		query := "INSERT INTO " + table + "(UserID, Username,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
 		insertDataInTable, err = db.Prepare(query)
 		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
+		res, err = insertDataInTable.Exec(data.Users.UserID, data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
 		break
 	case table == "Posts":
 		query := "INSERT INTO " + table + "(Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?,?);"

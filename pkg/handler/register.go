@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
+	"os/exec"
 	"text/template"
 	"time"
 )
@@ -13,8 +14,9 @@ type register struct {
 	isValid bool
 }
 
-func CreateUser(userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
+func CreateUser(UserId string, userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
 	nUser := datamanagement.Users{}
+	nUser.UserID = UserId
 	nUser.Username = userName
 	nUser.Email = userEmail
 	nUser.Password = stringPasswordInSha256
@@ -35,19 +37,25 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	userPassword := r.FormValue("password")
 	registerDisplay := register{}
 	registerDisplay.isValid = true
-
-	if !datamanagement.IsUserExist(userEmail, userName) {
-		passwordByte := []byte(userPassword)
-		passwordInSha256 := sha256.Sum256(passwordByte)
-		stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
-		nUser := CreateUser(userName, userName, userName, userEmail, stringPasswordInSha256)
-		nDataContainer := datamanagement.DataContainer{}
-		nDataContainer.Users = nUser
-		datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
-	} else {
-		registerDisplay.isValid = false
-		fmt.Println("nofvjnorlsfn")
+	if userEmail != "" && userName != "" && userPassword != "" {
+		if !datamanagement.IsUserExist(userEmail, userName) {
+			newUUID, err := exec.Command("uuidgen").Output()
+			if err != nil {
+				fmt.Println("user creation error ", err)
+			}
+			passwordByte := []byte(userPassword)
+			passwordInSha256 := sha256.Sum256(passwordByte)
+			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+			nUser := CreateUser(string(newUUID), userName, userName, userName, userEmail, stringPasswordInSha256)
+			nDataContainer := datamanagement.DataContainer{}
+			nDataContainer.Users = nUser
+			datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
+		} else {
+			registerDisplay.isValid = false
+			fmt.Println("nofvjnorlsfn")
+		}
 	}
+
 	// fmt.Println(userEmail, userName, userPassword)
 	t.ExecuteTemplate(w, "register", nil)
 }

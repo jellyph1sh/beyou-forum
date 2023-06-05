@@ -80,7 +80,7 @@ type TopicsTags struct {
 }
 
 type Users struct {
-	UserID         int
+	UserID         string
 	Username       string
 	Email          string
 	Password       string
