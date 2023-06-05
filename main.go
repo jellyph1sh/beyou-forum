@@ -15,6 +15,8 @@ func main() {
 	// datamanagement.AddLineIntoTargetTable(postTest, "Posts")
 	// datamanagement.LikePostManager(1, 1, "Dislikes")
 	// datamanagement.UpdateUpvotes(1, 1)
+	// w := datamanagement.DataContainer{WordsBlacklist: datamanagement.WordsBlacklist{WordID: 1, Word: "pd"}}
+	// datamanagement.AddLineIntoTargetTable(w, "WordsBlacklist")
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
