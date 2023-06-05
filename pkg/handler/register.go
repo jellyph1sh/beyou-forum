@@ -30,6 +30,16 @@ func CreateUser(UserId string, userName string, userFirstName string, userLastNa
 	return nUser
 }
 
+func deleteLastByte(tab []byte) []byte {
+	returnedTab := []byte{}
+	for index, element := range tab {
+		if index != len(tab)-1 {
+			returnedTab = append(returnedTab, element)
+		}
+	}
+	return returnedTab
+}
+
 func Register(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/register.html", "./static/html/navBar.html"))
 	userEmail := r.FormValue("email")
@@ -46,6 +56,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			passwordByte := []byte(userPassword)
 			passwordInSha256 := sha256.Sum256(passwordByte)
 			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+			fmt.Print(newUUID)
+			newUUID = deleteLastByte(newUUID)
+			fmt.Print(newUUID)
 			nUser := CreateUser(string(newUUID), userName, userName, userName, userEmail, stringPasswordInSha256)
 			nDataContainer := datamanagement.DataContainer{}
 			nDataContainer.Users = nUser

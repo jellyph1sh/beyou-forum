@@ -14,11 +14,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	ifUserExist, idUser := datamanagement.IsRegister(userInput, userPassword)
 	if ifUserExist {
 		fmt.Println("il est register")
-		// do login
 		// expiration := time.Now().Add(365 * 24 * time.Hour)
 		// cookie := http.Cookie{Name: "username", Value: "astaxie", Expires: expiration}
-		cookie := http.Cookie{Name: "IdUser", Value: fmt.Sprint(idUser)}
-		http.SetCookie(w, &cookie)
+		cookieIdUser := http.Cookie{Name: "idUser", Value: idUser}
+		http.SetCookie(w, &cookieIdUser)
+		http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 	} else {
 		fmt.Println("pas register")
 	}
