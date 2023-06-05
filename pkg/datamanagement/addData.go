@@ -97,11 +97,75 @@ func UpdateUpvotes(table string, data DataContainer, id int) {
 		return
 	}
 	var updateUpvotes *sql.Stmt
-	updateUpvotes, err = db.Prepare("UPDATE Topic SET Upvotes=Upvotes+1 WHERE id = ?;")
+	updateUpvotes, err = db.Prepare("UPDATE Topics SET Upvotes=Upvotes+1 WHERE id = ?;")
 	if err != nil {
 		fmt.Println(err)
 	}
 	res, err := updateUpvotes.Exec(id)
 	affected, _ := res.RowsAffected()
 	fmt.Println(affected, " ", table, " has got a new upvotes/unupvotes")
+}
+
+/*
+likOrdIS: 'Likes' - 'Dislikes';
+*/
+func LikePostManager(idPost, idUser int, likOrdIS string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	defer db.Close()
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return
+	}
+	row := readDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+	for row.Next() {
+		row.Close()
+		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser), db)
+		updateLike, err := db.Prepare("UPDATE Posts SET " + likOrdIS + "=" + likOrdIS + "-1 WHERE PostID = ?;")
+		if err != nil {
+			fmt.Println(err)
+		}
+		updateLike.Exec(idPost)
+		return
+	}
+	if likOrdIS == "Likes" {
+		row := readDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+		for row.Next() {
+			row.Close()
+			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser), db)
+		}
+		AddLineIntoTargetTable(DataContainer{Likes: Likes{PostID: idPost, UserID: idUser}}, "Likes")
+	} else {
+		row := readDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+		for row.Next() {
+			row.Close()
+			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser), db)
+		}
+		AddLineIntoTargetTable(DataContainer{Dislikes: Dislikes{PostID: idPost, UserID: idUser}}, "Dislikes")
+	}
+	updateLike, err := db.Prepare("UPDATE Posts SET " + likOrdIS + "=" + likOrdIS + "+1 WHERE PostID = ?;")
+	if err != nil {
+		fmt.Println(err)
+	}
+	updateLike.Exec(idPost)
+	return
+}
+
+func DeleteLineIntoTargetTable(table, condition string, db *sql.DB) {
+	if db == nil {
+		db, err := sql.Open("sqlite3", "./DB-Forum.db")
+		defer db.Close()
+		if err != nil {
+			fmt.Println("Could not open database : \n", err)
+			return
+		}
+	}
+	query := "DELETE FROM " + table + " WHERE (" + condition + ");"
+	fmt.Println(query)
+	res, err := db.Exec(query)
+	if err != nil {
+		fmt.Println("invalid condition : \n", err)
+		return
+	}
+	affected, _ := res.RowsAffected()
+	fmt.Println(affected, "line of ", table, "has been deleted")
 }
