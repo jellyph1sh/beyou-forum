@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -147,4 +148,25 @@ func CheckPrepareQuery(err error) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func CheckContentByBlackListWord(content string) bool {
+	blackListWords := GetAllFromTable("WordsBlacklist")
+	contentArray := strings.Split(content, " ")
+	for _, w := range blackListWords {
+		if arrayContains(contentArray, w.WordsBlacklist.Word) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func arrayContains(array []string, word string) bool {
+	for _, val := range array {
+		if word == val {
+			return true
+		}
+	}
+	return false
 }

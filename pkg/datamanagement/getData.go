@@ -90,6 +90,24 @@ func GetAllFromTable(table string) []DataContainer {
 		case table == "Reports":
 			row.Scan(&line.Reports.ReportID, &line.Reports.PostID, &line.Reports.ReportUserID, &line.Reports.Comment)
 			break
+		case table == "Dislikes":
+			row.Scan(&line.Dislikes.PostID, &line.Dislikes.UserID)
+			break
+		case table == "Likes":
+			row.Scan(&line.Dislikes.PostID, &line.Dislikes.UserID)
+			break
+		case table == "Follows":
+			row.Scan(&line.Follows.FollowID, &line.Follows.TopicID, &line.Follows.UserID)
+			break
+		case table == "TopicsTags":
+			row.Scan(&line.TopicsTags.TopicID, &line.TopicsTags.TagID)
+			break
+		case table == "Upvotes":
+			row.Scan(&line.Upvotes.TopicID, &line.Upvotes.UserID)
+			break
+		case table == "WordsBlacklist":
+			row.Scan(&line.WordsBlacklist.WordID, &line.WordsBlacklist.Word)
+			break
 		}
 		result = append(result, line)
 	}
