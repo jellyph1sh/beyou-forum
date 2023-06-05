@@ -3,6 +3,7 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -77,6 +78,12 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		CheckPrepareQuery(err)
 		res, err = insertDataInTable.Exec(data.TopicsTags.TopicID, data.TopicsTags.TagID)
 		break
+	case table == "Upvotes":
+		query := "INSERT INTO " + table + " VALUES (?,?);"
+		insertDataInTable, err = db.Prepare(query)
+		CheckPrepareQuery(err)
+		res, err = insertDataInTable.Exec(data.Upvotes.TopicID, data.Upvotes.UserID)
+		break
 	default:
 		fmt.Println("No data to add")
 		return
@@ -89,7 +96,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(table string, data DataContainer, id int) {
+func UpdateUpvotes(TopicID, UserID int) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
@@ -97,13 +104,23 @@ func UpdateUpvotes(table string, data DataContainer, id int) {
 		return
 	}
 	var updateUpvotes *sql.Stmt
-	updateUpvotes, err = db.Prepare("UPDATE Topics SET Upvotes=Upvotes+1 WHERE id = ?;")
+	sign := "+"
+	row := readDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + strconv.Itoa(UserID) + ";")
+	for row.Next() {
+		row.Close()
+		sign = "-"
+		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+strconv.Itoa(UserID))
+	}
+	if sign == "+" {
+		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")
+	}
+	updateUpvotes, err = db.Prepare("UPDATE Topics SET Upvotes=Upvotes" + sign + "1 WHERE TopicID = ?;")
 	if err != nil {
 		fmt.Println(err)
 	}
-	res, err := updateUpvotes.Exec(id)
+	res, err := updateUpvotes.Exec(TopicID)
 	affected, _ := res.RowsAffected()
-	fmt.Println(affected, " ", table, " has got a new upvotes/unupvotes")
+	fmt.Println(affected, " upvote of upvotes/unupvotes")
 }
 
 /*
@@ -119,7 +136,7 @@ func LikePostManager(idPost, idUser int, likOrdIS string) {
 	row := readDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
 	for row.Next() {
 		row.Close()
-		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser), db)
+		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
 		updateLike, err := db.Prepare("UPDATE Posts SET " + likOrdIS + "=" + likOrdIS + "-1 WHERE PostID = ?;")
 		if err != nil {
 			fmt.Println(err)
@@ -131,14 +148,14 @@ func LikePostManager(idPost, idUser int, likOrdIS string) {
 		row := readDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
 		for row.Next() {
 			row.Close()
-			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser), db)
+			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
 		}
 		AddLineIntoTargetTable(DataContainer{Likes: Likes{PostID: idPost, UserID: idUser}}, "Likes")
 	} else {
 		row := readDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
 		for row.Next() {
 			row.Close()
-			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser), db)
+			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
 		}
 		AddLineIntoTargetTable(DataContainer{Dislikes: Dislikes{PostID: idPost, UserID: idUser}}, "Dislikes")
 	}
@@ -150,14 +167,12 @@ func LikePostManager(idPost, idUser int, likOrdIS string) {
 	return
 }
 
-func DeleteLineIntoTargetTable(table, condition string, db *sql.DB) {
-	if db == nil {
-		db, err := sql.Open("sqlite3", "./DB-Forum.db")
-		defer db.Close()
-		if err != nil {
-			fmt.Println("Could not open database : \n", err)
-			return
-		}
+func DeleteLineIntoTargetTable(table, condition string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	defer db.Close()
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return
 	}
 	query := "DELETE FROM " + table + " WHERE (" + condition + ");"
 	fmt.Println(query)

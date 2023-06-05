@@ -14,6 +14,7 @@ func main() {
 	// postTest := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: "content posts test", AuthorID: 1, TopicID: 1, Likes: 5, Dislikes: 1, CreationDate: time.Now(), IsValidPost: true}}
 	// datamanagement.AddLineIntoTargetTable(postTest, "Posts")
 	// datamanagement.LikePostManager(1, 1, "Dislikes")
+	// datamanagement.UpdateUpvotes(1, 1)
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
