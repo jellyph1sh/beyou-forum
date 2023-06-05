@@ -14,8 +14,21 @@ type AccountPage struct {
 	Description     string
 }
 
+// update first name / last name
+// update email
+// update bio
+// update passsword
+// update pseudo
+
+// UPDATE Users SET Username = "" WHERE UserID = ""
 func Account(w http.ResponseWriter, r *http.Request) {
-	currentUser := datamanagement.GetProfileData(1)
+	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
+	delAccount := r.FormValue("delAccount")
+	editMail := r.FormValue("editMail")
+	changedPwd := r.FormValue("changedPwd")
+	cookie, _ := r.Cookie("idUser")
+	idUser := getCookieValue(cookie)
+	currentUser := datamanagement.GetProfileData(idUser)
 	p := AccountPage{currentUser.Email, currentUser.Username, currentUser.ProfilePicture, currentUser.Description}
 	if p.Profile_picture == "" {
 		p.Profile_picture = "../img/PP_wb.png"
@@ -29,10 +42,6 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	if p.Description == "" {
 		p.Description = "No bio added"
 	}
-	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
-	delAccount := r.FormValue("delAccount")
-	editMail := r.FormValue("editMail")
-	changedPwd := r.FormValue("changedPwd")
 	if delAccount != "" {
 		fmt.Println(delAccount)
 	} else if editMail != "" {
