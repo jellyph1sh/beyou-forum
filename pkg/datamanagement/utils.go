@@ -68,6 +68,7 @@ type Topics struct {
 	TopicID     int
 	Title       string
 	Description string
+	Picture     string
 	CreatorID   int
 	Upvotes     int
 	Follows     int
@@ -112,6 +113,7 @@ type DataContainer struct {
 	Tags       Tags
 	Topics     Topics
 	TopicsTags TopicsTags
+	Upvotes    Upvotes
 	Users
 	WordsBlacklist
 }

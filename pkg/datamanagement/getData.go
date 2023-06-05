@@ -82,7 +82,7 @@ func GetAllFromTable(table string) []DataContainer {
 			row.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate, &line.Posts.IsValidPost)
 			break
 		case table == "Topics":
-			row.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
+			row.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
 			break
 		case table == "Tags":
 			row.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)
@@ -127,7 +127,7 @@ func SortTopics(typOfSort string) []Topics {
 
 	for row.Next() {
 		var line Topics
-		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		row.Scan(&line.TopicID, &line.Title, &line.Description, line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
 
@@ -163,7 +163,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 	}
 	for row.Next() {
 		var line Topics
-		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
 	return result
