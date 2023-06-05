@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"forum/pkg/datamanagement"
 	"forum/pkg/handler"
 	"net/http"
 )
@@ -10,8 +9,11 @@ import (
 var port = ":8080"
 
 func main() {
-	topicTest := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: "topic test", Description: "le topic test", CreatorID: 1, Follows: 1, ValidTopic: true}}
-	datamanagement.AddLineIntoTargetTable(topicTest, "Topics")
+	// topicTest := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: "topic test", Description: "le topic test", CreatorID: 1, Follows: 1, ValidTopic: true}}
+	// datamanagement.AddLineIntoTargetTable(topicTest, "Topics")
+	// postTest := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: "content posts test", AuthorID: 1, TopicID: 1, Likes: 5, Dislikes: 1, CreationDate: time.Now(), IsValidPost: true}}
+	// datamanagement.AddLineIntoTargetTable(postTest, "Posts")
+	// datamanagement.LikePostManager(1, 1, "Dislikes")
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))

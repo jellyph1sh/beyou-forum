@@ -135,7 +135,7 @@ func SortTopics(typOfSort string) []Topics {
 }
 
 /*
-condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'
+condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'.
 refer a number in data for these conditions
 */
 func FilterTopics(condition string, data DataFilter) []Topics {
