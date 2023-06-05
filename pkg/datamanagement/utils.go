@@ -79,6 +79,11 @@ type TopicsTags struct {
 	TagID   int
 }
 
+type Upvotes struct {
+	TopicID int
+	UserID  int
+}
+
 type Users struct {
 	UserID         int
 	Username       string
