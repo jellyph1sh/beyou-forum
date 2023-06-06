@@ -148,3 +148,12 @@ func CheckPrepareQuery(err error) {
 		fmt.Println(err)
 	}
 }
+
+func ExecuterQuery(QUERY string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+	}
+	defer db.Close()
+	db.Exec(QUERY)
+}

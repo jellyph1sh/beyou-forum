@@ -68,7 +68,5 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("nofvjnorlsfn")
 		}
 	}
-
-	// fmt.Println(userEmail, userName, userPassword)
 	t.ExecuteTemplate(w, "register", nil)
 }

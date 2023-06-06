@@ -36,7 +36,6 @@ func IsRegister(userInput string, password string) (bool, string) {
 	passwordByte := []byte(password)
 	passwordInSha256 := sha256.Sum256(passwordByte)
 	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
-	// fmt.Println(stringPasswordInSha256)
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		fmt.Println("Could not open database : \n", err)
