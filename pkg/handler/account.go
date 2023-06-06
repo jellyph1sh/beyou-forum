@@ -20,7 +20,7 @@ type AccountPage struct {
 // update passsword
 // update pseudo
 
-// UPDATE Users SET Username = "" WHERE UserID = ""
+// 
 func Account(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
 	delAccount := r.FormValue("delAccount")
@@ -43,11 +43,20 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		p.Description = "No bio added"
 	}
 	if delAccount != "" {
+		// "DELETE FROM Users WHERE UserID ='"+ idUser +"';"
 		fmt.Println(delAccount)
 	} else if editMail != "" {
+		//"" UPDATE Users SET Email = '" + editMail +"' WHERE UserID ='"+ idUser +"';"
 		fmt.Println(editMail)
 	} else if changedPwd != "" {
+		//"UPDATE Users SET Password = '" + changedPwd +"' WHERE UserID = '"+ idUser +"';"
 		fmt.Println(changedPwd)
 	}
+		// "UPDATE Users SET Description = '" + changedBIO +"' WHERE UserID = '"+ idUser +"';"
+		// "UPDATE Users SET Firstname = '" + changedFirstname +"' WHERE UserID = '"+ idUser +"';"
+		// "UPDATE Users SET Lastname = '" + changedLastname +"' WHERE UserID = '"+ idUser +"';"
+		// "UPDATE Users SET Username = '" + changedUsername +"' WHERE UserID = '"+ idUser +"';"
+
+
 	t.ExecuteTemplate(w, "account", p)
 }
