@@ -19,7 +19,7 @@ func GetPostData(idPost int) Posts {
 	return result
 }
 
-func GetProfileData(idUser int) Users {
+func GetProfileData(idUser string) Users {
 	result := Users{}
 	query := "SELECT * FROM Users WHERE UserID = " + strconv.Itoa(idUser) + ";"
 	row := ReadDB(query)

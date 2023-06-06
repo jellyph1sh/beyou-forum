@@ -45,6 +45,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	userEmail := r.FormValue("email")
 	userName := r.FormValue("username")
 	userPassword := r.FormValue("password")
+	rememberMe := r.FormValue("rememberMe")
 	registerDisplay := register{}
 	registerDisplay.isValid = true
 	if userEmail != "" && userName != "" && userPassword != "" {
@@ -56,19 +57,22 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			passwordByte := []byte(userPassword)
 			passwordInSha256 := sha256.Sum256(passwordByte)
 			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
-			fmt.Print(newUUID)
 			newUUID = deleteLastByte(newUUID)
-			fmt.Print(newUUID)
 			nUser := CreateUser(string(newUUID), userName, userName, userName, userEmail, stringPasswordInSha256)
 			nDataContainer := datamanagement.DataContainer{}
 			nDataContainer.Users = nUser
 			datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
+			if rememberMe == "true" {
+				cookieIdUser := http.Cookie{Name: "idUser", Value: string(newUUID)}
+				http.SetCookie(w, &cookieIdUser)
+			} else {
+				uConnected.IdUser = string(newUUID)
+				uConnected.IsUserConnected = true
+			}
+			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 		} else {
 			registerDisplay.isValid = false
-			fmt.Println("nofvjnorlsfn")
 		}
 	}
-
-	// fmt.Println(userEmail, userName, userPassword)
 	t.ExecuteTemplate(w, "register", nil)
 }

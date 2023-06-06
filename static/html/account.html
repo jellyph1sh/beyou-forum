@@ -29,22 +29,41 @@
             <div class="columnContainer accountCompContGlobal marginContentAccount">
                 <span class="backgroundAccountCont"></span>
                 <div class="accountCompCont">
-                    <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
-                    <h2 class="usernameAccount">{{ .Username }}</h2>
+                    <div class="rowContainer containerImg alignCenter">
+                        <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
+                    </div>
+                    <div class="containerUser rowContainer alignCenter">
+                        <form action="" method="post">
+                            <input class="usernameAccount" placeholder="{{ .Username }}" type="text" name="changedUsername" id="">
+                        </form>
+                    </div>
                     <div class="columnContainer containerEmail">
                         <h3 class="accountCompEmail">Email address</h3>
                         <div class="rowContainer containerEditEmail">
                             <form action="" method="post"  class="rowContainer alignCenter">
-                                <input name="editMail" type="email" placeholder="{{ .Email }}" class="accountCompEmailUser"></h3>
+                                <input name="editMail" type="email" placeholder="{{ .Email }}" class="accountCompEmailUser">
                                 <button type="submit"><span class="googleEditIcon material-symbols-outlined"> edit </span></button>
                             </form>
+                        </div>
+                    </div>
+                    <div class="rowContainer alignCenter containerEditNames">
+                        <div class="columnContainer containerEditFormNames ">
+                            <h3>First name</h3>
+                            <form action="" method="post">
+                                <input name="changedFirstname" type="text" placeholder="{{ .FirstName }}" class="nameUser">
+                            </form>
+                            <h3>Last name</h3>
+                            <form action="" method="post">
+                                <input name="changedLastname" type="text" placeholder="{{ .LastName }}" class="nameUser">
+                            </form>
+                             
                         </div>
                     </div>
                 </div>
                 <div class="containerBio columnContainer">
                     <h2 class="bioTitle">Clic on bio to edit</h2>
                     <form action="" method="post"  class="formBio">
-                        <input name="editBio"  cols="40" rows="5" type="text" placeholder="{{ .Description }}" class="accountCompEmailUser"></h3>
+                        <input name="changedBIO"  cols="40" rows="5" type="text" placeholder="{{ .Description }}" class="accountCompEmailUser"></h3>
                     </form>
                 </div>
                 

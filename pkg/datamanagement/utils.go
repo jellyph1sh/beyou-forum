@@ -65,6 +65,11 @@ type Tags struct {
 	CreatorID int
 }
 
+type UserConnected struct {
+	IsUserConnected bool
+	IdUser          string
+}
+
 type Topics struct {
 	TopicID     int
 	Title       string
@@ -154,6 +159,15 @@ func CheckPrepareQuery(err error) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func ExecuterQuery(QUERY string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+	}
+	defer db.Close()
+	db.Exec(QUERY)
 }
 
 func CheckContentByBlackListWord(content string) bool {
