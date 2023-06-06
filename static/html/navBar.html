@@ -18,31 +18,41 @@
             <span class="underlineNav"></span>
             <h3 class="titleCatNav">GLOBAL</h3>
             <div class="columnContainer containerCatNav">
-                <div class="btnCatContainer rowContainer">
-                    <span class="googleSpan material-symbols-outlined"> tag </span>
-                    <a href="/Most_viewed_topics"><h1 class="nameCatNav">Most viewed hashtags</h1></a>
-                </div>
-                <div class="btnCatContainer rowContainer">
-                    <span class="googleSpan material-symbols-outlined">thumb_up</span>
-                    <a href="/Most_liked_topics"><h1 class="nameCatNav">Most liked topics</h1></a>
-                </div>
-                <div class="btnCatContainer rowContainer">
-                    <span class="googleSpan material-symbols-outlined"> visibility </span>
-                    <a href="/Most_viewed_topics"><h1 class="nameCatNav">Most viewed topics</h1></a>
-                </div>
+                <a href="/Most_upvoted_topics">
+                    <div class="btnCatContainer rowContainer">
+                        <img class="upvoteIcon" src="../img/Upvote_icon.png" alt="">
+                        <h1 class="nameCatNav">Most upvoted topics</h1>
+                    </div>
+                </a>
+                <a href="/Most_liked_posts">
+                    <div class="btnCatContainer rowContainer">
+                        <span class="googleSpan material-symbols-outlined">thumb_up</span>
+                    <h1 class="nameCatNav">Most liked posts</h1>
+                    </div>
+                </a>
             </div>
             <span class="underlineNav"></span>
             <h3 class="titleCatNav">MY FOLLOWS</h3>
-            <div class="btnCatContainer marginCat rowContainer">
-                <span class="googleSpan material-symbols-outlined"> favorite </span>
-                <a href="/Follows"><h1 class="nameCatNav">Topics followed</h1></a>
+            <a href="/Follows">
+                <div class="btnCatContainer marginCat rowContainer">
+                    <span class="googleSpan material-symbols-outlined"> favorite </span>
+                    <h1 class="nameCatNav">Topics followed</h1>
+                </div>
+            </a>
+            <span class="underlineNav"></span>
+            <h3 class="titleCatNav">CREATE</h3>
+            <div class="btnCatContainer btnCatContainerAdd marginCat rowContainer">
+                <img class="upvoteIcon" src="../img/add_icon.png" alt="">
+                <a href="/Create"><h1 class="nameCatNav">Create topic</h1></a>
             </div>
             <span class="underlineNav"></span>
             <h3 class="titleCatNav">MY PROFILE</h3>
-            <div class="btnCatContainer marginCat rowContainer">
-                <img class="iconAccountStyle" src="./img/PP.png" alt="Account_Icon">
-                <a href="/account"><h1 class="nameCatNav">My Account</h1></a>
-            </div>
+            <a href="/account">
+                <div class="btnCatContainer marginCat rowContainer">
+                    <img class="iconAccountStyle" src="./img/PP.png" alt="Account_Icon">
+                    <h1 class="nameCatNav">My Account</h1>
+                </div>
+            </a>
         </div>
     </nav>
 {{end}}
