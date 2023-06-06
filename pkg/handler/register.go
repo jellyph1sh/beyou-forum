@@ -57,9 +57,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			passwordByte := []byte(userPassword)
 			passwordInSha256 := sha256.Sum256(passwordByte)
 			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
-			fmt.Print(newUUID)
 			newUUID = deleteLastByte(newUUID)
-			// fmt.Print(newUUID)
 			nUser := CreateUser(string(newUUID), userName, userName, userName, userEmail, stringPasswordInSha256)
 			nDataContainer := datamanagement.DataContainer{}
 			nDataContainer.Users = nUser
@@ -74,7 +72,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 		} else {
 			registerDisplay.isValid = false
-			fmt.Println("nofvjnorlsfn")
 		}
 	}
 	t.ExecuteTemplate(w, "register", nil)

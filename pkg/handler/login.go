@@ -16,7 +16,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	rememberMe := r.FormValue("rememberMe")
 	ifUserExist, idUser := datamanagement.IsRegister(userInput, userPassword)
 	if ifUserExist {
-		fmt.Println("il est register")
 		// expiration := time.Now().Add(365 * 24 * time.Hour)
 		// cookie := http.Cookie{Name: "username", Value: "astaxie", Expires: expiration}
 		if rememberMe == "true" {

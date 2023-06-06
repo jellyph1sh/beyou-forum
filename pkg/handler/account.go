@@ -15,12 +15,6 @@ type AccountPage struct {
 	LastName        string
 }
 
-// update first name / last name
-// update email
-// update bio
-// update passsword
-// update pseudo
-
 func setDefaultValue(displayStructAccountPage AccountPage) AccountPage {
 	displayStructAccountPage.Profile_picture = "../img/PP_wb.png"
 	displayStructAccountPage.Username = "Guest"
@@ -37,9 +31,9 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	editMail := r.FormValue("editMail")
 	changedPwd := r.FormValue("changedPwd")
 	changedBIO := r.FormValue("changedBIO")
-	// changedFirstname := r.FormValue("changedFirstname")
-	// changedLastname := r.FormValue("changedLastname")
-	// changedUsername := r.FormValue("changedUsername")
+	changedFirstname := r.FormValue("changedFirstname")
+	changedLastname := r.FormValue("changedLastname")
+	changedUsername := r.FormValue("changedUsername")
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
 	if idUser == "" && uConnected.IsUserConnected {
@@ -58,15 +52,15 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	case changedBIO != "":
 		datamanagement.ExecuterQuery("UPDATE Users SET Description = '" + changedBIO + "' WHERE UserID = '" + idUser + "';")
 		break
-		// case changedFirstname != "":
-		// 	datamanagement.ExecuterQuery("UPDATE Users SET Firstname = '" + changedFirstname + "' WHERE UserID = '" + idUser + "';")
-		// 	break
-		// case changedLastname != "":
-		// 	datamanagement.ExecuterQuery("UPDATE Users SET Lastname = '" + changedLastname + "' WHERE UserID = '" + idUser + "';")
-		// 	break
-		// case Username != "":
-		// 	datamanagement.ExecuterQuery("UPDATE Users SET Username = '" + changedUsername + "' WHERE UserID = '" + idUser + "';")
-		// 	break
+	case changedFirstname != "":
+		datamanagement.ExecuterQuery("UPDATE Users SET Firstname = '" + changedFirstname + "' WHERE UserID = '" + idUser + "';")
+		break
+	case changedLastname != "":
+		datamanagement.ExecuterQuery("UPDATE Users SET Lastname = '" + changedLastname + "' WHERE UserID = '" + idUser + "';")
+		break
+	case changedUsername != "":
+		datamanagement.ExecuterQuery("UPDATE Users SET Username = '" + changedUsername + "' WHERE UserID = '" + idUser + "';")
+		break
 	}
 	currentUser := datamanagement.GetProfileData(idUser)
 	displayStructAccountPage := AccountPage{currentUser.Username, currentUser.Email, currentUser.ProfilePicture, currentUser.Description, currentUser.Firstname, currentUser.Lastname}

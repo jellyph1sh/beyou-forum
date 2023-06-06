@@ -24,8 +24,11 @@
         margin-left: 20vw;
         width: 65%;
     }
+    .containerUser {
+        padding: 0 2vw;
+    }
     .accountCompCont {
-        gap: 2vw;
+        gap: 0.5vw;
     }
     .accountCompCont {
         flex-direction: row;
@@ -34,8 +37,8 @@
         width: 100%;
     }
     .containerEmail {
-        padding: 1rem;
-        margin: 1rem;
+        padding: 0 1rem;
+   
     }
     .backgroundPwd {
         width: 32rem;
@@ -55,7 +58,11 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        margin-right: 15vw;
+        margin-right: 5vw;
+    }
+    .containerImg {
+        width: 100%;
+        margin-bottom: 0.8vh;
     }
     .accountCompCont {
         flex-direction: column;
@@ -64,8 +71,13 @@
         width: 100%;
     }
     .containerEmail {
-        padding: 1rem;
-        margin: 1rem;
+        margin-top: 0.8vh;
+        align-items: center;
+        width: 100%;
+    }
+    .containerEditNames {
+        margin-top: 0.8vh;
+        width: 100%;
     }
     .backgroundPwd {
         width: 32rem;
@@ -78,42 +90,18 @@
     }
 }
 
-@media screen and (max-width:900px) and (min-width:700px)  {
-    .containerAccountPage {
-        display: flex;
-        flex-direction: column;
-    }
-    .accountCompCont {
-        flex-direction: row;
-    }
-    .underlineAccountPage {
-        width: 95%;
-    }
-    .containerAccountComp {
-        margin-left: 1vw;
-    }
-    .containerEmail {
-        padding: 1rem;
-        margin: 1rem;
-    }
-    .backgroundPwd {
-        width: 355px;
-    }
-    .inputPwd {
-        width: 87.5%;
-    }
-    .googleSpan {
-        right: 30vw;
-    }
-}
 
-@media screen and (max-width:700px) {
+@media screen and (max-width:900px) {
     .containerAccountPage {
         display: flex;
         flex-direction: column;
     }
     .accountCompCont {
         flex-direction: column;
+    }
+    .containerImg {
+        width: 100%;
+        margin-bottom: 0.8vh;
     }
     .containerAccountComp {
         align-items: center;
@@ -125,8 +113,13 @@
         text-align: center;
     }
     .containerEmail {
-        margin: 0.8rem;
-        padding: 0.8rem;
+        margin-top: 0.8vh;
+        align-items: center;
+        width: 100%;
+    }
+    .containerEditNames {
+        margin-top: 0.8vh;
+        width: 100%;
     }
     .backgroundPwd {
         width: 355px;
@@ -150,6 +143,7 @@ body {
 
 .accountCompContGlobal{
     width: max-content;
+    height: max-content;
 }
 
 .accountCompCont {
@@ -158,14 +152,12 @@ body {
     align-items: center;
     justify-content: space-around;
     display: flex;
-
+    padding-bottom: 0.8vh;
 }
 
 .containerEmail {
-    background-color: #32333B;
-    border-radius: 15px;
-
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: rgba(26, 26, 29, 0.35);
+    height: 100%;
 }
 
 .containerEditEmail {
@@ -195,13 +187,34 @@ body {
 }
 
 .containerBio {
-    background-color: rgba(33, 33, 36);
+    background-color:  rgba(26, 26, 29, 0.6);
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     padding: 2rem;
     gap: 1vh;
 }
 
+.containerUser{
+    height: 100%;
+    background-color: rgba(26, 26, 29, 0.35);
+    width: 100%;
+
+}
+
+.containerEditNames{
+    background-color: rgba(26, 26, 29, 0.35);
+    height: 100%;
+}
+
+.containerEditFormNames {
+    padding: 0 3rem;
+
+}
+
+.containerImg {
+    background-color: rgba(26, 26, 29, 0.35);
+    height: 100%;
+}
 /*--------------------- Texts ---------------------*/
 
 .mainCatAccount {
@@ -212,7 +225,16 @@ body {
 
 .usernameAccount {
     font-family: 'Poppins-regular';
-    color: whitesmoke;
+    color: rgba(255, 255, 255, 1);
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    max-width: 8rem;
+    text-align: center;
+
+}
+.usernameAccount:focus-visible {
+    outline: 2px solid #d366388f;
 }
 
 .accountCompEmail  {
@@ -296,6 +318,34 @@ body {
  
 }
 
+.containerEditNames input[type="text"] {
+    border: 2px solid transparent;
+    font-size: 12px;
+    padding: 0.5rem 0rem;
+    padding-left : .2rem;
+}
+
+.containerEditNames input[type="text"]:focus {
+    outline: none !important;
+    border:2px solid #D36638;
+    padding-left: 0.2rem;
+}
+
+.containerEditNames h3{
+    color: white;
+    font-size: 16px;
+    margin: 0;
+}
+
+
+.nameUser {
+    color: #8D8D8D;
+    background-color: transparent;
+    border-radius: 5px;
+    font-weight: 700;
+    margin-left: 0.1rem;
+    align-items: center;
+ }
 /*--------------------- Buttons ---------------------*/
 
 .btnChangePassword {
