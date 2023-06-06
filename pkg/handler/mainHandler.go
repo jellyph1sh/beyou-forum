@@ -20,8 +20,6 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		Profile(w, r)
 	case "/register":
 		Register(w, r)
-	case "/topic":
-		Topic(w, r)
 	default:
 		InvalidPath(w, r)
 	}

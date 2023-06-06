@@ -11,7 +11,7 @@ import (
 func GetPostData(idPost int) Posts {
 	result := Posts{}
 	query := "SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = " + strconv.Itoa(idPost) + ";"
-	row := readDB(query)
+	row := ReadDB(query)
 	for row.Next() { // Iterate and fetch the records from result cursor
 		row.Scan(&result.PostID, &result.Content, &result.AuthorID, &result.TopicID, &result.Likes, &result.Dislikes, &result.CreationDate, &result.IsValidPost)
 	}
@@ -22,7 +22,7 @@ func GetPostData(idPost int) Posts {
 func GetProfileData(idUser int) Users {
 	result := Users{}
 	query := "SELECT * FROM Users WHERE UserID = " + strconv.Itoa(idUser) + ";"
-	row := readDB(query)
+	row := ReadDB(query)
 	for row.Next() {
 		row.Scan(&result.UserID, &result.Username, &result.Email, &result.Password, &result.Firstname, &result.Lastname, &result.Description, &result.CreationDate, &result.ProfilePicture, &result.IsAdmin, &result.ValidUser)
 	}
@@ -33,7 +33,7 @@ func GetProfileData(idUser int) Users {
 func GetSortPost() []Posts {
 	result := []Posts{}
 	query := "SELECT * FROM Posts ORDER BY Likes - Dislikes DESC;"
-	row := readDB(query)
+	row := ReadDB(query)
 	for row.Next() {
 		var post Posts
 		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
@@ -46,7 +46,7 @@ func GetSortPost() []Posts {
 func GetUserByName(search string) []Users {
 	result := []Users{}
 	query := "SELECT * FROM Users WHERE Username LIKE '%" + search + "%';"
-	row := readDB(query)
+	row := ReadDB(query)
 	for row.Next() {
 		var user Users
 		row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
@@ -59,7 +59,7 @@ func GetUserByName(search string) []Users {
 func GetPostByTopic(topic string) []Posts {
 	result := []Posts{}
 	query := "SELECT * FROM Posts ORDER BY Likes - Dislikes DESC WHERE TopicID LIKE " + topic + ";"
-	row := readDB(query)
+	row := ReadDB(query)
 	for row.Next() {
 		var post Posts
 		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
@@ -70,7 +70,7 @@ func GetPostByTopic(topic string) []Posts {
 }
 
 func GetAllFromTable(table string) []DataContainer {
-	row := readDB("SELECT * FROM " + table + ";")
+	row := ReadDB("SELECT * FROM " + table + ";")
 	var result []DataContainer
 	for row.Next() {
 		var line DataContainer
@@ -124,19 +124,19 @@ func SortTopics(typOfSort string) []Topics {
 	var row *sql.Rows
 	switch typOfSort {
 	case "a-z":
-		row = readDB("SELECT * FROM Topics ORDER BY Title ASC;")
+		row = ReadDB("SELECT * FROM Topics ORDER BY Title ASC;")
 		break
 	case "z-a":
-		row = readDB("SELECT * FROM Topics ORDER BY Title DESC;")
+		row = ReadDB("SELECT * FROM Topics ORDER BY Title DESC;")
 		break
 	case "DESC-Upvote":
-		row = readDB("SELECT * FROM Topics ORDER BY Upvotes DESC;")
+		row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes DESC;")
 		break
 	case "ASC-Upvote":
-		row = readDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
+		row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
 		break
 	case "creator":
-		row = readDB("SELECT * FROM Topics ORDER BY CreatorID DESC;")
+		row = ReadDB("SELECT * FROM Topics ORDER BY CreatorID DESC;")
 		break
 	default:
 		fmt.Println("invalid type of sort")
@@ -161,19 +161,19 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 	var row *sql.Rows
 	switch condition {
 	case "min upvote":
-		row = readDB("SELECT * FROM Topics WHERE Upvotes >= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Topics WHERE Upvotes >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "max upvote":
-		row = readDB("SELECT * FROM Topics WHERE Upvotes <= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Topics WHERE Upvotes <= " + fmt.Sprint(data.number) + ";")
 		break
 	case "creator":
-		row = readDB("SELECT * FROM Topics WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Topics WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
 		break
 	case "max follow":
-		row = readDB("SELECT * FROM Topics WHERE Follows >= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Topics WHERE Follows >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "min follow":
-		row = readDB("SELECT * FROM Topics WHERE Follows <= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Topics WHERE Follows <= " + fmt.Sprint(data.number) + ";")
 		break
 	default:
 		fmt.Println("Invalid condition")
@@ -192,25 +192,25 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 	var row *sql.Rows
 	switch condition {
 	case "min like":
-		row = readDB("SELECT * FROM Posts WHERE Likes >= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE Likes >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "max like":
-		row = readDB("SELECT * FROM Posts WHERE Like <= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE Like <= " + fmt.Sprint(data.number) + ";")
 		break
 	case "min dislike":
-		row = readDB("SELECT * FROM Posts WHERE Dislikes >= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE Dislikes >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "max dislike":
-		row = readDB("SELECT * FROM Posts WHERE Dislike <= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE Dislike <= " + fmt.Sprint(data.number) + ";")
 		break
 	case "creator":
-		row = readDB("SELECT * FROM Posts WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE CreatorID = " + fmt.Sprint(data.number) + ";")
 		break
 	case "max follow":
-		row = readDB("SELECT * FROM Posts WHERE Follows >= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE Follows >= " + fmt.Sprint(data.number) + ";")
 		break
 	case "min follow":
-		row = readDB("SELECT * FROM Posts WHERE Follows <= " + fmt.Sprint(data.number) + ";")
+		row = ReadDB("SELECT * FROM Posts WHERE Follows <= " + fmt.Sprint(data.number) + ";")
 		break
 	default:
 		fmt.Println("Invalid condition")
@@ -232,19 +232,19 @@ func SortPosts(typOfSort string) []Posts {
 	var row *sql.Rows
 	switch typOfSort {
 	case "a-z":
-		row = readDB("SELECT * FROM Posts ORDER BY Title ASC;")
+		row = ReadDB("SELECT * FROM Posts ORDER BY Title ASC;")
 		break
 	case "z-a":
-		row = readDB("SELECT * FROM Posts ORDER BY Title DESC;")
+		row = ReadDB("SELECT * FROM Posts ORDER BY Title DESC;")
 		break
 	case "like":
-		row = readDB("SELECT * FROM Posts ORDER BY Likes DESC;")
+		row = ReadDB("SELECT * FROM Posts ORDER BY Likes DESC;")
 		break
 	case "dislike":
-		row = readDB("SELECT * FROM Posts ORDER BY Dislikes DESC;")
+		row = ReadDB("SELECT * FROM Posts ORDER BY Dislikes DESC;")
 		break
 	case "creator":
-		row = readDB("SELECT * FROM Posts ORDER BY CreatorID DESC;")
+		row = ReadDB("SELECT * FROM Posts ORDER BY CreatorID DESC;")
 		break
 	default:
 		fmt.Println("invalid type of sort")
@@ -258,4 +258,14 @@ func SortPosts(typOfSort string) []Posts {
 	}
 
 	return result
+}
+
+func GetUserById(id int) Users {
+	row := ReadDB("SELECT * FROM Users WHERE UserID = " + strconv.Itoa(id) + ";")
+	for row.Next() {
+		var user Users
+		row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+		return user
+	}
+	return Users{}
 }
