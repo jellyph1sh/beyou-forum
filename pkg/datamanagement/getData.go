@@ -21,7 +21,7 @@ func GetPostData(idPost int) Posts {
 
 func GetProfileData(idUser string) Users {
 	result := Users{}
-	query := "SELECT * FROM Users WHERE UserID = " + strconv.Itoa(idUser) + ";"
+	query := "SELECT * FROM Users WHERE UserID = " + idUser + ";"
 	row := ReadDB(query)
 	for row.Next() {
 		row.Scan(&result.UserID, &result.Username, &result.Email, &result.Password, &result.Firstname, &result.Lastname, &result.Description, &result.CreationDate, &result.ProfilePicture, &result.IsAdmin, &result.ValidUser)
