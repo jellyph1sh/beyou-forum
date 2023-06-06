@@ -65,6 +65,11 @@ type Tags struct {
 	CreatorID int
 }
 
+type UserConnected struct {
+	IsUserConnected bool
+	IdUser          string
+}
+
 type Topics struct {
 	TopicID     int
 	Title       string

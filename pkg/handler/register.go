@@ -45,6 +45,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	userEmail := r.FormValue("email")
 	userName := r.FormValue("username")
 	userPassword := r.FormValue("password")
+	rememberMe := r.FormValue("rememberMe")
 	registerDisplay := register{}
 	registerDisplay.isValid = true
 	if userEmail != "" && userName != "" && userPassword != "" {
@@ -63,8 +64,13 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			nDataContainer := datamanagement.DataContainer{}
 			nDataContainer.Users = nUser
 			datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
-			cookieIdUser := http.Cookie{Name: "idUser", Value: string(newUUID)}
-			http.SetCookie(w, &cookieIdUser)
+			if rememberMe == "true" {
+				cookieIdUser := http.Cookie{Name: "idUser", Value: string(newUUID)}
+				http.SetCookie(w, &cookieIdUser)
+			} else {
+				uConnected.IdUser = string(newUUID)
+				uConnected.IsUserConnected = true
+			}
 			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 		} else {
 			registerDisplay.isValid = false

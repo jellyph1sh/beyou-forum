@@ -11,6 +11,8 @@ type AccountPage struct {
 	Email           string
 	Profile_picture string
 	Description     string
+	FirstName       string
+	LastName        string
 }
 
 // update first name / last name
@@ -18,6 +20,16 @@ type AccountPage struct {
 // update bio
 // update passsword
 // update pseudo
+
+func setDefaultValue(displayStructAccountPage AccountPage) AccountPage {
+	displayStructAccountPage.Profile_picture = "../img/PP_wb.png"
+	displayStructAccountPage.Username = "Guest"
+	displayStructAccountPage.Email = "No email for guest"
+	displayStructAccountPage.Description = "No bio added"
+	displayStructAccountPage.FirstName = "No First Name"
+	displayStructAccountPage.LastName = "No Last Name"
+	return displayStructAccountPage
+}
 
 func Account(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
@@ -30,6 +42,9 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	// changedUsername := r.FormValue("changedUsername")
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
+	if idUser == "" && uConnected.IsUserConnected {
+		idUser = uConnected.IdUser
+	}
 	switch true {
 	case delAccount != "":
 		datamanagement.ExecuterQuery("DELETE FROM Users WHERE UserID ='" + idUser + "';")
@@ -54,19 +69,10 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		// 	break
 	}
 	currentUser := datamanagement.GetProfileData(idUser)
-	p := AccountPage{currentUser.Username, currentUser.Email, currentUser.ProfilePicture, currentUser.Description}
-	if p.Profile_picture == "" {
-		p.Profile_picture = "../img/PP_wb.png"
+	displayStructAccountPage := AccountPage{currentUser.Username, currentUser.Email, currentUser.ProfilePicture, currentUser.Description, currentUser.Firstname, currentUser.Lastname}
+	displayStructAccountPage.Profile_picture = "../img/PP_wb.png"
+	if !uConnected.IsUserConnected {
+		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 	}
-	if p.Username == "" {
-		p.Username = "Guest"
-	}
-	if p.Email == "" {
-		p.Email = "No email for guest"
-	}
-	if p.Description == "" {
-		p.Description = "No bio added"
-	}
-
-	t.ExecuteTemplate(w, "account", p)
+	t.ExecuteTemplate(w, "account", displayStructAccountPage)
 }
