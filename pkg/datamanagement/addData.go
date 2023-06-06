@@ -46,6 +46,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		query := "INSERT INTO " + table + "(word) VALUES(?);"
 		insertDataInTable, err = db.Prepare(query)
 		CheckPrepareQuery(err)
+		fmt.Println("test")
 		res, err = insertDataInTable.Exec(data.WordsBlacklist.Word)
 		break
 	case table == "Reports":
@@ -85,7 +86,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		res, err = insertDataInTable.Exec(data.Upvotes.TopicID, data.Upvotes.UserID)
 		break
 	default:
-		fmt.Println("No data to add")
+		fmt.Println("Invalid Table")
 		return
 	}
 	if err != nil || res == nil {

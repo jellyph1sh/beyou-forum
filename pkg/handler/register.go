@@ -58,11 +58,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
 			fmt.Print(newUUID)
 			newUUID = deleteLastByte(newUUID)
-			fmt.Print(newUUID)
+			// fmt.Print(newUUID)
 			nUser := CreateUser(string(newUUID), userName, userName, userName, userEmail, stringPasswordInSha256)
 			nDataContainer := datamanagement.DataContainer{}
 			nDataContainer.Users = nUser
 			datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
+			cookieIdUser := http.Cookie{Name: "idUser", Value: string(newUUID)}
+			http.SetCookie(w, &cookieIdUser)
+			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 		} else {
 			registerDisplay.isValid = false
 			fmt.Println("nofvjnorlsfn")
