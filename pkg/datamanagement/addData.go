@@ -30,10 +30,10 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		res, err = insertDataInTable.Exec(data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
 		break
 	case table == "Topics":
-		query := "INSERT INTO " + table + "(Title,Description,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?);"
+		query := "INSERT INTO " + table + "(Title,Description,CreationDate,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?);"
 		insertDataInTable, err = db.Prepare(query)
 		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Topics.Title, data.Topics.Description, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
+		res, err = insertDataInTable.Exec(data.Topics.Title, data.Topics.Description, data.Topics.CreationDate, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
 		break
 	case table == "Tags":
 		query := "INSERT INTO " + table + "(Title,CreatorID) VALUES(?,?);"

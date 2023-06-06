@@ -65,14 +65,15 @@ type Tags struct {
 }
 
 type Topics struct {
-	TopicID     int
-	Title       string
-	Description string
-	Picture     string
-	CreatorID   int
-	Upvotes     int
-	Follows     int
-	ValidTopic  bool
+	TopicID      int
+	Title        string
+	Description  string
+	Picture      string
+	CreationDate time.Time
+	CreatorID    int
+	Upvotes      int
+	Follows      int
+	ValidTopic   bool
 }
 
 type TopicsTags struct {
