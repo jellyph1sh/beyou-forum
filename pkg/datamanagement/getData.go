@@ -111,7 +111,7 @@ func GetAllFromTable(table string) []DataContainer {
 		}
 		result = append(result, line)
 	}
-
+	row.Close()
 	return result
 }
 
@@ -148,7 +148,7 @@ func SortTopics(typOfSort string) []Topics {
 		row.Scan(&line.TopicID, &line.Title, &line.Description, line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
-
+	row.Close()
 	return result
 }
 
@@ -184,6 +184,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
+	row.Close()
 	return result
 }
 
@@ -221,6 +222,7 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 		row.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
 		result = append(result, line)
 	}
+	row.Close()
 	return result
 }
 
@@ -256,15 +258,16 @@ func SortPosts(typOfSort string) []Posts {
 		row.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
 		result = append(result, line)
 	}
-
+	row.Close()
 	return result
 }
 
-func GetUserById(id int) Users {
-	row := ReadDB("SELECT * FROM Users WHERE UserID = " + strconv.Itoa(id) + ";")
+func GetUserById(id string) Users {
+	row := ReadDB("SELECT * FROM Users WHERE UserID = " + id + ";")
 	for row.Next() {
 		var user Users
 		row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+		row.Close()
 		return user
 	}
 	return Users{}

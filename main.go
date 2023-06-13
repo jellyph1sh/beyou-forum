@@ -11,10 +11,10 @@ import (
 var port = ":8080"
 
 func main() {
-	// topicTest := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: "topicTest2", Description: "topicTest", CreatorID: 1, Upvotes: 0, Follows: 0, ValidTopic: true}}
-	// postTest := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: "un autre post test odiajdiuoazudanjudfnajudfnaefn", AuthorID: 1, TopicID: 1, Likes: 15, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
+	// topicTest := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: "topicTest3", Description: "topicTest", CreatorID: 1, Upvotes: 0, Follows: 0, ValidTopic: true}}
+	// postTest := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: "un autre post test odiajdiuoazudanjudfnajudfnaefn", AuthorID: "1", TopicID: 1, Likes: 15, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
 	// userTest := datamanagement.DataContainer{Users: datamanagement.Users{UserID: "1", Username: "DarkSasuke", Email: "email", Password: "oipjfziiofnziofnez", Firstname: "Dark", Lastname: "Link", Description: "baka", CreationDate: time.Now(), ProfilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLeR3wX3QrJpZGlb6fIeU-XPPRgxGlP5coYmQaBFZJ&s", IsAdmin: false, ValidUser: true}}
-	// datamanagement.AddLineIntoTargetTable(userTest, "Users")
+	// datamanagement.AddLineIntoTargetTable(postTest, "Posts")
 
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)

@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 )
 
 func Topic(w http.ResponseWriter, r *http.Request) {
@@ -15,8 +16,8 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	var topic datamanagement.Topics
 	for row.Next() {
 		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
-		row.Close()
 	}
+	row.Close()
 	dataToSend := datamanagement.DataTopicPage{Topic: topic}
 	row = datamanagement.ReadDB("SELECT * FROM Posts WHERE TopicID = " + strconv.Itoa(topic.TopicID) + ";")
 	for row.Next() {
@@ -25,9 +26,19 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		dataToSend.Posts = append(dataToSend.Posts, post)
 		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
 	}
+	row.Close()
+	// add a post
 	newPost := r.FormValue("postContent")
+	// TO DO : add condition (is user connected)
 	if len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost) {
-		post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost}}
+		cookie, _ := r.Cookie("idUser")
+		idUser := getCookieValue(cookie)
+		//temp condition waiting the cookie
+		if len(idUser) == 0 {
+			idUser = "1"
+		}
+		post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: dataToSend.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
+		datamanagement.AddLineIntoTargetTable(post, "Posts")
 	}
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, dataToSend)

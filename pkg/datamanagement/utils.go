@@ -44,7 +44,7 @@ type Likes struct {
 type Posts struct {
 	PostID       int
 	Content      string
-	AuthorID     int
+	AuthorID     string
 	TopicID      int
 	Likes        int
 	Dislikes     int
@@ -125,9 +125,9 @@ type DataContainer struct {
 }
 
 type DataTopicPage struct {
-	Topic      Topics
-	Posts      []Posts
-	Authors []Users			
+	Topic   Topics
+	Posts   []Posts
+	Authors []Users
 }
 
 /*don't forget to close the *sql.Rows when you use this func */
