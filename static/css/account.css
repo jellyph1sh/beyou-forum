@@ -582,7 +582,6 @@ body {
 }
 
 a .googleSpan{
-    position: fixed;
     align-self: flex-start;
     margin-top: 10px;
     z-index: 999;
