@@ -44,7 +44,7 @@ type Likes struct {
 type Posts struct {
 	PostID       int
 	Content      string
-	AuthorID     int
+	AuthorID     string
 	TopicID      int
 	Likes        int
 	Dislikes     int
@@ -124,8 +124,14 @@ type DataContainer struct {
 	WordsBlacklist
 }
 
+type DataTopicPage struct {
+	Topic   Topics
+	Posts   []Posts
+	Authors []Users
+}
+
 /*don't forget to close the *sql.Rows when you use this func */
-func readDB(query string) *sql.Rows {
+func ReadDB(query string) *sql.Rows {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {

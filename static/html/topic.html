@@ -7,6 +7,32 @@
     <title>topic</title>
 </head>
 <body>
-    <h1>topic</h1>
+    <div id="main-container">
+        <div id="header-topic">
+            <img src="{{.Topic.Picture}}">
+            <h1>{{.Topic.Title}}</h1>
+            <p></p>
+        </div>
+        <div id="post-container">
+            {{$root := .}}
+            {{range $i, $val := .Posts}}
+                {{$author := index $root.Authors $i}}
+                <div class="post">
+                    <img src="{{$author.ProfilePicture}}">
+                    <h3>{{$author.Username}}</h3>
+                    <p>{{$val.CreationDate.Format "Jan 02, 2006"}}</p>
+                    <p>{{$val.Content}}</p>
+                    <form method="post">
+                        <!-- like or dislike -->
+                    </form>
+                </div>
+            {{end}}
+        </div>
+        <div id="create-post-form">
+            <form method="post">
+                <input type="text" name="postContent" cols="30" rows="10" placeholder="type your post there"></input>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
