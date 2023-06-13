@@ -22,9 +22,9 @@ func getCookieValue(cookie *http.Cookie) string {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./static/html/home.html"))
+	t := template.Must(template.ParseFiles("./static/html/home.html", "./static/html/navBar.html"))
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
 	fmt.Println(idUser)
-	t.Execute(w, nil)
+	t.ExecuteTemplate(w, "home", nil)
 }

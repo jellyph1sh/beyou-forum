@@ -1,0 +1,45 @@
+/*--------------------- Fonts ---------------------*/
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
+     url('../fonts/Poppins-Semi/Poppins-SemiBold.woff') format('woff');
+}
+@font-face {
+    font-family: 'Poppins-regular';
+    src: url('../fonts/Poppins-Reg/Poppins-Regular.woff2') format('woff2'),
+     url('../fonts/Poppins-Reg/Poppins-Regular.woff') format('woff');
+}
+
+.cookiesContainer {
+    background-color: #28292F;
+    border-radius: 5px;
+    gap: 3vh;
+    padding: 1rem;
+}
+
+.textCookies {
+    color: whitesmoke;
+    font-family: 'Poppins';
+    text-align: center;
+    width: 80%;
+}
+
+.btnPolicy {
+    background-color: #44454F ;
+    color: #C6C6C6;
+}
+
+.btnOk {
+    background-color: #D36638;
+    color: white;
+}
+
+.containerBtnCookies {
+    align-self: baseline;
+}
+
+.cookieImg {
+    width: 5rem;
+    height: 5rem;
+}

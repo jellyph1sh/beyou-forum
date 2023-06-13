@@ -1,12 +1,27 @@
+{{ define "home"}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/easyCss.css">
     <title>home</title>
 </head>
 <body>
+    {{ template "navBar"}}
     <h1>home</h1>
+    <div class="cookiesContainer columnContainer">
+        <img class="cookieImg" src="../img/cookie.png" alt="cookie_img">
+        <h2 class="textCookies">We use cookies to make your 
+            experience  better</h2>
+        <div class="containerBtnCookies rowContainer">
+            <a class="btnPolicy" href="/policy">Check cookies policy</a>
+            <a class="btnOk" href="/home">OK</a>
+        </div>
+    </div>
 </body>
 </html>
+{{ end }}
