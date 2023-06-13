@@ -34,11 +34,10 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	changedFirstname := r.FormValue("changedFirstname")
 	changedLastname := r.FormValue("changedLastname")
 	changedUsername := r.FormValue("changedUsername")
-	cookie, _ := r.Cookie("idUser")
-	idUser := getCookieValue(cookie)
-	if idUser == "" && uConnected.IsUserConnected {
-		idUser = uConnected.IdUser
-	}
+	cookieIdUser, _ := r.Cookie("idUser")
+	cookieIsConnected, _ := r.Cookie("isConnected")
+	idUser := getCookieValue(cookieIdUser)
+	isConnected := getCookieValue(cookieIsConnected)
 	switch true {
 	case delAccount != "":
 		datamanagement.ExecuterQuery("DELETE FROM Users WHERE UserID ='" + idUser + "';")
@@ -65,7 +64,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	currentUser := datamanagement.GetProfileData(idUser)
 	displayStructAccountPage := AccountPage{currentUser.Username, currentUser.Email, currentUser.ProfilePicture, currentUser.Description, currentUser.Firstname, currentUser.Lastname}
 	displayStructAccountPage.Profile_picture = "../img/PP_wb.png"
-	if !uConnected.IsUserConnected {
+	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 	}
 	t.ExecuteTemplate(w, "account", displayStructAccountPage)
