@@ -31,14 +31,14 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	newPost := r.FormValue("postContent")
 	// TO DO : add condition (is user connected)
 	if len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost) {
-		cookie, _ := r.Cookie("idUser")
-		idUser := getCookieValue(cookie)
-		//temp condition waiting the cookie
-		if len(idUser) == 0 {
-			idUser = "1"
+		cookieIsConnected, _ := r.Cookie("isConnected")
+		isConnected := getCookieValue(cookieIsConnected)
+		if isConnected == "true" {
+			cookie, _ := r.Cookie("idUser")
+			idUser := getCookieValue(cookie)
+			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: dataToSend.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
+			datamanagement.AddLineIntoTargetTable(post, "Posts")
 		}
-		post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: dataToSend.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
-		datamanagement.AddLineIntoTargetTable(post, "Posts")
 	}
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, dataToSend)
