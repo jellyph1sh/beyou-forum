@@ -96,7 +96,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(TopicID, UserID int) {
+func UpdateUpvotes(TopicID int, UserID string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
@@ -105,11 +105,11 @@ func UpdateUpvotes(TopicID, UserID int) {
 	}
 	var updateUpvotes *sql.Stmt
 	sign := "+"
-	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + strconv.Itoa(UserID) + ";")
+	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + UserID + ";")
 	for row.Next() {
 		row.Close()
 		sign = "-"
-		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+strconv.Itoa(UserID))
+		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+UserID)
 	}
 	if sign == "+" {
 		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")

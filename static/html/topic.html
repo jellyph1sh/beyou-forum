@@ -12,6 +12,14 @@
             <img src="{{.Topic.Picture}}">
             <h1>{{.Topic.Title}}</h1>
             <p></p>
+            <form method="post">
+                <input type="text" name="follow" value="follow" hidden>
+                <input type="submit" value="Follow"></input>
+            </form>
+            <form method="post">
+                <input type="text" name="upvote" value="upvote" hidden>
+                <input type="submit" value="Upvote"></input>
+            </form>
         </div>
         <div id="post-container">
             {{$root := .}}

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -27,17 +28,35 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
 	}
 	row.Close()
+	cookie, _ := r.Cookie("idUser")
+	idUser := getCookieValue(cookie)
+	userFollowTopic := false
+	if idUser != "" {
+		row = datamanagement.ReadDB("SELECT * FROM Follows WHERE UserID = " + idUser + ";")
+		for row.Next() {
+			userFollowTopic = true
+		}
+	}
 	// add a post
 	newPost := r.FormValue("postContent")
-	// TO DO : add condition (is user connected)
-	if len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost) {
-		cookieIsConnected, _ := r.Cookie("isConnected")
-		isConnected := getCookieValue(cookieIsConnected)
-		if isConnected == "true" {
-			cookie, _ := r.Cookie("idUser")
-			idUser := getCookieValue(cookie)
+	clickFollow := r.FormValue("follow")
+	clickUpvote := r.FormValue("upvote")
+	cookieIsConnected, _ := r.Cookie("isConnected")
+	isConnected := getCookieValue(cookieIsConnected)
+	if isConnected == "true" {
+		if len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost) {
 			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: dataToSend.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
+		} else if clickFollow != "" {
+			fmt.Println("test")
+			if userFollowTopic {
+				datamanagement.DeleteLineIntoTargetTable("Follows", "UserID = "+idUser)
+			} else {
+				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topic.TopicID, UserID: idUser}}
+				datamanagement.AddLineIntoTargetTable(line, "Follows")
+			}
+		} else if clickUpvote != "" {
+			datamanagement.UpdateUpvotes(topic.TopicID, idUser)
 		}
 	}
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))

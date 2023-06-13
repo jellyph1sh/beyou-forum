@@ -33,7 +33,7 @@ type Dislikes struct {
 type Follows struct {
 	FollowID int
 	TopicID  int
-	UserID   int
+	UserID   string
 }
 
 type Likes struct {
@@ -88,7 +88,7 @@ type TopicsTags struct {
 
 type Upvotes struct {
 	TopicID int
-	UserID  int
+	UserID  string
 }
 
 type Users struct {
