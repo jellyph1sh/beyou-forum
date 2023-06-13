@@ -32,7 +32,10 @@ nav{
     border-radius: 10px;
     background-color: #32333B;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 
+.btnCatContainerAdd {
+    border: 2px solid #D36638;
 }
 
 .btnCatContainer:hover {
@@ -113,6 +116,10 @@ a {
     color: #D36638; 
 }
 
+.upvoteIcon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
 /*--------------------- Responsive ---------------------*/
 
 @media screen and (min-width : 900px) {
@@ -128,9 +135,6 @@ a {
         width: 100%;
     }
 
-    .linkPages {
-        gap: 0.5vh;
-    }
 
     .underlineNav {
         width: 100%;
