@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -18,22 +19,9 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 	}
 	row.Close()
-	dataToSend := datamanagement.DataTopicPage{Topic: topic}
-	row = datamanagement.ReadDB("SELECT * FROM Posts WHERE TopicID = " + strconv.Itoa(topic.TopicID) + ";")
-	for row.Next() {
-		var post datamanagement.Posts
-		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
-		dataToSend.Posts = append(dataToSend.Posts, post)
-		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
-	}
-	row.Close()
+	dataToSend := datamanagement.DataTopicPage{}
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
-
-	idUser = "1"
-
-	dataToSend.IsFollow = false
-	dataToSend.IsUpvote = false
 	if idUser != "" {
 		row = datamanagement.ReadDB("SELECT * FROM Follows WHERE UserID = " + idUser + " AND TopicID = " + strconv.Itoa(topic.TopicID) + ";")
 		for row.Next() {
@@ -46,6 +34,18 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			row.Close()
 		}
 	}
+	dataToSend = datamanagement.DataTopicPage{Topic: topic}
+	row = datamanagement.ReadDB("SELECT * FROM Posts WHERE TopicID = " + strconv.Itoa(topic.TopicID) + ";")
+	for row.Next() {
+		var post datamanagement.Posts
+		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		dataToSend.Posts = append(dataToSend.Posts, post)
+		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
+	}
+	row.Close()
+	idUser = "1" //delete this line
+	dataToSend.IsFollow = false
+	dataToSend.IsUpvote = false
 	// add a post
 	newPost := r.FormValue("postContent")
 	clickFollow := r.FormValue("follow")
@@ -54,7 +54,8 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	dislike := r.FormValue("dislike")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
-	isConnected = "true"
+	isConnected = "true" //delete this line
+	fmt.Println("test")
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
@@ -81,7 +82,12 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			datamanagement.LikePostManager(idPost, idUser, "Dislikes")
 			break
 		}
+		for _, p := range dataToSend.Posts {
+			dataToSend.Likes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Likes"))
+			dataToSend.Dislikes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Dislikes"))
+		}
 	}
+	fmt.Println(dataToSend)
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, dataToSend)
 }

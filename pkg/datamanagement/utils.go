@@ -130,6 +130,8 @@ type DataTopicPage struct {
 	Authors  []Users
 	IsFollow bool
 	IsUpvote bool
+	Likes    []bool
+	Dislikes []bool
 }
 
 /*don't forget to close the *sql.Rows when you use this func */
