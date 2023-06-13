@@ -8,31 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="../css/easyCss.css">
+    <link rel="stylesheet" href="../css/cookies.css">
     <title>home</title>
 </head>
 <body>
     <!-- {{ template "navBar"}} -->
     <h1>home</h1>
-    <script>
-        window.onload = function() {
-          var doc = document.getElementById('cookies')
-          doc.style.visibility = "visible"
-        };
-        function setDisplay () {
-            var doc = document.getElementById('cookies')
-            doc.style.visibility = "hidden"
-        }
-      </script>
-      
-    <div id="cookies" class="cookiesContainer columnContainer">
-        <img class="cookieImg" src="../img/cookie.png" alt="cookie_img">
-        <h2 class="textCookies">We use cookies to make your 
-            experience  better</h2>
-        <div class="containerBtnCookies rowContainer">
-            <a class="btnPolicy rowContainer alignCenter" href="/policy">Check cookies policy</a>
-            <p onclick="setDisplay()" class="btnOk rowContainer alignCenter" >OK</a>
-        </div>
-    </div>
+    {{ template "cookies"}}
 </body>
 </html>
 {{ end }}
