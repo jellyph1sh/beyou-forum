@@ -7,12 +7,26 @@ import (
 )
 
 type AccountPage struct {
-	Username        string
-	Email           string
-	Profile_picture string
-	Description     string
-	FirstName       string
-	LastName        string
+	Username                  string
+	Email                     string
+	Profile_picture           string
+	Description               string
+	FirstName                 string
+	LastName                  string
+	IsNotValidchangedPwd      bool
+	IsNotValidchangedBIO      bool
+	IsNotValidEditMail        bool
+	IsNotValidchangedUsername bool
+}
+
+func setDisplayStructAccount(displayStructAccountPage AccountPage, currentUser datamanagement.Users) AccountPage {
+	displayStructAccountPage.Username = currentUser.Username
+	displayStructAccountPage.Email = currentUser.Email
+	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
+	displayStructAccountPage.Description = currentUser.Description
+	displayStructAccountPage.FirstName = currentUser.Firstname
+	displayStructAccountPage.LastName = currentUser.Lastname
+	return displayStructAccountPage
 }
 
 func setDefaultValue(displayStructAccountPage AccountPage) AccountPage {
@@ -29,13 +43,15 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
 	delAccount := r.FormValue("delAccount")
 	editMail := r.FormValue("editMail")
-	changedPwd := r.FormValue("changedPwd")
+	changedPwd1 := r.FormValue("changedPwd1")
+	changedPwd2 := r.FormValue("changedPwd2")
 	changedBIO := r.FormValue("changedBIO")
 	changedFirstname := r.FormValue("changedFirstname")
 	changedLastname := r.FormValue("changedLastname")
 	changedUsername := r.FormValue("changedUsername")
 	cookieIdUser, _ := r.Cookie("idUser")
 	cookieIsConnected, _ := r.Cookie("isConnected")
+	displayStructAccountPage := AccountPage{}
 	idUser := getCookieValue(cookieIdUser)
 	isConnected := getCookieValue(cookieIsConnected)
 	switch true {
@@ -43,10 +59,18 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		datamanagement.ExecuterQuery("DELETE FROM Users WHERE UserID ='" + idUser + "';")
 		break
 	case editMail != "":
-		datamanagement.ExecuterQuery("UPDATE Users SET Email = '" + editMail + "' WHERE UserID ='" + idUser + "';")
+		if !datamanagement.IsUserExist(editMail, "") {
+			datamanagement.ExecuterQuery("UPDATE Users SET Email = '" + editMail + "' WHERE UserID ='" + idUser + "';")
+		} else {
+			displayStructAccountPage.IsNotValidEditMail = true
+		}
 		break
-	case changedPwd != "":
-		datamanagement.ExecuterQuery("UPDATE Users SET Password = '" + changedPwd + "' WHERE UserID = '" + idUser + "';")
+	case changedPwd1 != "" && changedPwd2 != "":
+		if changedPwd1 == changedPwd2 {
+			datamanagement.ExecuterQuery("UPDATE Users SET Password = '" + changedPwd1 + "' WHERE UserID = '" + idUser + "';")
+		} else {
+			displayStructAccountPage.IsNotValidchangedPwd = true
+		}
 		break
 	case changedBIO != "":
 		datamanagement.ExecuterQuery("UPDATE Users SET Description = '" + changedBIO + "' WHERE UserID = '" + idUser + "';")
@@ -58,11 +82,15 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		datamanagement.ExecuterQuery("UPDATE Users SET Lastname = '" + changedLastname + "' WHERE UserID = '" + idUser + "';")
 		break
 	case changedUsername != "":
-		datamanagement.ExecuterQuery("UPDATE Users SET Username = '" + changedUsername + "' WHERE UserID = '" + idUser + "';")
+		if !datamanagement.IsUserExist("", changedUsername) {
+			datamanagement.ExecuterQuery("UPDATE Users SET Username = '" + changedUsername + "' WHERE UserID = '" + idUser + "';")
+		} else {
+			displayStructAccountPage.IsNotValidchangedUsername = true
+		}
 		break
 	}
 	currentUser := datamanagement.GetProfileData(idUser)
-	displayStructAccountPage := AccountPage{currentUser.Username, currentUser.Email, currentUser.ProfilePicture, currentUser.Description, currentUser.Firstname, currentUser.Lastname}
+	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = "../img/PP_wb.png"
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
