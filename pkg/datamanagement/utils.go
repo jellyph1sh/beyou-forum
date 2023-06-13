@@ -27,7 +27,7 @@ type Display struct {
 
 type Dislikes struct {
 	PostID int
-	UserID int
+	UserID string
 }
 
 type Follows struct {
@@ -38,7 +38,7 @@ type Follows struct {
 
 type Likes struct {
 	PostID int
-	UserID int
+	UserID string
 }
 
 type Posts struct {

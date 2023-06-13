@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -30,6 +29,9 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	row.Close()
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
+
+	idUser = "1"
+
 	dataToSend.IsFollow = false
 	dataToSend.IsUpvote = false
 	if idUser != "" {
@@ -48,22 +50,36 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	newPost := r.FormValue("postContent")
 	clickFollow := r.FormValue("follow")
 	clickUpvote := r.FormValue("upvote")
+	like := r.FormValue("like")
+	dislike := r.FormValue("dislike")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
+	isConnected = "true"
 	if isConnected == "true" {
-		if len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost) {
+		switch true {
+		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
 			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: dataToSend.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
-		} else if clickFollow != "" {
-			fmt.Println("test")
+			break
+		case clickFollow != "":
 			if dataToSend.IsFollow {
 				datamanagement.DeleteLineIntoTargetTable("Follows", "UserID = "+idUser)
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topic.TopicID, UserID: idUser}}
 				datamanagement.AddLineIntoTargetTable(line, "Follows")
 			}
-		} else if clickUpvote != "" {
+			break
+		case clickUpvote != "":
 			datamanagement.UpdateUpvotes(topic.TopicID, idUser)
+			break
+		case like != "":
+			idPost, _ := strconv.Atoi(like)
+			datamanagement.LikePostManager(idPost, idUser, "Likes")
+			break
+		case dislike != "":
+			idPost, _ := strconv.Atoi(dislike)
+			datamanagement.LikePostManager(idPost, idUser, "Dislikes")
+			break
 		}
 	}
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))

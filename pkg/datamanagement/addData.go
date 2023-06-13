@@ -126,7 +126,7 @@ func UpdateUpvotes(TopicID int, UserID string) {
 /*
 likOrdIS: 'Likes' - 'Dislikes';
 */
-func LikePostManager(idPost, idUser int, likOrdIS string) {
+func LikePostManager(idPost int, idUser string, likOrdIS string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
