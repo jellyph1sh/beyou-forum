@@ -125,9 +125,11 @@ type DataContainer struct {
 }
 
 type DataTopicPage struct {
-	Topic   Topics
-	Posts   []Posts
-	Authors []Users
+	Topic    Topics
+	Posts    []Posts
+	Authors  []Users
+	IsFollow bool
+	IsUpvote bool
 }
 
 /*don't forget to close the *sql.Rows when you use this func */

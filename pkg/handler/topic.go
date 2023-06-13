@@ -30,11 +30,18 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	row.Close()
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
-	userFollowTopic := false
+	dataToSend.IsFollow = false
+	dataToSend.IsUpvote = false
 	if idUser != "" {
-		row = datamanagement.ReadDB("SELECT * FROM Follows WHERE UserID = " + idUser + ";")
+		row = datamanagement.ReadDB("SELECT * FROM Follows WHERE UserID = " + idUser + " AND TopicID = " + strconv.Itoa(topic.TopicID) + ";")
 		for row.Next() {
-			userFollowTopic = true
+			dataToSend.IsFollow = true
+			row.Close()
+		}
+		row = datamanagement.ReadDB("SELECT * FROM Upvotes WHERE UserID = " + idUser + " AND TopicID = " + strconv.Itoa(topic.TopicID) + ";")
+		for row.Next() {
+			dataToSend.IsUpvote = true
+			row.Close()
 		}
 	}
 	// add a post
@@ -49,7 +56,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
 		} else if clickFollow != "" {
 			fmt.Println("test")
-			if userFollowTopic {
+			if dataToSend.IsFollow {
 				datamanagement.DeleteLineIntoTargetTable("Follows", "UserID = "+idUser)
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topic.TopicID, UserID: idUser}}
