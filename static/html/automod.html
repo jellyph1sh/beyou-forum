@@ -1,3 +1,4 @@
+{{ define "automod" }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,38 @@
     <title>automod</title>
 </head>
 <body>
-    <h1>automod</h1>
+    <div class="containerAutomodPage">
+        <!--{{ template "navBar" }} -->
+        <div class=""></div>
+        <div class="automod">
+            <div class="reports">
+                <h2>Reports:</h2>
+                {{ $base := . }}
+                {{ range $report := $base.Reports }}
+                    {{ range $user := $base.Users }}
+                        {{ range $post := $base.Posts }}
+                            {{ if eq $report.ReportUserID $user.UserID }}
+                                {{ if eq $post.PostID $report.PostID }}
+                                    <div class="report">
+                                        <img src="" alt="">
+                                        <h3>{{ $user.Username }}</h3>
+                                        <p>{{ $post.Content }}</p>
+                                        <p>Comment : {{ $report.Comment }}</p>
+                                    </div>
+                                {{ end }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            </div>
+            <div class="bannedusers">
+
+            </div>
+            <div class="bannedwords">
+
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+{{ end }}

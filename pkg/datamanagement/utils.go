@@ -55,7 +55,7 @@ type Posts struct {
 type Reports struct {
 	ReportID     int
 	PostID       int
-	ReportUserID int
+	ReportUserID string
 	Comment      string
 }
 

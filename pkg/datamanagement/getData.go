@@ -259,3 +259,42 @@ func SortPosts(typOfSort string) []Posts {
 
 	return result
 }
+
+func GetAllReports() []Reports {
+	var reports []Reports
+
+	result := readDB("SELECT * FROM Reports;")
+	for result.Next() {
+		var report Reports
+		result.Scan(&report.ReportID, &report.PostID, &report.ReportUserID, &report.Comment)
+		fmt.Println(report.ReportUserID)
+		reports = append(reports, report)
+	}
+
+	return reports
+}
+
+func GetAllReportedUsers() []Users {
+	var reportedUsers []Users
+
+	result := readDB("SELECT * FROM Users;")
+	for result.Next() {
+		var user Users
+		result.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+		reportedUsers = append(reportedUsers, user)
+	}
+	return reportedUsers
+}
+
+func GetAllReportedPosts() []Posts {
+	var reportedPosts []Posts
+
+	result := readDB("SELECT * FROM Posts;")
+	for result.Next() {
+		var post Posts
+		result.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		reportedPosts = append(reportedPosts, post)
+	}
+
+	return reportedPosts
+}
