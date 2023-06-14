@@ -42,6 +42,7 @@ type structDisplayHome struct {
 func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWithUserInfo {
 	result := []TopicsWithUserInfo{}
 	for _, element := range topics {
+		// fmt.Println("element.CreatorID", element.CreatorID)
 		var topic TopicsWithUserInfo
 		topic.TopicID = element.TopicID
 		topic.Title = element.Title
@@ -54,6 +55,8 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + fmt.Sprint(element.CreationDate.Month()) + fmt.Sprint(element.CreationDate.Year())
 		user := datamanagement.GetProfileData(topic.CreatorID)
 		topic.CreatorName = user.Username
+		// fmt.Println(topic.CreationDate)
+		// fmt.Println(element.CreationDate.Day(), element.CreationDate.Month(), element.CreationDate.Year(), element.CreationDate)
 		result = append(result, topic)
 	}
 	return result
@@ -61,9 +64,8 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/home.html", "./static/html/navBar.html", "./static/html/cookiesPopup.html"))
-	// cookie, _ := r.Cookie("idUser")
-	// idUser := getCookieValue(cookie)
 	allTop := datamanagement.SortTopics("DESC-Upvote-Home")
+	fmt.Println(allTop)
 	structDisplayHome := structDisplayHome{}
 	structDisplayHome.AllTopics = updateTopicsInTopicsWithUserInfo(allTop)
 	t.ExecuteTemplate(w, "home", structDisplayHome)

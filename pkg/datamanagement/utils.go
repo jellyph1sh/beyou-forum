@@ -74,12 +74,12 @@ type Topics struct {
 	TopicID      int
 	Title        string
 	Description  string
+	CreationDate time.Time
 	Picture      string
 	CreatorID    string
 	Upvotes      int
 	Follows      int
 	ValidTopic   bool
-	CreationDate time.Time
 }
 
 type TopicsTags struct {

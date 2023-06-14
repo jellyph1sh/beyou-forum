@@ -22,6 +22,7 @@ func GetPostData(idPost int) Posts {
 func GetProfileData(idUser string) Users {
 	result := Users{}
 	query := "SELECT * FROM Users WHERE UserID = '" + idUser + "';"
+	// fmt.Println("edfghjklm", idUser)
 	row := ReadDB(query)
 	for row.Next() {
 		row.Scan(&result.UserID, &result.Username, &result.Email, &result.Password, &result.Firstname, &result.Lastname, &result.Description, &result.CreationDate, &result.ProfilePicture, &result.IsAdmin, &result.ValidUser)
@@ -130,10 +131,10 @@ func SortTopics(typOfSort string) []Topics {
 		row = ReadDB("SELECT * FROM Topics ORDER BY Title DESC;")
 		break
 	case "DESC-Upvote":
-		row = ReadDB("SELECT TopicID, Title, Description, Picture, CreatorID, Upvotes, Follows, ValidTopic FROM Topics ORDER BY Upvotes DESC;")
+		row = ReadDB("SELECT TopicID, Title, Description, Picture, CreationDate, CreatorID, Upvotes, Follows, ValidTopic FROM Topics ORDER BY Upvotes DESC;")
 		break
 	case "DESC-Upvote-Home":
-		row = ReadDB("SELECT TopicID, Title, Description, Picture, CreatorID, Upvotes, Follows, ValidTopic FROM Topics ORDER BY Upvotes DESC LIMIT 3;")
+		row = ReadDB("SELECT TopicID, Title, Description, Picture, CreationDate, CreatorID, Upvotes, Follows, ValidTopic FROM Topics ORDER BY Upvotes DESC LIMIT 3;")
 		break
 	case "ASC-Upvote":
 		row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
@@ -145,10 +146,9 @@ func SortTopics(typOfSort string) []Topics {
 		fmt.Println("invalid type of sort")
 		return result
 	}
-
 	for row.Next() {
 		var line Topics
-		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
 	row.Close()

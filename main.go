@@ -16,11 +16,34 @@ func main() {
 	// datamanagement.AddLineIntoTargetTable(postTest, "Posts")
 	// nCTN := datamanagement.DataContainer{}
 	// nPost1 := datamanagement.Topics{}
-	// nPost1.Title = "Affronte2"
-	// nPost1.TopicID = 3
+	// nPost1.Title = "test"
+	// nPost1.Description = ""
+	// nPost1.Picture = "../img/PP_wb.png"
 	// nPost1.CreationDate = time.Now()
+	// nPost1.CreatorID = "4c0718cc-9e57-487e-8ada-da539855df93"
+	// nPost1.Upvotes = 1000
+	// nPost1.Follows = 1000
 	// nPost1.ValidTopic = true
-	// nPost1.Upvotes = 998
+	// nCTN.Topics = nPost1
+	// datamanagement.AddLineIntoTargetTable(nCTN, "Topics")
+	// nPost1.Title = "test2"
+	// nPost1.Description = ""
+	// nPost1.Picture = "../img/PP_wb.png"
+	// nPost1.CreationDate = time.Now()
+	// nPost1.CreatorID = "4c0718cc-9e57-487e-8ada-da539855df93"
+	// nPost1.Upvotes = 1000
+	// nPost1.Follows = 1000
+	// nPost1.ValidTopic = true
+	// nCTN.Topics = nPost1
+	// datamanagement.AddLineIntoTargetTable(nCTN, "Topics")
+	// nPost1.Title = "test3"
+	// nPost1.Description = ""
+	// nPost1.Picture = "../img/PP_wb.png"
+	// nPost1.CreationDate = time.Now()
+	// nPost1.CreatorID = "4c0718cc-9e57-487e-8ada-da539855df93"
+	// nPost1.Upvotes = 1000
+	// nPost1.Follows = 1000
+	// nPost1.ValidTopic = true
 	// nCTN.Topics = nPost1
 	// datamanagement.AddLineIntoTargetTable(nCTN, "Topics")
 	//handlers
