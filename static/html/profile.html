@@ -18,5 +18,13 @@
     <div class="rowContainer containerImg alignCenter">
         <img class="imgAccount" src="{{.UserInfo.ProfilePicture}}" alt="pp">
     </div>
+    {{range $Post := .Posts}}
+        {{if $Post.IsValidPost}}
+            {{$Post.StructuredDate}}
+            {{$Post.Likes}}
+            {{$Post.Dislikes}}
+            {{$Post.Content}}
+        {{end}}
+    {{end}}
 </body>
 </html>
