@@ -26,8 +26,13 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/home.html", "./static/html/navBar.html", "./static/html/cookiesPopup.html"))
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
-	allTop := datamanagement.SortTopics("DESC-Upvote")
+	allTop := datamanagement.SortTopics("DESC-Upvote-Home")
+	data := struct {
+		AllTopics []datamanagement.Topics
+	}{
+		AllTopics: allTop,
+	}
 	fmt.Println(allTop)
 	fmt.Println(idUser)
-	t.ExecuteTemplate(w, "home", allTop)
+	t.ExecuteTemplate(w, "home", data)
 }
