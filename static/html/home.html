@@ -46,10 +46,10 @@
             {{ range .AllTopics }}
                 <div class="topicContainer">
                     <div class="headerTopic rowContainer ">
-                        <img class="imgTopic" src="../img/PP_wb.png" alt="topic_picture">
+                        <img class="imgTopic" src="{{.Picture}}" alt="topic_picture">
                         <p>/{{ .Title }}</p>
                     </div>
-                    <p class="creationInformations">Created - {{ .CreationDate }} by {{ .CreatorID }}</p>
+                    <p class="creationInformations">Created - {{ .CreationDate }} by {{ .CreatorName }}</p>
                     <div class="rowContainer containerFooterTopic">
                         <p class="upvoteNb">{{ .Upvotes }} Upvotes</p>
                         <form action="" method="post">
