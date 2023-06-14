@@ -267,7 +267,6 @@ func GetAllReports() []Reports {
 	for result.Next() {
 		var report Reports
 		result.Scan(&report.ReportID, &report.PostID, &report.ReportUserID, &report.Comment)
-		fmt.Println(report.ReportUserID)
 		reports = append(reports, report)
 	}
 
@@ -277,7 +276,7 @@ func GetAllReports() []Reports {
 func GetAllReportedUsers() []Users {
 	var reportedUsers []Users
 
-	result := readDB("SELECT * FROM Users;")
+	result := readDB("SELECT Users.* FROM Users JOIN Reports ON Users.UserID = Reports.ReportUserID;")
 	for result.Next() {
 		var user Users
 		result.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
@@ -289,7 +288,7 @@ func GetAllReportedUsers() []Users {
 func GetAllReportedPosts() []Posts {
 	var reportedPosts []Posts
 
-	result := readDB("SELECT * FROM Posts;")
+	result := readDB("SELECT Posts.* FROM Posts JOIN Reports ON Posts.PostID = Reports.PostID;")
 	for result.Next() {
 		var post Posts
 		result.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
@@ -297,4 +296,17 @@ func GetAllReportedPosts() []Posts {
 	}
 
 	return reportedPosts
+}
+
+func GetAllBlacklistWords() []WordsBlacklist {
+	var blackListWords []WordsBlacklist
+
+	result := readDB("SELECT * FROM WordsBlacklist;")
+	for result.Next() {
+		var word WordsBlacklist
+		result.Scan(&word.WordID, &word.Word)
+		blackListWords = append(blackListWords, word)
+	}
+
+	return blackListWords
 }

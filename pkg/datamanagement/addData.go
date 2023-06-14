@@ -185,3 +185,16 @@ func DeleteLineIntoTargetTable(table, condition string) {
 	affected, _ := res.RowsAffected()
 	fmt.Println(affected, "line of ", table, "has been deleted")
 }
+
+func AddWordIntoBlacklist(word string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return
+	}
+	query := "INSERT INTO WordsBlacklist (WordID, Word) VALUES (?,?);"
+	insertDataInTable, err := db.Prepare(query)
+	CheckPrepareQuery(err)
+	insertDataInTable.Exec(nil, word)
+	defer db.Close()
+}
