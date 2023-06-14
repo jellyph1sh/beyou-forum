@@ -284,3 +284,16 @@ func GetUserById(id string) Users {
 	}
 	return Users{}
 }
+
+func GetTopicsById(idUser string) []Topics {
+	result := []Topics{}
+	query := "SELECT * FROM Topics WHERE AuthorID = '" + idUser + "';"
+	row := ReadDB(query)
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var topic Topics
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+	row.Close()
+	return result
+}

@@ -26,5 +26,11 @@
             {{$Post.Content}}
         {{end}}
     {{end}}
+    {{range $Topic := .Topics}}
+        {{if $Topic.ValidTopic}}
+            {{$Topic.Picture}}
+            {{$Topic.Title}}
+        {{end}}
+    {{end}}
 </body>
 </html>

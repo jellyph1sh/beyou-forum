@@ -27,6 +27,7 @@ type profile struct {
 	UserInfo         datamanagement.Users
 	UserCreationDate string
 	Posts            []PostWithStructuredDate
+	Topics           []datamanagement.Topics
 }
 
 func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
@@ -103,7 +104,7 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
 	// end post
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
+	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
-	// fmt.Println(displayStructProfile.Posts)
 	t.Execute(w, displayStructProfile)
 }
