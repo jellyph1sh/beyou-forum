@@ -91,7 +91,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	}
 	currentUser := datamanagement.GetProfileData(idUser)
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
-	displayStructAccountPage.Profile_picture = "../img/PP_wb.png"
+	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 	}
