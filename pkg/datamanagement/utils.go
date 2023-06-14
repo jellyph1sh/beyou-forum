@@ -71,14 +71,15 @@ type UserConnected struct {
 }
 
 type Topics struct {
-	TopicID     int
-	Title       string
-	Description string
-	Picture     string
-	CreatorID   int
-	Upvotes     int
-	Follows     int
-	ValidTopic  bool
+	TopicID      int
+	Title        string
+	Description  string
+	Picture      string
+	CreatorID    string
+	CreationDate time.Time
+	Upvotes      int
+	Follows      int
+	ValidTopic   bool
 }
 
 type TopicsTags struct {
