@@ -24,7 +24,7 @@ func CreateUser(UserId string, userName string, userFirstName string, userLastNa
 	nUser.Lastname = userLastName
 	nUser.Description = ""
 	nUser.CreationDate = time.Now()
-	nUser.ProfilePicture = ""
+	nUser.ProfilePicture = "../img/PP_wb.png"
 	nUser.IsAdmin = false
 	nUser.ValidUser = true
 	return nUser
