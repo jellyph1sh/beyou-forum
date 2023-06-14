@@ -287,7 +287,7 @@ func GetUserById(id string) Users {
 
 func GetTopicsById(idUser string) []Topics {
 	result := []Topics{}
-	query := "SELECT * FROM Topics WHERE AuthorID = '" + idUser + "';"
+	query := "SELECT * FROM Topics WHERE CreatorID = '" + idUser + "';"
 	row := ReadDB(query)
 	for row.Next() { // Iterate and fetch the records from result cursor
 		var topic Topics
