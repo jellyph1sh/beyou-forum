@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
+     url('../fonts/Poppins-Semi/Poppins-SemiBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Poppins-regular';
+    src: url('../fonts/Poppins-Reg/Poppins-Regular.woff2') format('woff2'),
+     url('../fonts/Poppins-Reg/Poppins-Regular.woff') format('woff');
+}
+
+
+body {
+    background-color: #32333B;
+    min-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.containerHomePage {
+    justify-content: center;
+    width: 78%;
+    position: absolute;
+    right: 0;
+}
+
+.coloredText {
+    color: #D36638;
+}
+
+.containerCards {
+    justify-content: space-around;
+    flex-wrap: wrap;
+   
+}
+
+.card {
+    background-color: #28292F;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 15rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cardText {
+    color: whitesmoke;
+    font-family: 'Poppins';
+    text-align: center;
+}
+
+.CardImg {
+    width: 10rem;
+    object-fit: contain;
+}
+
+.titleHomePage {
+    font-family: 'Poppins';
+    color: whitesmoke;
+    text-align: center;
+    font-size:42px;
+}
+
+.subtitle1 {
+    font-family: 'Poppins-regular';
+    color: rgba(210, 209, 209, 1);
+    text-align: center;
+    font-size: 12px;
+    margin: 0;
+    margin-top: -1rem;
+}
+
+.subtitle2 {
+    color: whitesmoke;
+    font-family: 'Poppins';
+    text-align: center;
+    font-size: 14px;
+    margin: 10vh 0;
+}
+
+.textUpvoted {
+    color: whitesmoke;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-family: 'Poppins-regular';
+    margin-left: 4.5vw;
+}

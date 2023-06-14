@@ -12,9 +12,45 @@
     <title>home</title>
 </head>
 <body>
-    <!-- {{ template "navBar"}} -->
-    <h1>home</h1>
-    {{ template "cookies"}}
+    {{ template "navBar"}}
+    <div class="containerHomePage columnContainer">
+      
+        <h1 class="titleHomePage">New on <span class="coloredText">Bword</span> Studio ?</h1>
+        <h3 class="subtitle1">Log in first to explore the site better</h3>
+        <h2 class="subtitle2">Some easy step to get to know the website better</h2>
+        <div class="containerCards rowContainer">
+            <div class="card columnContainer alignCenter">
+                <img class="CardImg" src="../img/Enter-OTP-pana.png" alt="login_img">
+                <p class="cardText">Clic on the <span class="coloredText">register</span> button
+                    and enter your informations
+                </p>
+                <p class="cardText">If you already have an account,
+                    then click on the <span class="coloredText">login</span> button
+                </p>
+            </div>
+            <div class="card columnContainer alignCenter">
+                <img class="CardImg" src="../img/Online-popularity-pana.png" alt="message_img">
+                <p class="cardText">Go explore the website and start to <span class="coloredText">follow</span> topics</p>
+                <p class="cardText">You can <span class="coloredText">upvote</span> topics too </p>
+            </div>
+            <div class="card columnContainer alignCenter">
+                <img class="CardImg" src="../img/Messaging-bro.png" alt="Chat_img">
+                <p class="cardText">Start to <span class="coloredText">chat</span> with other users</p>
+                <p class="cardText">Go on topic and <span class="coloredText">post</span> your ideas</p>
+            </div>
+        </div>
+        <h2 class="subtitle2">Come check some topics</h2>
+        <h2 class="textUpvoted">Most upvoted topics</h2>
+        <div>
+            {{ $Topic := . }}
+                {{ range $name := $Topic.Title}}
+                    <p>{{ $name }}</p>
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+
+    <!-- {{ template "cookies"}} -->
 </body>
 </html>
 {{ end }}

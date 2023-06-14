@@ -130,7 +130,7 @@ func SortTopics(typOfSort string) []Topics {
 		row = ReadDB("SELECT * FROM Topics ORDER BY Title DESC;")
 		break
 	case "DESC-Upvote":
-		row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes DESC;")
+		row = ReadDB("SELECT TopicID, Title, Description, Picture, CreatorID, Upvotes, Follows, ValidTopic FROM Topics ORDER BY Upvotes DESC;")
 		break
 	case "ASC-Upvote":
 		row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
@@ -145,7 +145,7 @@ func SortTopics(typOfSort string) []Topics {
 
 	for row.Next() {
 		var line Topics
-		row.Scan(&line.TopicID, &line.Title, &line.Description, line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		row.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
 	row.Close()

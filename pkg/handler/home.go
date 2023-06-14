@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"forum/pkg/datamanagement"
 	"net/http"
 	"text/template"
 )
@@ -25,6 +26,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/home.html", "./static/html/navBar.html", "./static/html/cookiesPopup.html"))
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
+	allTop := datamanagement.SortTopics("DESC-Upvote")
+	fmt.Println(allTop)
 	fmt.Println(idUser)
-	t.ExecuteTemplate(w, "home", nil)
+	t.ExecuteTemplate(w, "home", allTop)
 }
