@@ -82,8 +82,11 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 
 func Profile(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/profile.html", "./static/html/navBar.html"))
-	cookieIdUser, _ := r.Cookie("idUser")
-	idUser := getCookieValue(cookieIdUser)
+	idUser := r.FormValue("idUser")
+	if idUser == "" {
+		cookieIdUser, _ := r.Cookie("idUser")
+		idUser = getCookieValue(cookieIdUser)
+	}
 	displayStructProfile := profile{}
 	displayStructProfile.UserInfo = datamanagement.GetProfileData(idUser)
 	displayStructProfile.UserCreationDate = displayStructProfile.UserInfo.CreationDate.Format("02-01-2006")
