@@ -10,14 +10,36 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func IsUserExist(userEmail string, userProfilName string) bool {
+func IsUsernameAlreadyExist(userProfilName string) bool {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		fmt.Println("Could not open database : \n", err)
 		return false
 	}
 	defer db.Close()
-	QUERY := "SELECT * FROM Users WHERE ( Username = '" + string(userProfilName) + "' OR Email = '" + string(userEmail) + "');"
+	QUERY := "SELECT * FROM Users WHERE Username = '" + string(userProfilName) + "';"
+	row, err := db.Query(QUERY)
+	if err != nil {
+		fmt.Println("Invalid request :")
+		log.Fatal(err)
+		return false
+	}
+	defer row.Close()
+	if row.Next() == false {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsEmailAlreadyExist(userEmail string) bool {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return false
+	}
+	defer db.Close()
+	QUERY := "SELECT * FROM Users WHERE Email = '" + string(userEmail) + "';"
 	row, err := db.Query(QUERY)
 	if err != nil {
 		fmt.Println("Invalid request :")
