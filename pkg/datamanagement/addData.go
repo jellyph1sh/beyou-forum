@@ -96,7 +96,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(TopicID, UserID int) {
+func UpdateUpvotes(TopicID int, UserID string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
@@ -105,11 +105,11 @@ func UpdateUpvotes(TopicID, UserID int) {
 	}
 	var updateUpvotes *sql.Stmt
 	sign := "+"
-	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + strconv.Itoa(UserID) + ";")
+	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + UserID + ";")
 	for row.Next() {
-		row.Close()
 		sign = "-"
-		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+strconv.Itoa(UserID))
+		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+UserID)
+		row.Close()
 	}
 	if sign == "+" {
 		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")
@@ -126,7 +126,7 @@ func UpdateUpvotes(TopicID, UserID int) {
 /*
 likOrdIS: 'Likes' - 'Dislikes';
 */
-func LikePostManager(idPost, idUser int, likOrdIS string) {
+func LikePostManager(idPost int, idUser string, likOrdIS string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
@@ -171,6 +171,7 @@ func DeleteLineIntoTargetTable(table, condition string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
+		fmt.Println("delete is not possible")
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
@@ -178,9 +179,20 @@ func DeleteLineIntoTargetTable(table, condition string) {
 	fmt.Println(query)
 	res, err := db.Exec(query)
 	if err != nil {
+		fmt.Println("delete is not possible")
 		fmt.Println("invalid condition : \n", err)
 		return
 	}
 	affected, _ := res.RowsAffected()
 	fmt.Println(affected, "line of ", table, "has been deleted")
+}
+
+func UpdateLine(query string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	defer db.Close()
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return
+	}
+	db.Exec(query)
 }

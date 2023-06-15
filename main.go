@@ -15,7 +15,7 @@ func main() {
 	// postTest := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: "un autre post test odiajdiuoazudanjudfnajudfnaefn", AuthorID: "1", TopicID: 1, Likes: 15, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
 	// userTest := datamanagement.DataContainer{Users: datamanagement.Users{UserID: "1", Username: "DarkSasuke", Email: "email", Password: "oipjfziiofnziofnez", Firstname: "Dark", Lastname: "Link", Description: "baka", CreationDate: time.Now(), ProfilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLeR3wX3QrJpZGlb6fIeU-XPPRgxGlP5coYmQaBFZJ&s", IsAdmin: false, ValidUser: true}}
 	// datamanagement.AddLineIntoTargetTable(postTest, "Posts")
-
+	// datamanagement.UpdateLine("UPDATE Topics SET Title='test' WHERE TopicID = 2;")
 	//handlers
 	http.HandleFunc("/", handler.MainHandler)
 	allTopics := datamanagement.GetAllFromTable("Topics")
