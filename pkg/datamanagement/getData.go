@@ -97,6 +97,7 @@ func GetAllFromTable(table string) []DataContainer {
 			break
 		case table == "Topics":
 			row.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
+			fmt.Println(line)
 			break
 		case table == "Tags":
 			row.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)

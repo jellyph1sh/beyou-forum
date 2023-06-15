@@ -22,6 +22,8 @@ func main() {
 	http.HandleFunc("/", handler.MainHandler)
 	// allTopics := datamanagement.GetAllFromTable("Topics")
 	// for _, t := range allTopics {
+	// 	// fmt.Println(t)
+	// 	fmt.Println("/topic/" + t.Topics.Title)
 	// 	http.HandleFunc("/topic/"+t.Topics.Title, handler.Topic)
 	// }
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
