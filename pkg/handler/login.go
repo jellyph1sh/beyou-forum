@@ -37,7 +37,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 				cookieRememberMe := http.Cookie{Name: "Remember", Value: "false"}
 				http.SetCookie(w, &cookieIdUser)
 				http.SetCookie(w, &cookieRememberMe)
-				cookieIsConnected := http.Cookie{Name: "isConnected", Value: "true", Expires: time.Now().Add(6 * time.Second)}
+				cookieIsConnected := http.Cookie{Name: "isConnected", Value: "true", Expires: time.Now().Add(6 * time.Hour)}
 				http.SetCookie(w, &cookieIsConnected)
 			}
 			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
