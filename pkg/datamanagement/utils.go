@@ -151,6 +151,16 @@ func ReadDB(query string) *sql.Rows {
 	return row
 }
 
+func ReadDBAlreadyOpen(query string, db *sql.DB) *sql.Rows {
+	row, err := db.Query(query)
+	if err != nil {
+		fmt.Println("Invalid request :")
+		log.Fatal(err)
+		return nil
+	}
+	return row
+}
+
 func buildQueryAddData(table string, nbValues int) string {
 	result := "INSERT INTO " + table + " Values (?"
 	for i := 1; i < nbValues; i++ {

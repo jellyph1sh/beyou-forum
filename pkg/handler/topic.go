@@ -87,7 +87,6 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			dataToSend.Dislikes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Dislikes"))
 		}
 	}
-	fmt.Println(dataToSend)
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, dataToSend)
 }
