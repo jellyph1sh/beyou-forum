@@ -135,6 +135,8 @@ func SortTopics(typOfSort string) []Topics {
 		break
 	case "DESC-Upvote-Home":
 		row = ReadDB("SELECT TopicID, Title, Description, Picture, CreationDate, CreatorID, Upvotes, Follows, ValidTopic FROM Topics ORDER BY Upvotes DESC LIMIT 3;")
+		// row = ReadDB("SELECT TopicID, Title, Description, Picture, CreationDate, CreatorID, Upvotes, Follows, ValidTopic FROM Topics;")
+		// row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes DESC LIMIT 3;")
 		break
 	case "ASC-Upvote":
 		row = ReadDB("SELECT * FROM Topics ORDER BY Upvotes ASC;")
