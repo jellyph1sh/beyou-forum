@@ -8,6 +8,19 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func GetPostFromUser(idUser string) []Posts {
+	result := []Posts{}
+	query := "SELECT * FROM Posts WHERE AuthorID = '" + idUser + "';"
+	row := ReadDB(query)
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var post Posts
+		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		result = append(result, post)
+	}
+	row.Close()
+	return result
+}
+
 func GetPostData(idPost int) Posts {
 	result := Posts{}
 	query := "SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = " + strconv.Itoa(idPost) + ";"
@@ -276,4 +289,25 @@ func GetUserById(id string) Users {
 		return user
 	}
 	return Users{}
+}
+
+func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
+	row := ReadDB("SELECT * FROM " + DisOrLike + " WHERE PostID = " + strconv.Itoa(PostID) + " AND UserID = " + UserID)
+	for row.Next() {
+		return true
+	}
+	row.Close()
+	return false
+}
+func GetTopicsById(idUser string) []Topics {
+	result := []Topics{}
+	query := "SELECT * FROM Topics WHERE CreatorID = '" + idUser + "';"
+	row := ReadDB(query)
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var topic Topics
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+	row.Close()
+	return result
 }

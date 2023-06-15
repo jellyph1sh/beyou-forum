@@ -27,18 +27,18 @@ type Display struct {
 
 type Dislikes struct {
 	PostID int
-	UserID int
+	UserID string
 }
 
 type Follows struct {
 	FollowID int
 	TopicID  int
-	UserID   int
+	UserID   string
 }
 
 type Likes struct {
 	PostID int
-	UserID int
+	UserID string
 }
 
 type Posts struct {
@@ -89,7 +89,7 @@ type TopicsTags struct {
 
 type Upvotes struct {
 	TopicID int
-	UserID  int
+	UserID  string
 }
 
 type Users struct {
@@ -126,9 +126,13 @@ type DataContainer struct {
 }
 
 type DataTopicPage struct {
-	Topic   Topics
-	Posts   []Posts
-	Authors []Users
+	Topic    Topics
+	Posts    []Posts
+	Authors  []Users
+	IsFollow bool
+	IsUpvote bool
+	Likes    []bool
+	Dislikes []bool
 }
 
 /*don't forget to close the *sql.Rows when you use this func */
@@ -139,6 +143,16 @@ func ReadDB(query string) *sql.Rows {
 		fmt.Println("Could not open database : \n", err)
 		return nil
 	}
+	row, err := db.Query(query)
+	if err != nil {
+		fmt.Println("Invalid request :")
+		log.Fatal(err)
+		return nil
+	}
+	return row
+}
+
+func ReadDBAlreadyOpen(query string, db *sql.DB) *sql.Rows {
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Invalid request :")
