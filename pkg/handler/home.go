@@ -25,6 +25,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/home.html", "./static/html/navBar.html", "./static/html/cookiesPopup.html"))
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
+	cookieConnected, _ := r.Cookie("idUser")
+	IsConnected := getCookieValue(cookieConnected)
 	fmt.Println(idUser)
-	t.ExecuteTemplate(w, "home", nil)
+	t.ExecuteTemplate(w, "home", IsConnected)
 }

@@ -34,6 +34,25 @@ nav{
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.btnSignContainer {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 14rem;
+    padding: 0rem 1rem;
+    gap: 1vw;
+    border-radius: 999px;
+    background-color: #D36638;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: 2px solid #D36638;
+}
+
+.btnSignContainer:hover {
+    cursor: pointer;
+    transition: 0.5s;
+    background-color: transparent;
+}
+
 .btnCatContainerAdd {
     border: 2px solid #D36638;
 }
@@ -105,8 +124,13 @@ nav{
 }
 
 .marginCat {
-    margin-bottom: 5vh;
+    margin-bottom: 4vh;
 }
+
+.marginProfile {
+    margin-bottom: 2vh;
+}
+
 
 a {
     text-decoration: none;
@@ -168,9 +192,6 @@ a {
         display: none;
         flex-direction: column;
         align-items: center;
-    }
-    nav .linkPages a {
-        width: 50%;
     }
 
     .labelNav {
