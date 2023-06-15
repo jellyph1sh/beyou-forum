@@ -13,9 +13,11 @@
 <body>
     <div class="containerLoginPage">
         {{template "navBar"}}
-        <div class=""></div>
         <div class="columnContainer containerLogin">
             <h1 class="titleLogin">LOGIN</h1>
+            {{if .IsNotValid}}
+            <h1>t'es un bouff</h1>
+            {{end}}
             <h2 class="subTitleLogin">Please enter your email and password</h2>
             <form method="post" class="columnContainer formStyleLog">
                 <h2 class="textCatLogin">Email or Username:</h2>

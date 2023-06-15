@@ -8,6 +8,19 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func GetPostFromUser(idUser string) []Posts {
+	result := []Posts{}
+	query := "SELECT * FROM Posts WHERE AuthorID = '" + idUser + "';"
+	row := ReadDB(query)
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var post Posts
+		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		result = append(result, post)
+	}
+	row.Close()
+	return result
+}
+
 func GetPostData(idPost int) Posts {
 	result := Posts{}
 	query := "SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = " + strconv.Itoa(idPost) + ";"
@@ -21,7 +34,7 @@ func GetPostData(idPost int) Posts {
 
 func GetProfileData(idUser string) Users {
 	result := Users{}
-	query := "SELECT * FROM Users WHERE UserID = " + idUser + ";"
+	query := "SELECT * FROM Users WHERE UserID = '" + idUser + "';"
 	row := ReadDB(query)
 	for row.Next() {
 		row.Scan(&result.UserID, &result.Username, &result.Email, &result.Password, &result.Firstname, &result.Lastname, &result.Description, &result.CreationDate, &result.ProfilePicture, &result.IsAdmin, &result.ValidUser)
@@ -142,7 +155,6 @@ func SortTopics(typOfSort string) []Topics {
 		fmt.Println("invalid type of sort")
 		return result
 	}
-
 	for row.Next() {
 		var line Topics
 		row.Scan(&line.TopicID, &line.Title, &line.Description, line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
@@ -280,4 +292,16 @@ func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
 	}
 	row.Close()
 	return false
+}
+func GetTopicsById(idUser string) []Topics {
+	result := []Topics{}
+	query := "SELECT * FROM Topics WHERE CreatorID = '" + idUser + "';"
+	row := ReadDB(query)
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var topic Topics
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+	row.Close()
+	return result
 }

@@ -32,6 +32,15 @@
                     <div class="rowContainer containerImg alignCenter">
                         <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
                     </div>
+                    {{ if .IsNotValidchangedPwd}}
+                        <h1>T'es un giga bouff</h1>
+                    {{ else if .IsNotValidchangedBIO}}
+                        <h1>T'es un giga bouff</h1>                
+                    {{ else if .IsNotValidEditMail}}
+                        <h1>T'es un giga bouff</h1>              
+                    {{ else if .IsNotValidchangedUsername}}
+                        <h1>T'es un giga bouff</h1>
+                    {{ end }}
                     <div class="containerUser rowContainer alignCenter">
                         <form action="" method="post">
                             <input class="usernameAccount" placeholder="{{ .Username }}" type="text" name="changedUsername" id="">
@@ -93,11 +102,11 @@
                             </div>
                             <div class="columnContainer">
                                 <h2 class="nameEditPop">New password</h2>
-                                <input class="inputPwd" required type="password" name="changedPwd">
+                                <input class="inputPwd" required type="password" name="changedPwd1">
                             </div>
                             <div class="columnContainer">
                                 <h2 class="nameEditPop">Confirm new password</h2>
-                                <input class="inputPwd" required type="password" name="changedPwd">
+                                <input class="inputPwd" required type="password" name="changedPwd2">
                             </div>
                         </div>
                         <div class="rowContainer alignCenter">
