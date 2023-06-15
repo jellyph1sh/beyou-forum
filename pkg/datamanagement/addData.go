@@ -186,3 +186,13 @@ func DeleteLineIntoTargetTable(table, condition string) {
 	affected, _ := res.RowsAffected()
 	fmt.Println(affected, "line of ", table, "has been deleted")
 }
+
+func UpdateLine(query string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	defer db.Close()
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return
+	}
+	db.Exec(query)
+}
