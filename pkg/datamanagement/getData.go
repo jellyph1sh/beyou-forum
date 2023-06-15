@@ -285,6 +285,14 @@ func GetUserById(id string) Users {
 	return Users{}
 }
 
+func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
+	row := ReadDB("SELECT * FROM " + DisOrLike + " WHERE PostID = " + strconv.Itoa(PostID) + " AND UserID = " + UserID)
+	for row.Next() {
+		return true
+	}
+	row.Close()
+	return false
+}
 func GetTopicsById(idUser string) []Topics {
 	result := []Topics{}
 	query := "SELECT * FROM Topics WHERE CreatorID = '" + idUser + "';"

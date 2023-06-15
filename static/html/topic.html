@@ -12,6 +12,14 @@
             <img src="{{.Topic.Picture}}">
             <h1>{{.Topic.Title}}</h1>
             <p></p>
+            <form method="post">
+                <input type="text" name="follow" value="follow" hidden>
+                <input type="submit" value="Follow"></input>
+            </form>
+            <form method="post">
+                <input type="text" name="upvote" value="upvote" hidden>
+                <input type="submit" value="Upvote"></input>
+            </form>
         </div>
         <div id="post-container">
             {{$root := .}}
@@ -23,7 +31,12 @@
                     <p>{{$val.CreationDate.Format "Jan 02, 2006"}}</p>
                     <p>{{$val.Content}}</p>
                     <form method="post">
-                        <!-- like or dislike -->
+                        <input type="text" name="like" value="{{$val.PostID}}" hidden>
+                        <input type="submit" value="like">
+                    </form>
+                    <form method="post">
+                        <input type="text" name="dislike" value="{{$val.PostID}}" hidden>
+                        <input type="submit" value="dislike">
                     </form>
                 </div>
             {{end}}
