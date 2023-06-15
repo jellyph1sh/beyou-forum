@@ -1,0 +1,172 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
+     url('../fonts/Poppins-Semi/Poppins-SemiBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Poppins-regular';
+    src: url('../fonts/Poppins-Reg/Poppins-Regular.woff2') format('woff2'),
+     url('../fonts/Poppins-Reg/Poppins-Regular.woff') format('woff');
+}
+
+
+body {
+    background-color: #32333B;
+
+    margin: 0;
+}
+
+.containerHomePage {
+    justify-content: center;
+    width: 78%;
+    position: absolute;
+    right: 0;
+}
+
+.coloredText {
+    color: #D36638;
+}
+
+.containerCards {
+    justify-content: space-around;
+    flex-wrap: wrap;
+   
+}
+
+.card {
+    background-color: #28292F;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 15rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cardText {
+    color: whitesmoke;
+    font-family: 'Poppins';
+    text-align: center;
+}
+
+.CardImg {
+    width: 10rem;
+    object-fit: contain;
+}
+
+.titleHomePage {
+    font-family: 'Poppins';
+    color: whitesmoke;
+    text-align: center;
+    font-size:42px;
+}
+
+.subtitle1 {
+    font-family: 'Poppins-regular';
+    color: rgba(210, 209, 209, 1);
+    text-align: center;
+    font-size: 12px;
+    margin: 0;
+    margin-top: -1rem;
+}
+
+.subtitle2 {
+    color: whitesmoke;
+    font-family: 'Poppins';
+    text-align: center;
+    font-size: 14px;
+    margin-top: 7vh;
+    margin-bottom: 7vh;
+}
+
+.textUpvoted {
+    color: whitesmoke;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-family: 'Poppins-regular';
+    margin-left: 4vw;
+    margin-bottom: 5vh;
+}
+
+.containerAllTopics {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 5vh;
+}
+
+.topicContainer {
+    background-color: #28292F;
+    border-radius: 10px;
+    justify-content: space-around;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.headerTopic {
+    background-color: #44454F;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 0.5rem 1rem;
+    justify-content: flex-start;
+    gap: 1vw;
+    align-items: center;
+}
+
+.headerTopic p {
+    color: whitesmoke;
+    font-size: 18px;
+    font-family: 'Poppins';
+}
+
+.imgTopic {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 999px;
+    border: 2.5px solid #D36638;
+}
+
+.creationInformations {
+    color: #C8C8C8 ;
+    font-family: 'Poppins-regular';
+    padding: 0 1rem;
+}
+
+.upvoteIcon {
+    width: 2rem;
+    height: 2rem;
+}
+
+.upvoteNb {
+    color: #FFF;
+    font-family: 'Poppins';
+}
+
+.containerFooterTopic {
+    justify-content: space-between;
+    padding: 0 1rem;
+    align-items: center;
+}
+
+.btnCheckTopic {
+    border: 3px solid #D36638;
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+}
+
+.btnCheckTopic button {
+    background: none;
+    border: none;
+    font-family: 'Poppins';
+    color: white;
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.btnCheckTopic span {
+    color: whitesmoke;
+    cursor: pointer;
+}
+
+.btnCheckTopic:hover{
+    cursor: pointer;
+}

@@ -74,9 +74,9 @@ type Topics struct {
 	TopicID      int
 	Title        string
 	Description  string
+	CreationDate time.Time
 	Picture      string
 	CreatorID    string
-	CreationDate time.Time
 	Upvotes      int
 	Follows      int
 	ValidTopic   bool
