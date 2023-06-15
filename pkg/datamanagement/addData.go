@@ -107,9 +107,9 @@ func UpdateUpvotes(TopicID int, UserID string) {
 	sign := "+"
 	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + UserID + ";")
 	for row.Next() {
-		row.Close()
 		sign = "-"
 		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+UserID)
+		row.Close()
 	}
 	if sign == "+" {
 		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")
@@ -171,6 +171,7 @@ func DeleteLineIntoTargetTable(table, condition string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	defer db.Close()
 	if err != nil {
+		fmt.Println("delete is not possible")
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
@@ -178,6 +179,7 @@ func DeleteLineIntoTargetTable(table, condition string) {
 	fmt.Println(query)
 	res, err := db.Exec(query)
 	if err != nil {
+		fmt.Println("delete is not possible")
 		fmt.Println("invalid condition : \n", err)
 		return
 	}
