@@ -2,7 +2,6 @@ package handler
 
 import (
 	"database/sql"
-	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -16,7 +15,6 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	topicName := url[2]
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		fmt.Println("Could not open database : \n", err)
 		return
 	}
 	row := datamanagement.ReadDBAlreadyOpen("SELECT * FROM Topics WHERE Title = '"+topicName+"';", db)
@@ -50,7 +48,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
 	}
 	row.Close()
-	idUser = "1" //delete this line
+	// idUser = "1" //delete this line
 	dataToSend.IsFollow = false
 	dataToSend.IsUpvote = false
 	// add a post
@@ -61,8 +59,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	dislike := r.FormValue("dislike")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
-	isConnected = "true" //delete this line
-	fmt.Println("test")
+	// isConnected = "true" //delete this line
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
@@ -70,7 +67,6 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
 			break
 		case clickFollow != "":
-			fmt.Println("test timing 1")
 			if dataToSend.IsFollow {
 				datamanagement.DeleteLineIntoTargetTable("Follows", "UserID = "+idUser)
 				dataToSend.IsFollow = false
@@ -101,7 +97,6 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			dataToSend.Likes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Likes"))
 			dataToSend.Dislikes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Dislikes"))
 		}
-		fmt.Println("test timing 2")
 	}
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, dataToSend)
