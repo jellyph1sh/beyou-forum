@@ -10,11 +10,11 @@ import (
 
 func AddLineIntoTargetTable(data DataContainer, table string) {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
 	if err != nil {
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
+	defer db.Close()
 	var insertDataInTable *sql.Stmt
 	var res sql.Result
 	switch true {
@@ -46,11 +46,10 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		query := "INSERT INTO " + table + "(word) VALUES(?);"
 		insertDataInTable, err = db.Prepare(query)
 		CheckPrepareQuery(err)
-		fmt.Println("test")
 		res, err = insertDataInTable.Exec(data.WordsBlacklist.Word)
 		break
 	case table == "Reports":
-		query := "INSERT INTO " + table + "(PostID,ReportUserID,Comment) VALUES (?,?,?,?);"
+		query := "INSERT INTO " + table + "(PostID,ReportUserID,Comment) VALUES (?,?,?);"
 		insertDataInTable, err = db.Prepare(query)
 		CheckPrepareQuery(err)
 		res, err = insertDataInTable.Exec(data.Reports.PostID, data.Reports.ReportUserID, data.Reports.Comment)
@@ -90,7 +89,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		return
 	}
 	if err != nil || res == nil {
-		fmt.Println("Could not insert this data : \n", "\n", err)
+		fmt.Println("Could not insert this data : \n", err)
 		return
 	}
 	affected, _ := res.RowsAffected()
@@ -106,7 +105,7 @@ func UpdateUpvotes(TopicID, UserID int) {
 	}
 	var updateUpvotes *sql.Stmt
 	sign := "+"
-	row := readDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + strconv.Itoa(UserID) + ";")
+	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + strconv.Itoa(UserID) + ";")
 	for row.Next() {
 		row.Close()
 		sign = "-"
@@ -134,7 +133,7 @@ func LikePostManager(idPost, idUser int, likOrdIS string) {
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
-	row := readDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+	row := ReadDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
 	for row.Next() {
 		row.Close()
 		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
@@ -146,14 +145,14 @@ func LikePostManager(idPost, idUser int, likOrdIS string) {
 		return
 	}
 	if likOrdIS == "Likes" {
-		row := readDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+		row := ReadDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
 		for row.Next() {
 			row.Close()
 			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
 		}
 		AddLineIntoTargetTable(DataContainer{Likes: Likes{PostID: idPost, UserID: idUser}}, "Likes")
 	} else {
-		row := readDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+		row := ReadDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
 		for row.Next() {
 			row.Close()
 			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
