@@ -237,6 +237,11 @@ input[type="email"]:focus{
     border:2px solid #D36638;
 }
 
+input[type="text"]:focus{
+    outline: none !important;
+    border:2px solid #D36638;
+}
+
 input[type="password"]:focus{
     outline: none !important;
     border:2px solid #D36638;
