@@ -15,6 +15,7 @@ func GetPostFromUser(idUser string) []Posts {
 	for row.Next() { // Iterate and fetch the records from result cursor
 		var post Posts
 		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		fmt.Println(post)
 		result = append(result, post)
 	}
 	row.Close()
@@ -300,9 +301,10 @@ func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
 	row.Close()
 	return false
 }
+
 func GetTopicsById(idUser string) []Topics {
 	result := []Topics{}
-	query := "SELECT * FROM Topics WHERE CreatorID = '" + idUser + "';"
+	query := "SELECT TopicID, Title, Description, Picture, CreatorID, Upvotes, Follows, ValidTopic FROM Topics WHERE CreatorID = '" + idUser + "';"
 	row := ReadDB(query)
 	for row.Next() { // Iterate and fetch the records from result cursor
 		var topic Topics

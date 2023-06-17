@@ -1,3 +1,4 @@
+{{ define "profile" }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,8 +32,8 @@
                     {{if $Post.IsValidPost}}
                     <div class="columnContainer containerPostProfile">
                         <div class="rowContainer containerHeaderProfile">
-                            <img class="imgPostProfile" src="../img/PP_wb.png" alt="pp">
-                            <p class="usernamePost">{{.UserInfo.Username}}</p>
+                            <img class="imgPostProfile" src="{{ $Post.ProfilePicture}}" alt="pp">
+                            <p class="usernamePost">{{$Post.AuthorName}}</p>
                             <span class="separatationDate"></span>
                             <p class="structuredDate">{{$Post.StructuredDate}} ago</p>
                         </div>
@@ -61,7 +62,9 @@
                     {{end}}
                 </div>
             </div>
+          
         </div>
     </div>
 </body>
 </html>
+{{ end }}

@@ -52,7 +52,7 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 		topic.Upvotes = element.Upvotes
 		topic.Follows = element.Follows
 		topic.ValidTopic = element.ValidTopic
-		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + fmt.Sprint(element.CreationDate.Month()) + fmt.Sprint(element.CreationDate.Year())
+		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + " " + fmt.Sprint(element.CreationDate.Month()) + " " + fmt.Sprint(element.CreationDate.Year())
 		user := datamanagement.GetProfileData(topic.CreatorID)
 		topic.CreatorName = user.Username
 		// fmt.Println(topic.CreationDate)
@@ -65,7 +65,6 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 func Home(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/home.html", "./static/html/navBar.html", "./static/html/cookiesPopup.html"))
 	allTop := datamanagement.SortTopics("DESC-Upvote-Home")
-	fmt.Println(allTop)
 	structDisplayHome := structDisplayHome{}
 	structDisplayHome.AllTopics = updateTopicsInTopicsWithUserInfo(allTop)
 	t.ExecuteTemplate(w, "home", structDisplayHome)
