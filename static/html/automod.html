@@ -16,7 +16,7 @@
             <div class="reports">
                 <h2>Reports:</h2>
                 {{ range $report := $base.Reports }}
-                    {{ range $user := $base.Users }}
+                    {{ range $user := $base.ReportedUsers }}
                         {{ range $post := $base.Posts }}
                             {{ if eq $report.ReportUserID $user.UserID }}
                                 {{ if eq $post.PostID $report.PostID }}
@@ -25,6 +25,14 @@
                                         <h3>{{ $user.Username }}</h3>
                                         <p>{{ $post.Content }}</p>
                                         <p>Reason : {{ $report.Comment }}</p>
+                                        <form method="post">
+                                            <input type="text" name="ban" value={{ $report.ReportID }} style="visibility: hidden;">
+                                            <input class="submitbutton" type="submit" value="Ban"/>
+                                        </form>
+                                        <form method="post">
+                                            <input type="text" name="delete" value={{ $report.PostID }} style="visibility: hidden;">
+                                            <input class="submitbutton" type="submit" value="Delete"/>
+                                        </form>
                                     </div>
                                 {{ end }}
                             {{ end }}
@@ -33,7 +41,16 @@
                 {{ end }}
             </div>
             <div class="bannedusers">
-
+                {{ range $user := $base.BannedUsers }}
+                    <div class="user">
+                        <img src={{ $user.ProfilePicture }} alt="ProfilePicture">
+                        <h3>{{ $user.Username }}</h3>
+                        <form method="post">
+                            <input type="text" name="unban" value={{ $user.UserID }} style="visibility: hidden;">
+                            <input class="submitbutton" type="submit" value="Unban {{$user.Username}}"/>
+                        </form>
+                    </div>
+                {{ end }}
             </div>
             <div class="bannedwords">
                 <div class="wordsinput">

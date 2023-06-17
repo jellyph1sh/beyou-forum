@@ -198,3 +198,18 @@ func AddWordIntoBlacklist(word string) {
 	insertDataInTable.Exec(nil, word)
 	defer db.Close()
 }
+
+func SetUserStatus(userID string, status string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return
+	}
+	query, err := db.Prepare("UPDATE Users SET ValidUser = ? WHERE UserID = ?;")
+	if err != nil {
+		fmt.Println(err)
+	}
+	res, err := query.Exec(status, userID)
+	res.RowsAffected()
+	fmt.Println(userID + " has been unban!")
+}

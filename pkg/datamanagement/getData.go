@@ -285,6 +285,19 @@ func GetAllReportedUsers() []Users {
 	return reportedUsers
 }
 
+func GetAllBannedUsers() []Users {
+	var bannedUsers []Users
+
+	result := readDB("SELECT * FROM Users WHERE ValidUser = false;")
+	for result.Next() {
+		var user Users
+		result.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+		bannedUsers = append(bannedUsers, user)
+	}
+
+	return bannedUsers
+}
+
 func GetAllReportedPosts() []Posts {
 	var reportedPosts []Posts
 
