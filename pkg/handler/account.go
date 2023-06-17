@@ -89,7 +89,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		}
 		break
 	}
-	currentUser := datamanagement.GetProfileData(idUser)
+	currentUser := datamanagement.GetUserById(idUser)
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
 	if isConnected != "true" {
