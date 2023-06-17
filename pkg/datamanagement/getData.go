@@ -314,3 +314,15 @@ func GetTopicsById(idUser string) []Topics {
 	row.Close()
 	return result
 }
+func GetTopicByName(search string) []Topics {
+	result := []Topics{}
+	query := "SELECT * FROM Topics WHERE Username LIKE '%" + search + "%';"
+	row := ReadDB(query)
+	for row.Next() {
+		var topic Topics
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.CreationDate, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+	row.Close()
+	return result
+}

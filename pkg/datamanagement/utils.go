@@ -135,6 +135,11 @@ type DataTopicPage struct {
 	Dislikes []bool
 }
 
+type DataExplorePage struct {
+	Topics        []Topics
+	currentPaging int
+}
+
 /*don't forget to close the *sql.Rows when you use this func */
 func ReadDB(query string) *sql.Rows {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
