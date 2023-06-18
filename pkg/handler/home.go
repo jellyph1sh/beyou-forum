@@ -67,8 +67,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	allTop := datamanagement.SortTopics("DESC-Upvote-Home")
 	structDisplayHome := structDisplayHome{}
 	structDisplayHome.AllTopics = updateTopicsInTopicsWithUserInfo(allTop)
-	cookieConnected, _ := r.Cookie("idUser")
-	IsConnected := getCookieValue(cookieConnected)
+	// cookieConnected, _ := r.Cookie("idUser")
+	// IsConnected := getCookieValue(cookieConnected)
 	t.ExecuteTemplate(w, "home", structDisplayHome)
-	t.ExecuteTemplate(w, "navBar", IsConnected)
+	// t.ExecuteTemplate(w, "navBar", IsConnected)
 }

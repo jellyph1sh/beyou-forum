@@ -171,7 +171,8 @@ a {
     }
 
     nav {
-        position: sticky;
+        position: fixed;
+        height: 5rem;
         width: 100%;
         padding: 0;
     }
@@ -203,6 +204,7 @@ a {
 
     #toggle:checked + .linkPages {
         display: flex;
+        background-color: #28292F;
     }
     .websiteName {
         width: 75vw;
