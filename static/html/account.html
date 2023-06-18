@@ -17,8 +17,27 @@
         function DeletePopup() {
           document.getElementById('popupDel').style.visibility = 'visible';
         }
+        
         function EditPasswordPopup(){
             document.getElementById('popupPwd').style.visibility = 'visible';
+        }
+
+        function changeButtonColor(originBtnId, targetId) {
+            const [originBtn, target] = [document.getElementById(originBtnId), document.getElementById(targetId)];
+            const [colorOrigin, colorTarget] = (originBtnId === "btnDelete") ? ["#D97136", "transparent"] : ["transparent", "#D97136"];
+            [originBtn, target].forEach(btn => {
+                btn.classList.add("transition-button");
+                btn.style.backgroundColor = (btn === originBtn) ? colorOrigin : colorTarget;
+            });
+        }
+
+        function restoreButtonColor(originBtnId, targetId) {
+            const [originBtn, target] = [document.getElementById(originBtnId), document.getElementById(targetId)];
+            const [colorTarget, colorOrigin] = (originBtnId === "btnDelete") ? ["#D97136", "transparent"] : ["transparent", "#D97136"];
+            [originBtn, target].forEach(btn => {
+                btn.classList.add("transition-button");
+                btn.style.backgroundColor = (btn === originBtn) ? colorOrigin : colorTarget;
+            });
         }
     </script>  
     <div class="containerAccountPage">
@@ -72,7 +91,7 @@
                 <div class="containerBio columnContainer">
                     <h2 class="bioTitle">Clic on bio to edit</h2>
                     <form action="" method="post"  class="formBio">
-                        <input name="changedBIO"  cols="40" rows="5" type="text" placeholder="{{ .Description }}" class="accountCompEmailUser"></h3>
+                        <input name="changedBIO"  cols="40" rows="5" type="text" placeholder="{{ .Description }}" class="accountCompEmailUser">
                     </form>
                 </div>
                 
@@ -80,7 +99,7 @@
             <h1 class="mainCatAccount marginContentAccount">Password settings</h1>
             <span class="underlineAccountPage"></span>
             <h2 class="accountInformationMsg marginContentAccount">YOUR NEW PASSWORD NEED TO CONTAINS AT LEAST 8 CHARACTERS</h2>
-            <button onclick="EditPasswordPopup()" type="submit" class="btnChangePassword marginContentAccount">Change password</button>
+            <button id="btnPassword" onmouseover="changeButtonColor('btnDelete','btnPassword')" onmouseout="restoreButtonColor('btnDelete','btnPassword')"onclick="EditPasswordPopup()" type="submit" class="btnChangePassword marginContentAccount">Change password</button>
             <div id="popupPwd" class="columnContainer ">
                 <a href="/account" class="rowContainer flexExit">
                     <span class="googleSpan material-symbols-outlined">close</span>
@@ -117,7 +136,7 @@
             </div>
             <h2 class="accountInformationMsg marginContentAccount marginh2Del">DELETE ACCOUNT</h2>
             <span class="underlineAccountPage"></span>
-            <button onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
+            <button id="btnDelete" onmouseover="changeButtonColor('btnPassword','btnDelete')" onmouseout="restoreButtonColor('btnPassword','btnDelete')" onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
             <div id="popupDel" class="columnContainer ">
                 <div class="deletePopup">
                     <div class="popup-content columnContainer">
