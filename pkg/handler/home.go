@@ -53,7 +53,7 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 		topic.Follows = element.Follows
 		topic.ValidTopic = element.ValidTopic
 		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + " " + fmt.Sprint(element.CreationDate.Month()) + " " + fmt.Sprint(element.CreationDate.Year())
-		user := datamanagement.GetProfileData(topic.CreatorID)
+		user := datamanagement.GetUserById(topic.CreatorID)
 		topic.CreatorName = user.Username
 		// fmt.Println(topic.CreationDate)
 		// fmt.Println(element.CreationDate.Day(), element.CreationDate.Month(), element.CreationDate.Year(), element.CreationDate)
