@@ -17,6 +17,7 @@ type AccountPage struct {
 	IsNotValidchangedBIO      bool
 	IsNotValidEditMail        bool
 	IsNotValidchangedUsername bool
+	IsConnected               string
 }
 
 func setDisplayStructAccount(displayStructAccountPage AccountPage, currentUser datamanagement.Users) AccountPage {
@@ -95,8 +96,6 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 	}
-	cookieConnected, _ := r.Cookie("idUser")
-	IsConnected := getCookieValue(cookieConnected)
+	displayStructAccountPage.IsConnected = isConnected
 	t.ExecuteTemplate(w, "account", displayStructAccountPage)
-	t.ExecuteTemplate(w, "navBar", IsConnected)
 }

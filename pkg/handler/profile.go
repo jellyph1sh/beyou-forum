@@ -30,6 +30,7 @@ type profile struct {
 	UserCreationDate string
 	Posts            []PostWithStructuredDate
 	Topics           []datamanagement.Topics
+	IsConnected      string
 }
 
 func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
@@ -116,8 +117,8 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
 	fmt.Println(displayStructProfile.Posts)
-	cookieConnected, _ := r.Cookie("idUser")
+	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
+	displayStructProfile.IsConnected = IsConnected
 	t.ExecuteTemplate(w, "profile", displayStructProfile)
-	t.ExecuteTemplate(w, "navBar", IsConnected)
 }

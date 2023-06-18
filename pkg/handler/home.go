@@ -36,7 +36,8 @@ type TopicsWithUserInfo struct {
 }
 
 type structDisplayHome struct {
-	AllTopics []TopicsWithUserInfo
+	AllTopics   []TopicsWithUserInfo
+	IsConnected string
 }
 
 func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWithUserInfo {
@@ -67,8 +68,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	allTop := datamanagement.SortTopics("DESC-Upvote-Home")
 	structDisplayHome := structDisplayHome{}
 	structDisplayHome.AllTopics = updateTopicsInTopicsWithUserInfo(allTop)
-	// cookieConnected, _ := r.Cookie("idUser")
-	// IsConnected := getCookieValue(cookieConnected)
+	cookieConnected, _ := r.Cookie("isConnected")
+	IsConnected := getCookieValue(cookieConnected)
+	structDisplayHome.IsConnected = IsConnected
 	t.ExecuteTemplate(w, "home", structDisplayHome)
-	// t.ExecuteTemplate(w, "navBar", IsConnected)
 }

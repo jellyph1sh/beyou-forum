@@ -10,12 +10,11 @@
     <title>Error</title>
 </head>
 <body >
-    {{template "navBar"}}
+    {{ template "navBar" . }}
     <div class = "columnContainer alignCenter containerErrorPath">
         <img class="imgError" src="../img/404_error.png" alt="404_img">
         <h1 class="textError">Error : Invalid Url Path</h1>
     </div>
-    
 </body>
 </html>
 {{ end }}
