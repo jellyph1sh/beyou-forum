@@ -25,6 +25,9 @@
     .containerPosts {
         min-width: 90%;
     }
+    .containerProfilePage {
+        margin-top: 80px;
+    }
 }
 
 /*--------------------- Containers ---------------------*/
@@ -35,6 +38,7 @@
     padding: 0 2rem;
     margin: 1rem;
     border-radius: 10px;
+    flex-wrap: wrap;
 }
 
 .dateContainer {

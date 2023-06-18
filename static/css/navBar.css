@@ -205,6 +205,7 @@ a {
     #toggle:checked + .linkPages {
         display: flex;
         background-color: #28292F;
+        border-bottom: 2px solid #44454F;
     }
     .websiteName {
         width: 75vw;
