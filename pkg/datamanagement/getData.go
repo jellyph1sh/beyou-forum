@@ -407,7 +407,7 @@ func GetUserById(id string) Users {
 	}
 	defer db.Close()
 
-	row := db.QueryRow("SELECT * Users WHERE UserID = ?;", id)
+	row := db.QueryRow("SELECT * FROM Users WHERE UserID = ?;", id)
 	if err != nil {
 		log.Fatal(err)
 		return Users{}
