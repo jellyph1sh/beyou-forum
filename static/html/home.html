@@ -54,7 +54,7 @@
                         <p class="upvoteNb">{{ .Upvotes }} Upvotes</p>
                         <form action="" method="post">
                             <div class="rowContainer btnCheckTopic">
-                                <button type="submit" value="{{ .CreatorID }}">Check Topic <span class="material-symbols-outlined">arrow_forward</span></button>
+                                <button type="submit" value="{{ .TopicID }}">Check Topic <span class="material-symbols-outlined">arrow_forward</span></button>
                             </div>
                         </form>
                     </div>
@@ -62,7 +62,7 @@
             {{ end }}
         </div>
     </div>
-    <!-- {{ template "cookies"}} -->
+    {{ template "cookies"}}
 </body>
 </html>
 {{ end }}""

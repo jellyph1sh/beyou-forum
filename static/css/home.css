@@ -1,3 +1,5 @@
+/*------------------------ Fonts ------------------------*/
+
 @font-face {
     font-family: 'Poppins';
     src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
@@ -10,12 +12,35 @@
      url('../fonts/Poppins-Reg/Poppins-Regular.woff') format('woff');
 }
 
+/*------------------------ Animations ------------------------*/
+
+@keyframes moveArrowForward {
+    0% {
+        transform: translateX(0px);
+    }
+    100% {
+        transform: translateX(10px);
+    }
+
+}
+
+@keyframes moveArrowBackward {
+    0% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
+}
+
+/*------------------------ Body ------------------------*/
 
 body {
     background-color: #32333B;
-
     margin: 0;
 }
+
+/*------------------------ Containers ------------------------*/
 
 .containerHomePage {
     justify-content: center;
@@ -24,14 +49,9 @@ body {
     right: 0;
 }
 
-.coloredText {
-    color: #D36638;
-}
-
 .containerCards {
     justify-content: space-around;
     flex-wrap: wrap;
-   
 }
 
 .card {
@@ -42,15 +62,46 @@ body {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.containerAllTopics {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 5vh;
+}
+
+.topicContainer {
+    background-color: #28292F;
+    border-radius: 10px;
+    justify-content: space-around;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.headerTopic {
+    background-color: #44454F;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 0.5rem 1rem;
+    justify-content: flex-start;
+    gap: 1vw;
+    align-items: center;
+}
+
+.containerFooterTopic {
+    justify-content: space-between;
+    padding: 0 1rem;
+    align-items: center;
+    gap: 1rem;
+}
+
+/*------------------------ Texts ------------------------*/
+
+.coloredText {
+    color: #D36638;
+}
+
 .cardText {
     color: whitesmoke;
     font-family: 'Poppins';
     text-align: center;
-}
-
-.CardImg {
-    width: 10rem;
-    object-fit: contain;
 }
 
 .titleHomePage {
@@ -87,33 +138,28 @@ body {
     margin-bottom: 5vh;
 }
 
-.containerAllTopics {
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-bottom: 5vh;
-}
-
-.topicContainer {
-    background-color: #28292F;
-    border-radius: 10px;
-    justify-content: space-around;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-}
-
-.headerTopic {
-    background-color: #44454F;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 0.5rem 1rem;
-    justify-content: flex-start;
-    gap: 1vw;
-    align-items: center;
-}
-
 .headerTopic p {
     color: whitesmoke;
     font-size: 18px;
     font-family: 'Poppins';
+}
+
+.creationInformations {
+    color: #C8C8C8 ;
+    font-family: 'Poppins-regular';
+    padding: 0 1rem;
+}
+
+.upvoteNb {
+    color: #FFF;
+    font-family: 'Poppins';
+}
+
+/*------------------------ Others ------------------------*/
+
+.CardImg {
+    width: 10rem;
+    object-fit: contain;
 }
 
 .imgTopic {
@@ -123,27 +169,12 @@ body {
     border: 2.5px solid #D36638;
 }
 
-.creationInformations {
-    color: #C8C8C8 ;
-    font-family: 'Poppins-regular';
-    padding: 0 1rem;
-}
-
 .upvoteIcon {
     width: 2rem;
     height: 2rem;
 }
 
-.upvoteNb {
-    color: #FFF;
-    font-family: 'Poppins';
-}
-
-.containerFooterTopic {
-    justify-content: space-between;
-    padding: 0 1rem;
-    align-items: center;
-}
+/*------------------------ Buttons ------------------------*/
 
 .btnCheckTopic {
     border: 3px solid #D36638;
@@ -169,4 +200,14 @@ body {
 
 .btnCheckTopic:hover{
     cursor: pointer;
+}
+
+.btnCheckTopic:hover span{
+    animation: moveArrowForward 1s ease;
+    animation-fill-mode: forwards;
+}
+
+.btnCheckTopic:not(:hover) span {
+    animation: moveArrowBackward 1s ease;
+    animation-fill-mode: forwards;
 }
