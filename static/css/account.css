@@ -338,6 +338,7 @@ body {
 .btnChangePassword {
     background-color: #D97136;
     width: max-content;
+    cursor: pointer;
     border-radius: 5px;
     color: whitesmoke;
     border: 3px solid #D97136;
@@ -347,16 +348,11 @@ body {
     min-width: 11rem;
 }
 
-.btnChangePassword:hover {
-    background-color: transparent;
-    transition: 0.5s;
-    cursor: pointer;
-}
-
 
 .btnDeleteAccount {
     background-color: transparent;
     width: max-content;
+    cursor: pointer;
     border-radius: 5px;
     min-width: 11rem;
     color: whitesmoke;
@@ -367,10 +363,8 @@ body {
     margin-top: 2vh;
 }
 
-.btnDeleteAccount:hover {
-    background-color: #D97136;
-    transition: 0.5s;
-    cursor: pointer;
+.transition-button {
+    transition: background-color 0.8s ease;
 }
 
 /*--------------------- Others ---------------------*/

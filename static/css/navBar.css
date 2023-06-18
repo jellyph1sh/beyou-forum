@@ -25,6 +25,7 @@ nav{
     text-align: center;
     justify-content: center;
     align-items: center;
+    text-transform: uppercase;
     width: 14rem;
     padding: 0rem 1rem;
     gap: 1vw;

@@ -95,5 +95,8 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 	}
+	cookieConnected, _ := r.Cookie("idUser")
+	IsConnected := getCookieValue(cookieConnected)
 	t.ExecuteTemplate(w, "account", displayStructAccountPage)
+	t.ExecuteTemplate(w, "navBar", IsConnected)
 }
