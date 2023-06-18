@@ -13,19 +13,19 @@ import (
 func IsUserExist(userEmail string, userProfilName string) bool {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return false
-	}
-	defer db.Close()
-	QUERY := "SELECT * FROM Users WHERE ( Username = '" + string(userProfilName) + "' OR Email = '" + string(userEmail) + "');"
-	row, err := db.Query(QUERY)
-	if err != nil {
-		fmt.Println("Invalid request :")
 		log.Fatal(err)
 		return false
 	}
-	defer row.Close()
-	if row.Next() == false {
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ? OR Email = ?);", string(userProfilName), string(userEmail))
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
 		return false
 	} else {
 		return true
@@ -38,19 +38,19 @@ func IsRegister(userInput string, password string) (bool, string) {
 	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		fmt.Println("Could not open database : \n", err)
+		log.Fatal(err)
 		return false, ""
 	}
 	defer db.Close()
-	QUERY := "SELECT * FROM Users WHERE ( Username = '" + string(userInput) + "' OR Email = '" + string(userInput) + "' ) AND Password = '" + string(stringPasswordInSha256) + "';"
-	row, err := db.Query(QUERY)
+
+	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ? OR Email = ? ) AND Password = ?;", string(userInput), string(userInput), string(stringPasswordInSha256))
 	if err != nil {
-		fmt.Println("Invalid request :")
 		log.Fatal(err)
 		return false, "2"
 	}
-	defer row.Close()
-	for row.Next() {
+	defer rows.Close()
+
+	for rows.Next() {
 		var id string
 		var name string
 		var first_name string
@@ -62,8 +62,9 @@ func IsRegister(userInput string, password string) (bool, string) {
 		var description string
 		var profile_image string
 		var creation_date time.Time
-		row.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
+		rows.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
 		return true, id
 	}
+
 	return false, "3"
 }
