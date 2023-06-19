@@ -18,7 +18,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	rememberMe := r.FormValue("rememberMe")
 	cookieRemeberMe, _ := r.Cookie("Remember")
 	CrememberMe := getCookieValue(cookieRemeberMe)
-	loginDisplay := login{false}
+	loginDisplay := register{false}
 	if CrememberMe == "true" {
 		http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 	}

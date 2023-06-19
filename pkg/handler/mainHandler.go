@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 )
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,5 +25,5 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		Profile(w, r, false)
 	default:
 		InvalidPath(w, r)
-	}
+  }
 }

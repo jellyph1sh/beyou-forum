@@ -11,9 +11,7 @@ import (
 )
 
 type register struct {
-	EmailAndUsernameIsNotValid bool
-	EmailIsNotValid            bool
-	UsernameIsNotValid         bool
+	IsNotValid bool
 }
 
 func CreateUser(UserId string, userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
@@ -48,11 +46,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	userName := r.FormValue("username")
 	userPassword := r.FormValue("password")
 	rememberMe := r.FormValue("rememberMe")
-	registerDisplay := register{false, false, false}
+	registerDisplay := register{false}
 	if userEmail != "" && userName != "" && userPassword != "" {
-		isUsernameAlreadyExist := datamanagement.IsUsernameAlreadyExist(userName)
-		isEmailAlreadyExist := datamanagement.IsEmailAlreadyExist(userEmail)
-		if !isUsernameAlreadyExist && !isEmailAlreadyExist {
+		if !datamanagement.IsUserExist(userEmail, userName) {
 			newUUID, err := exec.Command("uuidgen").Output()
 			if err != nil {
 				fmt.Println("user creation error ", err)
@@ -80,13 +76,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			}
 			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 		} else {
-			if isEmailAlreadyExist && isUsernameAlreadyExist {
-				registerDisplay.EmailAndUsernameIsNotValid = true
-			} else if isEmailAlreadyExist {
-				registerDisplay.EmailIsNotValid = true
-			} else if isUsernameAlreadyExist {
-				registerDisplay.UsernameIsNotValid = true
-			}
+			registerDisplay.IsNotValid = true
 		}
 	}
 	t.ExecuteTemplate(w, "register", registerDisplay)
