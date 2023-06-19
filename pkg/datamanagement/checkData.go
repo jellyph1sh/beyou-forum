@@ -10,21 +10,43 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func IsUserExist(userEmail string, userProfilName string) bool {
+func IsUsernameAlreadyExist(userProfilName string) bool {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return false
+	}
+	defer db.Close()
+	QUERY := "SELECT * FROM Users WHERE Username = '" + string(userProfilName) + "';"
+	row, err := db.Query(QUERY)
+	if err != nil {
+		fmt.Println("Invalid request :")
+		log.Fatal(err)
+		return false
+	}
+	defer row.Close()
+	if row.Next() == false {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsEmailAlreadyExist(userEmail string) bool {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+		return false
+	}
+	defer db.Close()
+	QUERY := "SELECT * FROM Users WHERE Email = '" + string(userEmail) + "';"
+	rows, err := db.Query(QUERY)
+	if err != nil {
+		fmt.Println("Invalid request :")
 		log.Fatal(err)
 		return false
 	}
 	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ? OR Email = ?);", string(userProfilName), string(userEmail))
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer rows.Close()
-
 	if !rows.Next() {
 		return false
 	} else {
@@ -42,14 +64,12 @@ func IsRegister(userInput string, password string) (bool, string) {
 		return false, ""
 	}
 	defer db.Close()
-
 	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ? OR Email = ? ) AND Password = ?;", string(userInput), string(userInput), string(stringPasswordInSha256))
 	if err != nil {
 		log.Fatal(err)
 		return false, "2"
 	}
 	defer rows.Close()
-
 	for rows.Next() {
 		var id string
 		var name string
@@ -65,6 +85,5 @@ func IsRegister(userInput string, password string) (bool, string) {
 		rows.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
 		return true, id
 	}
-
 	return false, "3"
 }
