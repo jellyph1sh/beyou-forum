@@ -6,7 +6,7 @@ import (
 )
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
-	url := strings.Split(r.URL.String(), "/")
+	url := strings.Split(r.URL.String(), "/") // take url
 	switch true {
 	case url[1] == "account" && len(url) == 2:
 		Account(w, r)
