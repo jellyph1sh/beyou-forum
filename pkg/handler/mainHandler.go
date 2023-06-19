@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 )
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,10 +21,10 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	case url[1] == "register" && len(url) == 2:
 		Register(w, r)
 	case url[1] == "profile" && len(url) == 2:
-		Profile(w, r, true)
+		Profile(w, r)
 	case url[1] == "profile" && len(url) > 2:
-		Profile(w, r, false)
+		Profile(w, r)
 	default:
 		InvalidPath(w, r)
-  }
+	}
 }

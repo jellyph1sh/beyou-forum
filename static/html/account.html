@@ -14,14 +14,10 @@
 </head>
 <body>
     <script>
-        function DeletePopup() {
-          document.getElementById('popupDel').style.visibility = 'visible';
+        function showPopup(id) {
+          document.getElementById(id).style.visibility = 'visible';
         }
         
-        function EditPasswordPopup(){
-            document.getElementById('popupPwd').style.visibility = 'visible';
-        }
-
         function changeButtonColor(originBtnId, targetId) {
             const [originBtn, target] = [document.getElementById(originBtnId), document.getElementById(targetId)];
             const [colorOrigin, colorTarget] = (originBtnId === "btnDelete") ? ["#D97136", "transparent"] : ["transparent", "#D97136"];
@@ -112,7 +108,7 @@
             <h1 class="mainCatAccount marginContentAccount">Password settings</h1>
             <span class="underlineAccountPage"></span>
             <h2 class="accountInformationMsg marginContentAccount">EDIT YOUR PASSWORD</h2>
-            <button id="btnPassword" onmouseover="changeButtonColor('btnDelete','btnPassword')" onmouseout="restoreButtonColor('btnDelete','btnPassword')"onclick="EditPasswordPopup()" type="submit" class="btnChangePassword marginContentAccount">Change password</button>
+            <button id="btnPassword" onmouseover="changeButtonColor('btnDelete','btnPassword')" onmouseout="restoreButtonColor('btnDelete','btnPassword')"onclick="showPopup('popupPwd')" type="submit" class="btnChangePassword marginContentAccount">Change password</button>
             <div id="popupPwd" class="columnContainer ">
                 <a href="/account" class="rowContainer flexExit">
                     <span class="googleSpan material-symbols-outlined">close</span>
@@ -148,14 +144,31 @@
                 </div>
             </div>
             <span class="underlineAccountPage"></span>
+            <h2 class="accountInformationMsg marginContentAccount marginh2Del">DISCONNECT</h2>
+            <button onclick="showPopup('popupDisconnect')" class="marginContentAccount btnDisconnect" >Disconnect from {{ .Username }}</button>
+            <div id="popupDisconnect" class="columnContainer ">
+                <div class="deletePopup">
+                    <div class="popup-content columnContainer">
+                        <h2 class="titleDelPop">Are you sure ?</h2>
+                        <p class="textPopDel">Are you sure you want to disconnect from your account</p>
+                    </div>
+                    <div class="rowContainer delPopBtnCont">
+                        <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
+                        <form action="" method="post" name="Disconnect">
+                            <input class="delPopBtn delPopBtnDelete" type="submit" name="Disconnect" value="Disconnect">
+                        </form> 
+                    </div>
+                </div>
+            </div>
+            <span class="underlineAccountPage"></span>
             <h2 class="accountInformationMsg marginContentAccount marginh2Del">DELETE ACCOUNT</h2>
-            <button id="btnDelete" onmouseover="changeButtonColor('btnPassword','btnDelete')" onmouseout="restoreButtonColor('btnPassword','btnDelete')" onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
+            <button id="btnDelete" onmouseover="changeButtonColor('btnPassword','btnDelete')" onmouseout="restoreButtonColor('btnPassword','btnDelete')" onclick="showPopup('popupDel')" class="marginContentAccount btnDeleteAccount" >Delete account</button>
             <div id="popupDel" class="columnContainer ">
                 <div class="deletePopup">
                     <div class="popup-content columnContainer">
-                    <h2 class="titleDelPop">Are you sure ?</h2>
-                    <p class="textPopDel">Are you sure you want to delete your account, this <br>
-                        action will delete permanently your account.</p>
+                        <h2 class="titleDelPop">Are you sure ?</h2>
+                        <p class="textPopDel">Are you sure you want to delete your account, this <br>
+                            action will delete permanently your account.</p>
                     </div>
                     <div class="rowContainer delPopBtnCont">
                         <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
@@ -165,7 +178,6 @@
                     </div>
                 </div>
             </div>
-              
         </div>
     </div>
 </body>

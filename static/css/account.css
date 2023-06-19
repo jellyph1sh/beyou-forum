@@ -587,6 +587,34 @@ a .googleSpan:hover {
     color: #CBCBCB;
 }
 
+/*--------------------- Popup Disconnect ---------------------*/
+
+#popupDisconnect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.btnDisconnect {
+    color: #D36638;
+    font-family: 'Poppins';
+    width: max-content;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-top: 1rem ;
+    margin-bottom: 1rem ;
+}
+
 /*--------------------- Popup Error ---------------------*/
 
 #popupError {
