@@ -18,7 +18,7 @@ const (
 )
 
 type DataFilter struct {
-	number int
+	Number int
 }
 
 type Display struct {
@@ -62,7 +62,7 @@ type Reports struct {
 type Tags struct {
 	TagID     int
 	Title     string
-	CreatorID int
+	CreatorID string
 }
 
 type UserConnected struct {
@@ -133,6 +133,11 @@ type DataTopicPage struct {
 	IsUpvote bool
 	Likes    []bool
 	Dislikes []bool
+}
+
+type DataExplorePage struct {
+	Topics []Topics
+	Users  []string
 }
 
 /*don't forget to close the *sql.Rows when you use this func */

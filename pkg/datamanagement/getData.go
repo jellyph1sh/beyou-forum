@@ -179,7 +179,7 @@ func GetAllFromTable(table string) []DataContainer {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM ?;", table)
+	rows, err := db.Query("SELECT * FROM " + table + ";")
 	if err != nil {
 		log.Fatal(err)
 		return nil
@@ -197,7 +197,7 @@ func GetAllFromTable(table string) []DataContainer {
 			rows.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate, &line.Posts.IsValidPost)
 			break
 		case table == "Topics":
-			rows.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
+			rows.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.CreationDate, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
 			break
 		case table == "Tags":
 			rows.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)
@@ -226,7 +226,6 @@ func GetAllFromTable(table string) []DataContainer {
 		}
 		result = append(result, line)
 	}
-
 	return result
 }
 
@@ -261,6 +260,9 @@ func SortTopics(typOfSort string) []Topics {
 		break
 	case "creator":
 		query = "SELECT * FROM Topics ORDER BY CreatorID DESC;"
+		break
+	case "default":
+		query = "SELECT * FROM Topics;"
 		break
 	default:
 		fmt.Println("invalid type of sort")
@@ -318,7 +320,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 		return nil
 	}
 
-	rows, err := db.Query(query, fmt.Sprint(data.number))
+	rows, err := db.Query(query, fmt.Sprint(data.Number))
 	if err != nil {
 		log.Fatal(err)
 		return nil
@@ -371,7 +373,7 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 		return nil
 	}
 
-	rows, err := db.Query(query, fmt.Sprint(data.number))
+	rows, err := db.Query(query, fmt.Sprint(data.Number))
 	if err != nil {
 		log.Fatal(err)
 		return nil
@@ -505,4 +507,37 @@ func GetTopicsById(creatorID string) []Topics {
 	}
 
 	return topics
+}
+func GetTopicsByName(search string) []Topics {
+	result := []Topics{}
+	query := "SELECT * FROM Topics WHERE Title LIKE '%" + search + "%';"
+	row := ReadDB(query)
+	for row.Next() {
+		var topic Topics
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.CreationDate, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+	row.Close()
+	return result
+}
+
+func GetOneTopicByName(search string) Tags {
+	result := Tags{}
+	query := "SELECT * FROM Tags WHERE Title='" + search + "';"
+	row := ReadDB(query)
+	for row.Next() {
+		row.Scan(&result.TagID, &result.Title, &result.CreatorID)
+		row.Close()
+	}
+	return result
+}
+func GetTagByName(search string) Tags {
+	result := Tags{}
+	query := "SELECT * FROM Topics WHERE Title ='" + search + "';"
+	row := ReadDB(query)
+	for row.Next() {
+		row.Scan(&result.TagID, &result.Title, &result.CreatorID)
+		row.Close()
+	}
+	return result
 }
