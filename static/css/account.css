@@ -169,7 +169,7 @@ body {
 }
 
 .marginh2Del {
-    margin-top: 1vh;
+    margin-top: 5vh;
     margin-bottom: -0.5rem;
 }
 
@@ -202,7 +202,6 @@ body {
     background-color: rgba(26, 26, 29, 0.35);
     height: 100%;
 }
-
 /*--------------------- Texts ---------------------*/
 
 .mainCatAccount {
@@ -219,14 +218,10 @@ body {
     font-size: 16px;
     max-width: 8rem;
     text-align: center;
-    border: 2px solid transparent;
 
 }
-
-.containerUser input[type="text"]:focus{
-    outline: none;
-    border: 2px solid #d36638;
-    border-radius: 2px;
+.usernameAccount:focus-visible {
+    outline: 2px solid #d366388f;
 }
 
 .accountCompEmail  {
@@ -297,6 +292,7 @@ body {
     outline: none !important;
     border:2px dotted #D36638;
     padding-left: 0.2rem;
+    /* padding-right: -0.2rem; */
 }
 
 .containerBio input[type="text"] {
@@ -365,7 +361,6 @@ body {
     font-family: 'Poppins-regular';
     font-weight: 900;
     margin-top: 2vh;
-    margin-bottom: 3vh;
 }
 
 .transition-button {
@@ -569,8 +564,7 @@ body {
 
 a .googleSpan{
     align-self: flex-start;
-    position: absolute;
-    margin-top: 20px;
+    margin-top: 10px;
     z-index: 999;
     color: #C1BEBE ;
 }
@@ -585,65 +579,4 @@ a .googleSpan:hover {
     margin-top: -400px;
     font-family: 'Poppins';
     color: #CBCBCB;
-}
-
-/*--------------------- Popup Error ---------------------*/
-
-#popupError {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 9999;
-    visibility: hidden;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.containerPopupError {
-    background-color: #28292F;
-    border-radius: 10px;
-    width: 30rem;
-    border: 2px solid #44454F;
-}
-
-.coloredText {
-    color: #D36638;
-    font-family: 'Poppins';
-}
-
-.containerTopError {
-    color: white;
-    font-family: 'Poppins';
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    text-align: center;
-}
-
-.containerTopError img {
-    width: 10rem;
-    object-fit: contain;
-}
-
-.errorMsgEdit {
-    text-transform: uppercase;
-    color: whitesmoke;
-    font-family: 'Poppins';
-    width: 100%;
-    background-color: #44454F;
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
-    margin: 0;
-    text-align: center;
-    padding: 0.5rem 0;
-}
-
-.closeSpan {
-    color: #8D8D8D;
-    cursor: pointer;
-    width: 100%;
-    margin: 0.5rem;
 }
