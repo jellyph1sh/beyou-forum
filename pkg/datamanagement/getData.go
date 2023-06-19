@@ -16,21 +16,18 @@ func GetPostFromUser(idUser string) []Posts {
 		return nil
 	}
 	defer db.Close()
-
 	rows, err := db.Query("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
 	if err != nil {
 		log.Fatal(err)
 		return nil
 	}
 	defer rows.Close()
-
 	result := []Posts{}
 	for rows.Next() { // Iterate and fetch the records from result cursor
 		var post Posts
 		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
 		result = append(result, post)
 	}
-
 	return result
 }
 
@@ -82,7 +79,7 @@ func GetSortPost() []Posts {
 	return result
 }
 
-func GetUserByName(search string) []Users {
+func SearchUserByName(search string) []Users {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		log.Fatal(err)
@@ -103,10 +100,52 @@ func GetUserByName(search string) []Users {
 		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
 		result = append(result, user)
 	}
-
 	return result
 }
 
+func GetUserByName(userName string) Users {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return Users{}
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Users WHERE Username LIKE ?;", userName)
+	if err != nil {
+		log.Fatal(err)
+		return Users{}
+	}
+	defer rows.Close()
+
+	var user Users
+	for rows.Next() {
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+	}
+	return user
+}
+
+func GetUserByID(userId string) Users {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return Users{}
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Users WHERE UserID LIKE ?;", userId)
+	if err != nil {
+		log.Fatal(err)
+		return Users{}
+	}
+	defer rows.Close()
+
+	var user Users
+	for rows.Next() {
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+	}
+	return user
+}
 func GetPostByTopic(topic string) []Posts {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {

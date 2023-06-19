@@ -145,7 +145,7 @@
             </div>
             <span class="underlineAccountPage"></span>
             <h2 class="accountInformationMsg marginContentAccount marginh2Del">DISCONNECT</h2>
-            <button type="submit" value="disconnect" name="disconnect" onclick="showPopup('popupDisconnect')" class="marginContentAccount btnDisconnect" >Disconnect from {{ .Username }}</button>
+            <button onclick="showPopup('popupDisconnect')" class="marginContentAccount btnDisconnect" >Disconnect from {{ .Username }}</button>
             <div id="popupDisconnect" class="columnContainer ">
                 <div class="deletePopup">
                     <div class="popup-content columnContainer">
@@ -155,7 +155,7 @@
                     <div class="rowContainer delPopBtnCont">
                         <a href="/account" class="delPopBtn delPopBtnCancel">Cancel</a>
                         <form action="" method="post" name="Disconnect">
-                            <input class="delPopBtn delPopBtnDelete" type="submit" name="Disconnect" value="Disconnect">
+                            <input class="delPopBtn delPopBtnDelete" type="submit" name="disconnect" value="disconnect">
                         </form> 
                     </div>
                 </div>
