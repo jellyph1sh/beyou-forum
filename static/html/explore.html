@@ -10,8 +10,8 @@
     <div>
         <h1>EXPLORE TOPICS</h1>
         <form method="post">
-            <input type="text" name="topicForm">
-            <select name="sort">
+            <input type="text" name="topicSearch">
+            <select name="sort" type="submit" onchange="this.form.submit()">
                 <option value="default">Sort by</option>
                 <option value="a-z">a-z</option>
                 <option value="z-a">z-a</option>
@@ -21,6 +21,9 @@
             </select>
         </form>
     
+        {{if not .Topics}}
+            <p>there isn't any topic</p>
+        {{else}}
         <div>
             {{$root := .}}
             {{range $i, $topic := .Topics}}
@@ -30,24 +33,28 @@
                         <h2>{{$topic.Title}}</h2>
                     </div>
                     <p>Created - {{$topic.CreationDate.Format "Jan 02, 2006"}} by {{index $root.Users $i}}</p>
-                    <p>{{$topic.Upvotes}} upvotes</p>
+                    <p>{{index $root.Upvotes $i}} upvotes</p>
                     <a href="http://localhost:8080/topic/{{$topic.Title}}">CHECK TOPIC</a>
                 </div>
             {{end}}
         </div>
     
-    
         <!-- paging -->
         <div>
+            {{if .CanPrevious}}
             <form>
                 <input type="text" value="previous" name="previous" hidden>
                 <input type="submit" value="previous page"></input>
             </form>
+            {{end}}
+            {{if .CanNext}}
             <form>
                 <input type="text" value="next" name="next" hidden>
                 <input type="submit" value="next page"></input>
             </form>
+            {{end}}
         </div>
+        {{end}}
     </div>
     <div>
         <h1>CREATE TOPIC</h1>
@@ -61,6 +68,10 @@
                 <input type="text" name="tags" placeholder="Add tags ...">
                 <input type="submit" hidden>
             </form>
+            {{if .InvalidTopic}}
+                <p>Invalid Topic:</p>
+                <p>the title cannot contains space or you may have use a forbidden word</p>
+            {{end}}
         </div>
     </div>
 </body>
