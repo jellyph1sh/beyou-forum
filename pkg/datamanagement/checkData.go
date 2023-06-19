@@ -109,6 +109,17 @@ func IsRegister(userInput string, password string) (bool, string) {
 		rows.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
 		return true, id
 	}
-
 	return false, "3"
+}
+
+func IsValidPassword(password string, idUser string) bool {
+	dataUser := GetUserByID(idUser)
+	passwordByte := []byte(password)
+	passwordInSha256 := sha256.Sum256(passwordByte)
+	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+	if dataUser.Password == stringPasswordInSha256 {
+		return true
+	} else {
+		return false
+	}
 }

@@ -19,7 +19,7 @@ type AccountPage struct {
 	IsNotValidchangedBIO      bool
 	IsNotValidEditMail        bool
 	IsNotValidchangedUsername bool
-	IsConnected               string
+	IsConnected               bool
 }
 
 func setDisplayStructAccount(displayStructAccountPage AccountPage, currentUser datamanagement.Users) AccountPage {
@@ -48,19 +48,23 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	editMail := r.FormValue("editMail")
 	changedPwd1 := r.FormValue("changedPwd1")
 	changedPwd2 := r.FormValue("changedPwd2")
+	currentPwd := r.FormValue("currentPwd")
 	changedBIO := r.FormValue("changedBIO")
 	changedFirstname := r.FormValue("changedFirstname")
 	changedLastname := r.FormValue("changedLastname")
 	changedUsername := r.FormValue("changedUsername")
+	disconnect := r.FormValue("disconnect")
 	cookieIdUser, _ := r.Cookie("idUser")
-	cookieIsConnected, _ := r.Cookie("isConnected")
 	displayStructAccountPage := AccountPage{}
 	idUser := getCookieValue(cookieIdUser)
-	isConnected := getCookieValue(cookieIsConnected)
 	switch true {
 	case delAccount != "":
 		datamanagement.ExecuterQuery("DELETE FROM Users WHERE UserID ='" + idUser + "';")
 		break
+	case disconnect != "":
+		cookieIsConnected := http.Cookie{Name: "isConnected", Value: "false"}
+		http.SetCookie(w, &cookieIsConnected)
+		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
 	case editMail != "":
 		if !datamanagement.IsEmailAlreadyExist(editMail) {
 			datamanagement.ExecuterQuery("UPDATE Users SET Email = '" + editMail + "' WHERE UserID ='" + idUser + "';")
@@ -68,8 +72,8 @@ func Account(w http.ResponseWriter, r *http.Request) {
 			displayStructAccountPage.IsNotValidEditMail = true
 		}
 		break
-	case changedPwd1 != "" && changedPwd2 != "":
-		if changedPwd1 == changedPwd2 {
+	case changedPwd1 != "" && changedPwd2 != "" && currentPwd != "":
+		if changedPwd1 == changedPwd2 && datamanagement.IsValidPassword(currentPwd, idUser) {
 			passwordByte := []byte(changedPwd1)
 			passwordInSha256 := sha256.Sum256(passwordByte)
 			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
@@ -98,9 +102,13 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	currentUser := datamanagement.GetUserById(idUser)
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
+	cookieIsConnected, _ := r.Cookie("isConnected")
+	isConnected := getCookieValue(cookieIsConnected)
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
+		displayStructAccountPage.IsConnected = false
+	} else {
+		displayStructAccountPage.IsConnected = true
 	}
-	displayStructAccountPage.IsConnected = isConnected
 	t.ExecuteTemplate(w, "account", displayStructAccountPage)
 }
