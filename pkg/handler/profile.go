@@ -5,6 +5,7 @@ import (
 	"forum/pkg/datamanagement"
 	"math"
 	"net/http"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -82,30 +83,10 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 
 func Profile(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/profile.html", "./static/html/navBar.html"))
-	idUser := r.FormValue("idUser")
-	if idUser == "" {
-		cookieIdUser, _ := r.Cookie("idUser")
-		idUser = getCookieValue(cookieIdUser)
-	}
+	url := strings.Split(r.URL.String(), "/")
 	displayStructProfile := profile{}
-	displayStructProfile.UserInfo = datamanagement.GetProfileData(idUser)
+	displayStructProfile.UserInfo = datamanagement.GetUserByName(url[2])
 	displayStructProfile.UserCreationDate = displayStructProfile.UserInfo.CreationDate.Format("02-01-2006")
-	// make post
-	// nCTN := datamanagement.DataContainer{}
-	// nPost1 := datamanagement.Posts{}
-	// nPost1.Content = "kjejejejejeje"
-	// nPost1.AuthorID = idUser
-	// nPost1.TopicID = 1
-	// nPost1.Likes = 14
-	// nPost1.Dislikes = 15
-	// nPost1.CreationDate = time.Now()
-	// nPost1.IsValidPost = true
-	// nCTN.Posts = nPost1
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// end post
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
