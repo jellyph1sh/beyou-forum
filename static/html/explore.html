@@ -7,25 +7,61 @@
     <title>explore</title>
 </head>
 <body>
-    <h1>EXPLORE TOPICS</h1>
-    <form method="post">
-        <input type="text" name="topicForm">
-        <select name="sort">
-            <option value="default">Sort by</option>
-            <option value="a-z">a-z</option>
-            <option value="z-a">z-a</option>
-            <option value="DESC-Upvote">DESC-Upvote</option>
-            <option value="ASC-Upvote">ASC-Upvote</option>
-            <option value="creator">creator</option>
-        </select>
-    </form>
-
-
-
-
-    <!-- paging -->
-    <!-- {{range $i,$a := .}}
-
-    {{end}} -->
+    <div>
+        <h1>EXPLORE TOPICS</h1>
+        <form method="post">
+            <input type="text" name="topicForm">
+            <select name="sort">
+                <option value="default">Sort by</option>
+                <option value="a-z">a-z</option>
+                <option value="z-a">z-a</option>
+                <option value="DESC-Upvote">DESC-Upvote</option>
+                <option value="ASC-Upvote">ASC-Upvote</option>
+                <option value="creator">creator</option>
+            </select>
+        </form>
+    
+        <div>
+            {{$root := .}}
+            {{range $i, $topic := .Topics}}
+                <div>
+                    <div>
+                        <img src="{{$topic.Picture}}">
+                        <h2>{{$topic.Title}}</h2>
+                    </div>
+                    <p>Created - {{$topic.CreationDate.Format "Jan 02, 2006"}} by {{index $root.Users $i}}</p>
+                    <p>{{$topic.Upvotes}} upvotes</p>
+                    <a href="http://localhost:8080/topic/{{$topic.Title}}">CHECK TOPIC</a>
+                </div>
+            {{end}}
+        </div>
+    
+    
+        <!-- paging -->
+        <div>
+            <form>
+                <input type="text" value="previous" name="previous" hidden>
+                <input type="submit" value="previous page"></input>
+            </form>
+            <form>
+                <input type="text" value="next" name="next" hidden>
+                <input type="submit" value="next page"></input>
+            </form>
+        </div>
+    </div>
+    <div>
+        <h1>CREATE TOPIC</h1>
+        <div>
+            <h2>Wanna talk about a new topic ?</h2>
+            <form>
+                <label>
+                    About what? <input type="text" name="topicTitle" required>
+                </label>
+                <input type="text" name="description" placeholder="Add a description ..." required>
+                <input type="text" name="tags" placeholder="Add tags ...">
+                <input type="submit" hidden>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
