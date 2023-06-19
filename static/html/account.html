@@ -39,12 +39,27 @@
                 btn.style.backgroundColor = (btn === originBtn) ? colorOrigin : colorTarget;
             });
         }
+
+        function errorPopup(errorMsg){
+            let content = document.getElementById('msgError').innerText = errorMsg
+            document.getElementById('popupError').style.visibility = 'visible';
+        }
     </script>  
     <div class="containerAccountPage">
         {{ template "navBar" .IsConnected}}
         <div class="columnContainer containerAccountComp">
             <h1 class="mainCatAccount marginContentAccount">Account settings</h1>
             <span class="underlineAccountPage"></span>
+            <div id="popupError">
+                <div class="containerPopupError columnContainer">
+                    <a href="/account"><span class="closeSpan material-symbols-outlined">close</span></a>
+                    <div class="containerTopError rowContainer">
+                        <h2>It seems that something went <span class="coloredText">wrong</span></h2>
+                        <img src="../img/wrong.png" alt="invalid_img">
+                    </div>
+                    <h2 id="msgError" class="errorMsgEdit">Invalid email</h2>
+                </div>
+            </div>
             <div class="columnContainer accountCompContGlobal marginContentAccount">
                 <span class="backgroundAccountCont"></span>
                 <div class="accountCompCont">
@@ -52,13 +67,13 @@
                         <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
                     </div>
                     {{ if .IsNotValidchangedPwd}}
-                        <h1>T'es un giga bouff</h1>
+                        <script>errorPopup('Invalid password')</script>
                     {{ else if .IsNotValidchangedBIO}}
-                        <h1>T'es un giga bouff</h1>                
+                        <script>errorPopup('Invalid bio')</script>            
                     {{ else if .IsNotValidEditMail}}
-                        <h1>T'es un giga bouff</h1>              
+                        <script>errorPopup('Invalid Email')</script>
                     {{ else if .IsNotValidchangedUsername}}
-                        <h1>T'es un giga bouff</h1>
+                        <script>errorPopup('Invalid username')</script>
                     {{ end }}
                     <div class="containerUser rowContainer alignCenter">
                         <form action="" method="post">
@@ -84,7 +99,6 @@
                             <form action="" method="post">
                                 <input name="changedLastname" type="text" placeholder="{{ .LastName }}" class="nameUser">
                             </form>
-                             
                         </div>
                     </div>
                 </div>
@@ -94,11 +108,10 @@
                         <input name="changedBIO"  cols="40" rows="5" type="text" placeholder="{{ .Description }}" class="accountCompEmailUser">
                     </form>
                 </div>
-                
             </div>
             <h1 class="mainCatAccount marginContentAccount">Password settings</h1>
             <span class="underlineAccountPage"></span>
-            <h2 class="accountInformationMsg marginContentAccount">YOUR NEW PASSWORD NEED TO CONTAINS AT LEAST 8 CHARACTERS</h2>
+            <h2 class="accountInformationMsg marginContentAccount">EDIT YOUR PASSWORD</h2>
             <button id="btnPassword" onmouseover="changeButtonColor('btnDelete','btnPassword')" onmouseout="restoreButtonColor('btnDelete','btnPassword')"onclick="EditPasswordPopup()" type="submit" class="btnChangePassword marginContentAccount">Change password</button>
             <div id="popupPwd" class="columnContainer ">
                 <a href="/account" class="rowContainer flexExit">
@@ -134,8 +147,8 @@
                     </form>
                 </div>
             </div>
-            <h2 class="accountInformationMsg marginContentAccount marginh2Del">DELETE ACCOUNT</h2>
             <span class="underlineAccountPage"></span>
+            <h2 class="accountInformationMsg marginContentAccount marginh2Del">DELETE ACCOUNT</h2>
             <button id="btnDelete" onmouseover="changeButtonColor('btnPassword','btnDelete')" onmouseout="restoreButtonColor('btnPassword','btnDelete')" onclick="DeletePopup()" class="marginContentAccount btnDeleteAccount" >Delete account</button>
             <div id="popupDel" class="columnContainer ">
                 <div class="deletePopup">
@@ -152,6 +165,7 @@
                     </div>
                 </div>
             </div>
+              
         </div>
     </div>
 </body>
