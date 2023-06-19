@@ -71,6 +71,9 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	prev := r.FormValue("previous")
 	next := r.FormValue("next")
 	pagingInt, _ := strconv.Atoi(getCookieValue(cookiePaging))
+	dataToSend.CanNext = true
+	dataToSend.CanPrevious = true
+	dataToSend.InvalidTopic = false
 	if next != "" && pagingInt*2 < len(dataToSend.Topics) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt + 1)}
 		pagingInt++
@@ -78,28 +81,27 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt - 1)}
 		pagingInt--
 	}
-	dataToSend.CanNext = true
-	dataToSend.CanPrevious = true
-	dataToSend.InvalidTopic = false
 	if pagingInt == 1 {
 		dataToSend.CanPrevious = false
-	} else if pagingInt*2 >= len(dataToSend.Topics) {
-		dataToSend.CanNext = false
 	}
 	t := template.Must(template.ParseFiles("./static/html/explore.html"))
 	if len(dataToSend.Topics) == 0 {
-		fmt.Println("test")
 		t.Execute(w, dataToSend)
-	} else if pagingInt*2 > len(dataToSend.Topics) {
-		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt)*2].Upvotes))
-		dataToSend.Users = []string{datamanagement.GetUserById(dataToSend.Topics[(pagingInt)*2].CreatorID).Username}
+	} else if pagingInt*2 >= len(dataToSend.Topics) {
+		dataToSend.CanNext = false
+		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt-1)*2].Upvotes))
+		dataToSend.Users = []string{datamanagement.GetUserById(dataToSend.Topics[(pagingInt-1)*2].CreatorID).Username}
+		if pagingInt*2 == len(dataToSend.Topics) {
+			dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt)*2-1].Upvotes))
+			dataToSend.Users = append(dataToSend.Users, datamanagement.GetUserById(dataToSend.Topics[(pagingInt)*2-1].CreatorID).Username)
+		}
 		dataToSend.Topics = dataToSend.Topics[(pagingInt-1)*2:]
 		t.Execute(w, dataToSend)
 	} else {
+		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt-1)*2].Upvotes))
 		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt)*2-1].Upvotes))
-		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt)*2-1].Upvotes))
-		dataToSend.Users = []string{datamanagement.GetUserById(dataToSend.Topics[(pagingInt)*2].CreatorID).Username}
-		dataToSend.Users = append(dataToSend.Users, datamanagement.GetUserById(dataToSend.Topics[pagingInt].CreatorID).Username)
+		dataToSend.Users = []string{datamanagement.GetUserById(dataToSend.Topics[(pagingInt-1)*2].CreatorID).Username}
+		dataToSend.Users = append(dataToSend.Users, datamanagement.GetUserById(dataToSend.Topics[(pagingInt)*2-1].CreatorID).Username)
 		dataToSend.Topics = dataToSend.Topics[(pagingInt-1)*2 : pagingInt*2]
 		t.Execute(w, dataToSend)
 	}

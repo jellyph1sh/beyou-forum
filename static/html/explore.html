@@ -25,10 +25,10 @@
                     <option value="creator">creator</option>
                 </select>
             </form>
+            {{if not .Topics}}
+                <p>there isn't any topic</p>
+            {{else}}
             <div class="columnContainer containerTopicsExplore">
-                {{if not .Topics}}
-                    <p>there isn't any topic</p>
-                {{else}}
                 {{$root := .}}
                 {{range $i, $topic := .Topics}}
                     <div class="columnContainer containerTopic">
@@ -47,20 +47,17 @@
         
             <!-- paging -->
             <div class="containerPagination rowContainer alignCenter">
-                {{if .CanPrevious}}
                 <form id="previous" method="post">
                     <input type="text" value="previous" name="previous" hidden>
                     <input class="inputPagination" type="submit" value="previous page">
                     <span class="arrowPagination">❮</span>
                 </form>
-                {{end}}
-                {{if .CanNext}}    
+  
                 <form id="next" method="post">
                     <input type="text" value="next" name="next" hidden>
                     <input class="inputPagination" type="submit" value="next page">
                     <span class="arrowPagination">❯</span>
                 </form>
-                {{end}}
             </div>
             {{end}}
         </div>

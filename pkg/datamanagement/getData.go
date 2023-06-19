@@ -493,7 +493,7 @@ func GetTopicsById(creatorID string) []Topics {
 	defer db.Close()
 
 	topics := []Topics{}
-	rows, err := db.Query("SELECT * FROM Topics WHERE CreatorID = ? AND ValidTopic = true;", creatorID)
+	rows, err := db.Query("SELECT * FROM Topics WHERE CreatorID = '?' AND ValidTopic = true;", creatorID)
 	if err != nil {
 		log.Fatal(err)
 		return nil
