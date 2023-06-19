@@ -60,6 +60,9 @@ nav{
     align-items: center;
 }
 
+.btnCatContainerReport {
+    border-top: 2px solid #D36638;
+}
 /*--------------------- Texts ---------------------*/
 
 .labelNav, #toggle{
@@ -132,6 +135,11 @@ a {
     width: 1.25rem;
     height: 1.25rem;
 }
+
+.googleSpanReport {
+    color: #D36638;
+}
+
 /*--------------------- Responsive ---------------------*/
 
 @media screen and (min-width : 900px) {

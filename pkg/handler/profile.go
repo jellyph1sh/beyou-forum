@@ -5,6 +5,7 @@ import (
 	"forum/pkg/datamanagement"
 	"math"
 	"net/http"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -55,7 +56,7 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 			} else {
 				pastTime = math.Trunc(pastTime / 24)
 				if pastTime < 30 {
-					if pastTime > 1 {
+					if pastTime <= 1 {
 						post.StructuredDate = fmt.Sprintf("%v", pastTime) + " day"
 					} else {
 						post.StructuredDate = fmt.Sprintf("%v", pastTime) + " days"
@@ -63,14 +64,14 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 				} else {
 					pastTime = math.Trunc(pastTime / 30)
 					if pastTime < 12 {
-						if pastTime > 1 {
+						if pastTime <= 1 {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " month"
 						} else {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " months"
 						}
 					} else {
 						pastTime = math.Trunc(pastTime / 12)
-						if pastTime > 1 {
+						if pastTime <= 1 {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " year"
 						} else {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " years"
@@ -87,36 +88,25 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 	return result
 }
 
-func Profile(w http.ResponseWriter, r *http.Request) {
+func Profile(w http.ResponseWriter, r *http.Request, isMyProfile bool) {
 	t := template.Must(template.ParseFiles("./static/html/profile.html", "./static/html/navBar.html"))
-	idUser := r.FormValue("idUser")
-	if idUser == "" {
-		cookieIdUser, _ := r.Cookie("idUser")
-		idUser = getCookieValue(cookieIdUser)
-	}
 	displayStructProfile := profile{}
-	displayStructProfile.UserInfo = datamanagement.GetUserById(idUser)
+	url := strings.Split(r.URL.String(), "/")
+	if isMyProfile {
+		cookieIdUser, _ := r.Cookie("idUser")
+		idUser := getCookieValue(cookieIdUser)
+		if idUser != "" {
+			displayStructProfile.UserInfo = datamanagement.GetUserById(idUser)
+		} else {
+			displayStructProfile.UserInfo = datamanagement.GetUserByName("guest")
+		}
+	} else {
+		displayStructProfile.UserInfo = datamanagement.GetUserByName(url[2])
+	}
 	displayStructProfile.UserCreationDate = displayStructProfile.UserInfo.CreationDate.Format("02-01-2006")
-	// make post
-	// nCTN := datamanagement.DataContainer{}
-	// nPost1 := datamanagement.Posts{}
-	// nPost1.Content = "kjejejejejeje"
-	// nPost1.AuthorID = idUser
-	// nPost1.TopicID = 1
-	// nPost1.Likes = 14
-	// nPost1.Dislikes = 15
-	// nPost1.CreationDate = time.Now()
-	// nPost1.IsValidPost = true
-	// nCTN.Posts = nPost1
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// datamanagement.AddLineIntoTargetTable(nCTN, "Posts")
-	// end post
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
-	fmt.Println(displayStructProfile.Posts)
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
 	displayStructProfile.IsConnected = IsConnected

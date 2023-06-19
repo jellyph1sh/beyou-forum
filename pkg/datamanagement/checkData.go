@@ -10,7 +10,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func IsUserExist(userEmail string, userProfilName string) bool {
+func IsEmailAlreadyExist(userEmail string) bool {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		log.Fatal(err)
@@ -18,7 +18,51 @@ func IsUserExist(userEmail string, userProfilName string) bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ? OR Email = ?);", string(userProfilName), string(userEmail))
+	rows, err := db.Query("SELECT * FROM Users WHERE (Email = ?);", string(userEmail))
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsUsernameAlreadyExist(userProfilName string) bool {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ?);", string(userProfilName))
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsValidTopic(topic string) bool {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Topics WHERE (Title = ?);", string(topic))
 	if err != nil {
 		log.Fatal(err)
 		return false
@@ -65,6 +109,17 @@ func IsRegister(userInput string, password string) (bool, string) {
 		rows.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
 		return true, id
 	}
-
 	return false, "3"
+}
+
+func IsValidPassword(password string, idUser string) bool {
+	dataUser := GetUserByID(idUser)
+	passwordByte := []byte(password)
+	passwordInSha256 := sha256.Sum256(passwordByte)
+	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+	if dataUser.Password == stringPasswordInSha256 {
+		return true
+	} else {
+		return false
+	}
 }
