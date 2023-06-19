@@ -146,7 +146,26 @@ func GetUserByID(userId string) Users {
 	}
 	return user
 }
-func GetPostByTopic(topic string) []Posts {
+
+func GetTopicId(topicName string) int {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT TopicID FROM Topics WHERE Title LIKE ?;", topicName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var id int
+	for rows.Next() {
+		rows.Scan(&id)
+	}
+	return id
+}
+func GetPostByTopic(topic int) []Posts {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		log.Fatal(err)
@@ -154,7 +173,7 @@ func GetPostByTopic(topic string) []Posts {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC WHERE TopicID LIKE ?;", topic)
+	rows, err := db.Query("SELECT * FROM Posts WHERE TopicID LIKE ?;", topic)
 	if err != nil {
 		log.Fatal(err)
 		return nil
@@ -505,9 +524,9 @@ func GetTopicsById(creatorID string) []Topics {
 		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		topics = append(topics, topic)
 	}
-
 	return topics
 }
+
 func GetTopicsByName(search string) []Topics {
 	result := []Topics{}
 	query := "SELECT * FROM Topics WHERE Title LIKE '%" + search + "%';"
@@ -531,6 +550,7 @@ func GetOneTopicByName(search string) Tags {
 	}
 	return result
 }
+
 func GetTagByName(search string) Tags {
 	result := Tags{}
 	query := "SELECT * FROM Topics WHERE Title ='" + search + "';"
@@ -540,4 +560,23 @@ func GetTagByName(search string) Tags {
 		row.Close()
 	}
 	return result
+}
+
+func GetTopicByName(topicName string) Topics {
+	var topic Topics
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	defer db.Close()
+	if err != nil {
+		fmt.Println("Could not open database : \n", err)
+	}
+	row, err := db.Query("SELECT * FROM Topics WHERE Title like ?;", topicName)
+	if err != nil {
+		fmt.Println("Invalid request :")
+		log.Fatal(err)
+	}
+	for row.Next() {
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+	}
+	row.Close()
+	return topic
 }
