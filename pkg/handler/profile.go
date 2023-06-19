@@ -20,6 +20,8 @@ type PostWithStructuredDate struct {
 	CreationDate   time.Time
 	StructuredDate string
 	IsValidPost    bool
+	ProfilePicture string
+	AuthorName     string
 }
 
 // post du mec (date, contenu, nbrLike, nbrDislike)
@@ -29,6 +31,7 @@ type profile struct {
 	UserCreationDate string
 	Posts            []PostWithStructuredDate
 	Topics           []datamanagement.Topics
+	IsConnected      string
 }
 
 func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
@@ -38,6 +41,7 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 		post.Content = element.Content
 		post.AuthorID = element.AuthorID
 		post.TopicID = element.TopicID
+		post.PostID = element.PostID
 		post.Likes = element.Likes
 		post.Dislikes = element.Dislikes
 		post.CreationDate = element.CreationDate
@@ -76,6 +80,9 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 				}
 			}
 		}
+		user := datamanagement.GetUserById(post.AuthorID)
+		post.ProfilePicture = user.ProfilePicture
+		post.AuthorName = user.Username
 		result = append(result, post)
 	}
 	return result
@@ -90,5 +97,9 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
-	t.Execute(w, displayStructProfile)
+	fmt.Println(displayStructProfile.Posts)
+	cookieConnected, _ := r.Cookie("isConnected")
+	IsConnected := getCookieValue(cookieConnected)
+	displayStructProfile.IsConnected = IsConnected
+	t.ExecuteTemplate(w, "profile", displayStructProfile)
 }
