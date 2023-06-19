@@ -56,7 +56,7 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 			} else {
 				pastTime = math.Trunc(pastTime / 24)
 				if pastTime < 30 {
-					if pastTime > 1 {
+					if pastTime <= 1 {
 						post.StructuredDate = fmt.Sprintf("%v", pastTime) + " day"
 					} else {
 						post.StructuredDate = fmt.Sprintf("%v", pastTime) + " days"
@@ -64,14 +64,14 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 				} else {
 					pastTime = math.Trunc(pastTime / 30)
 					if pastTime < 12 {
-						if pastTime > 1 {
+						if pastTime <= 1 {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " month"
 						} else {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " months"
 						}
 					} else {
 						pastTime = math.Trunc(pastTime / 12)
-						if pastTime > 1 {
+						if pastTime <= 1 {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " year"
 						} else {
 							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " years"
