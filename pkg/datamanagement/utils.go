@@ -74,8 +74,8 @@ type Topics struct {
 	TopicID      int
 	Title        string
 	Description  string
-	CreationDate time.Time
 	Picture      string
+	CreationDate time.Time
 	CreatorID    string
 	Upvotes      int
 	Follows      int
@@ -209,4 +209,24 @@ func arrayContains(array []string, word string) bool {
 		}
 	}
 	return false
+}
+
+func SelectDB(query string, args ...interface{}) *sql.Rows {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return nil
+	}
+	defer db.Close()
+
+	fmt.Println(args...)
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		log.Fatal(err)
+		return nil
+	}
+	defer rows.Close()
+
+	return rows
 }

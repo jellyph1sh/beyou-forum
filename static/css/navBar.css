@@ -25,6 +25,7 @@ nav{
     text-align: center;
     justify-content: center;
     align-items: center;
+    text-transform: uppercase;
     width: 14rem;
     padding: 0rem 1rem;
     gap: 1vw;
@@ -170,7 +171,8 @@ a {
     }
 
     nav {
-        position: sticky;
+        position: fixed;
+        height: 5rem;
         width: 100%;
         padding: 0;
     }
@@ -202,6 +204,8 @@ a {
 
     #toggle:checked + .linkPages {
         display: flex;
+        background-color: #28292F;
+        border-bottom: 2px solid #44454F;
     }
     .websiteName {
         width: 75vw;

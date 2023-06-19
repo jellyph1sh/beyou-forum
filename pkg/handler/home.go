@@ -36,7 +36,8 @@ type TopicsWithUserInfo struct {
 }
 
 type structDisplayHome struct {
-	AllTopics []TopicsWithUserInfo
+	AllTopics   []TopicsWithUserInfo
+	IsConnected string
 }
 
 func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWithUserInfo {
@@ -53,7 +54,7 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 		topic.Follows = element.Follows
 		topic.ValidTopic = element.ValidTopic
 		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + " " + fmt.Sprint(element.CreationDate.Month()) + " " + fmt.Sprint(element.CreationDate.Year())
-		user := datamanagement.GetProfileData(topic.CreatorID)
+		user := datamanagement.GetUserById(topic.CreatorID)
 		topic.CreatorName = user.Username
 		// fmt.Println(topic.CreationDate)
 		// fmt.Println(element.CreationDate.Day(), element.CreationDate.Month(), element.CreationDate.Year(), element.CreationDate)
@@ -67,5 +68,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	allTop := datamanagement.SortTopics("DESC-Upvote-Home")
 	structDisplayHome := structDisplayHome{}
 	structDisplayHome.AllTopics = updateTopicsInTopicsWithUserInfo(allTop)
+	cookieConnected, _ := r.Cookie("isConnected")
+	IsConnected := getCookieValue(cookieConnected)
+	structDisplayHome.IsConnected = IsConnected
 	t.ExecuteTemplate(w, "home", structDisplayHome)
 }

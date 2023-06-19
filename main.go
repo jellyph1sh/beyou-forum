@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"forum/pkg/handler"
-
 	"net/http"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var port = ":8080"

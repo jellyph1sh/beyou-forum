@@ -17,6 +17,7 @@ type AccountPage struct {
 	IsNotValidchangedBIO      bool
 	IsNotValidEditMail        bool
 	IsNotValidchangedUsername bool
+	IsConnected               string
 }
 
 func setDisplayStructAccount(displayStructAccountPage AccountPage, currentUser datamanagement.Users) AccountPage {
@@ -89,11 +90,12 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		}
 		break
 	}
-	currentUser := datamanagement.GetProfileData(idUser)
+	currentUser := datamanagement.GetUserById(idUser)
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 	}
+	displayStructAccountPage.IsConnected = isConnected
 	t.ExecuteTemplate(w, "account", displayStructAccountPage)
 }

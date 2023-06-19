@@ -6,6 +6,8 @@ import (
 )
 
 func InvalidPath(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./static/html/invalidPath.html"))
-	t.Execute(w, nil)
+	t := template.Must(template.ParseFiles("./static/html/invalidPath.html", "./static/html/navBar.html"))
+	cookieConnected, _ := r.Cookie("isConnected")
+	IsConnected := getCookieValue(cookieConnected)
+	t.ExecuteTemplate(w, "errorPath", IsConnected)
 }
