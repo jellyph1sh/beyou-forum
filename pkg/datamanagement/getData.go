@@ -82,7 +82,7 @@ func GetSortPost() []Posts {
 	return result
 }
 
-func GetUserByName(search string) []Users {
+func SearchUserByName(search string) []Users {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
 		log.Fatal(err)
@@ -103,8 +103,29 @@ func GetUserByName(search string) []Users {
 		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
 		result = append(result, user)
 	}
-
 	return result
+}
+
+func GetUserByName(userName string) Users {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return Users{}
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Users WHERE Username LIKE ?;", userName)
+	if err != nil {
+		log.Fatal(err)
+		return Users{}
+	}
+	defer rows.Close()
+
+	var user Users
+	for rows.Next() {
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+	}
+	return user
 }
 
 func GetPostByTopic(topic string) []Posts {
