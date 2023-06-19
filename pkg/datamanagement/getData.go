@@ -16,21 +16,18 @@ func GetPostFromUser(idUser string) []Posts {
 		return nil
 	}
 	defer db.Close()
-
 	rows, err := db.Query("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
 	if err != nil {
 		log.Fatal(err)
 		return nil
 	}
 	defer rows.Close()
-
 	result := []Posts{}
 	for rows.Next() { // Iterate and fetch the records from result cursor
 		var post Posts
 		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
 		result = append(result, post)
 	}
-
 	return result
 }
 
