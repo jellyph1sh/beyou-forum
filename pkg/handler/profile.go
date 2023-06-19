@@ -88,16 +88,21 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 	return result
 }
 
-func Profile(w http.ResponseWriter, r *http.Request) {
+func Profile(w http.ResponseWriter, r *http.Request, isMyProfile bool) {
 	t := template.Must(template.ParseFiles("./static/html/profile.html", "./static/html/navBar.html"))
 	url := strings.Split(r.URL.String(), "/")
 	displayStructProfile := profile{}
-	displayStructProfile.UserInfo = datamanagement.GetUserByName(url[2])
+	if isMyProfile {
+		cookieIdUser, _ := r.Cookie("idUser")
+		idUser := getCookieValue(cookieIdUser)
+		displayStructProfile.UserInfo = datamanagement.GetUserById(idUser)
+	} else {
+		displayStructProfile.UserInfo = datamanagement.GetUserByName(url[2])
+	}
 	displayStructProfile.UserCreationDate = displayStructProfile.UserInfo.CreationDate.Format("02-01-2006")
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
-	fmt.Println(displayStructProfile.Posts)
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
 	displayStructProfile.IsConnected = IsConnected
