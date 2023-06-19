@@ -36,7 +36,9 @@
     .googleSpan {
         right: 36vw;
     }
-    
+    .containerClose {
+        width: 30rem;
+    }
 }
 
 
@@ -74,6 +76,9 @@
     }
     .googleSpan {
         right: 30vw;
+    }
+    .containerClose {
+        width: 30rem;
     }
 }
 
@@ -117,6 +122,9 @@
     .googleSpan {
         right: 25vw;
     }
+    .containerClose {
+        width: 15rem;
+    }
 }
 
 /*--------------------- Global ---------------------*/
@@ -124,6 +132,20 @@
 body {
     background-color: #32333B;
     margin: 0;
+}
+
+/*------------------------ Animations ------------------------*/
+
+@keyframes disconnectAnim {
+    0% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
 }
 
 /*--------------------- Containers ---------------------*/
@@ -201,6 +223,11 @@ body {
 .containerImg {
     background-color: rgba(26, 26, 29, 0.35);
     height: 100%;
+}
+.containerDisconnect {
+    color: #D97136;
+    align-items: center;
+    gap: .5vw;
 }
 
 /*--------------------- Texts ---------------------*/
@@ -372,6 +399,18 @@ body {
     transition: background-color 0.8s ease;
 }
 
+.btnDisconnect {
+    color: #D97136;
+    font-family: 'Poppins';
+    width: max-content;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-top: 1rem ;
+    margin-bottom: 1rem ;
+}
+
 /*--------------------- Others ---------------------*/
 
 .underlineAccountPage {
@@ -387,6 +426,11 @@ body {
     border-radius: 999px;
     margin: 1rem;
     border:3px solid #D97136;
+}
+
+.containerDisconnect:hover span {
+    cursor: pointer;
+    animation: disconnectAnim 2s infinite ease;
 }
 
 /*--------------------- Popup del ---------------------*/
@@ -567,15 +611,20 @@ body {
     background-color: #774128;
 }
 
-a .googleSpan{
-    align-self: flex-start;
+a .googleSpanClosePwd{
     position: absolute;
     margin-top: 20px;
+    top: 0;
+    right: 0;
     z-index: 999;
     color: #C1BEBE ;
 }
 
-a .googleSpan:hover {
+.containerClose {
+    position: relative;
+}
+
+a .googleSpanClosePwd:hover {
     cursor: pointer;
 }
 
@@ -601,18 +650,6 @@ a .googleSpan:hover {
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
-}
-
-.btnDisconnect {
-    color: #D36638;
-    font-family: 'Poppins';
-    width: max-content;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    margin-top: 1rem ;
-    margin-bottom: 1rem ;
 }
 
 /*--------------------- Popup Error ---------------------*/
