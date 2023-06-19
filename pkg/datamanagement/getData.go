@@ -330,7 +330,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 	var result []Topics
 	for rows.Next() {
 		var line Topics
-		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
 
@@ -493,7 +493,7 @@ func GetTopicsById(creatorID string) []Topics {
 	defer db.Close()
 
 	topics := []Topics{}
-	rows, err := db.Query("SELECT * FROM Topics WHERE CreatorID = ? AND ValidTopic = true;", creatorID)
+	rows, err := db.Query("SELECT * FROM Topics WHERE CreatorID = '?' AND ValidTopic = true;", creatorID)
 	if err != nil {
 		log.Fatal(err)
 		return nil
@@ -514,26 +514,26 @@ func GetTopicsByName(search string) []Topics {
 	row := ReadDB(query)
 	for row.Next() {
 		var topic Topics
-		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.CreationDate, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		result = append(result, topic)
 	}
 	row.Close()
 	return result
 }
 
-func GetOneTopicByName(search string) Tags {
-	result := Tags{}
-	query := "SELECT * FROM Tags WHERE Title='" + search + "';"
+func GetOneTopicByName(search string) Topics {
+	result := Topics{}
+	query := "SELECT * FROM Topics WHERE Title='" + search + "';"
 	row := ReadDB(query)
 	for row.Next() {
-		row.Scan(&result.TagID, &result.Title, &result.CreatorID)
+		row.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
 		row.Close()
 	}
 	return result
 }
 func GetTagByName(search string) Tags {
 	result := Tags{}
-	query := "SELECT * FROM Topics WHERE Title ='" + search + "';"
+	query := "SELECT * FROM Tags WHERE Title ='" + search + "';"
 	row := ReadDB(query)
 	for row.Next() {
 		row.Scan(&result.TagID, &result.Title, &result.CreatorID)

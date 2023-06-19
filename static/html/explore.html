@@ -15,8 +15,8 @@
         <div class="containerExplore columnContainer">
             <h1 class="titleCatExplore exploreTitle">EXPLORE TOPICS</h1>
             <form method="post" class="containerSearchSort rowContainer">
-                <input class="searchBar" placeholder="Search topics" type="text" name="topicForm">
-                <select class="sort" name="sort">
+                <input class="searchBar" placeholder="Search topics" type="text" name="topicSearch">
+                <select class="sort" name="sort" onchange="this.form.submit()">
                     <option value="default">Sort by</option>
                     <option value="a-z">a-z</option>
                     <option value="z-a">z-a</option>
@@ -25,7 +25,9 @@
                     <option value="creator">creator</option>
                 </select>
             </form>
-        
+            {{if not .Topics}}
+                <p>there isn't any topic</p>
+            {{else}}
             <div class="columnContainer containerTopicsExplore">
                 {{$root := .}}
                 {{range $i, $topic := .Topics}}
@@ -36,7 +38,7 @@
                         </div>
                         <p class="datetopic">Created - {{$topic.CreationDate.Format "Jan 02, 2006"}} by {{index $root.Users $i}}</p>
                         <div class="rowContainer containerFooterTopic">
-                            <p class="nbUpvotes">{{$topic.Upvotes}} upvotes</p>
+                            <p class="nbUpvotes">{{index $root.Upvotes $i}} upvotes</p>
                             <a class="bntCheckTopicExplore rowContainer" href="http://localhost:8080/topic/{{$topic.Title}}">CHECK TOPIC<span class="material-symbols-outlined">arrow_forward</span></a>
                         </div>
                     </div>
@@ -50,12 +52,14 @@
                     <input class="inputPagination" type="submit" value="previous page">
                     <span class="arrowPagination">❮</span>
                 </form>
+  
                 <form id="next" method="post">
                     <input type="text" value="next" name="next" hidden>
                     <input class="inputPagination" type="submit" value="next page">
                     <span class="arrowPagination">❯</span>
                 </form>
             </div>
+            {{end}}
         </div>
         <div class="containerCreateTopic">
             <h1 class="titleCatExplore">CREATE A TOPIC</h1>
