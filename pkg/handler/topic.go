@@ -27,12 +27,12 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
 	if idUser != "" {
-		row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Follows WHERE UserID = "+idUser+" AND TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
+		row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Follows WHERE UserID = '"+idUser+"' AND TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
 		for row.Next() {
 			dataToSend.IsFollow = true
 			row.Close()
 		}
-		row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Upvotes WHERE UserID = "+idUser+" AND TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
+		row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Upvotes WHERE UserID = '"+idUser+"' AND TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
 		for row.Next() {
 			dataToSend.IsUpvote = true
 			row.Close()
