@@ -17,12 +17,8 @@
         <div class=""></div>
         <div class="columnContainer containerRegister">
             <h1 class="titleRegister">Register</h1>
-            {{if .EmailAndUsernameIsNotValid}}
-                <h1>t'es un bouff email et pseudo</h1>
-            {{ else if .EmailIsNotValid}}
-                <h1>t'es un bouff email</h1>
-            {{ else if .UsernameIsNotValid}}
-                <h1>t'es un bouff pseudo</h1>
+            {{if .IsNotValid}}
+                <h1>t'es un bouff</h1>
             {{end}}
             <h2 class="subTitleLogin">Please enter an email, username and password</h2>
             <form method="post" class="columnContainer formStyleRegister">

@@ -2,28 +2,24 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 )
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
-	url := strings.Split(r.URL.String(), "/")
-	switch true {
-	case url[1] == "account" && len(url) == 2:
+	switch r.URL.Path {
+	case "/account":
 		Account(w, r)
-	case url[1] == "automod" && len(url) == 2:
+	case "/automod":
 		Automod(w, r)
-	case url[1] == "explore" && len(url) == 2:
+	case "/explore":
 		Explore(w, r)
-	case url[1] == "home" && len(url) == 2:
+	case "/home":
 		Home(w, r)
-	case url[1] == "login" && len(url) == 2:
+	case "/login":
 		Login(w, r)
-	case url[1] == "register" && len(url) == 2:
+	case "/profile":
+		Profile(w, r)
+	case "/register":
 		Register(w, r)
-	case url[1] == "profile" && len(url) == 2:
-		Profile(w, r, true)
-	case url[1] == "profile" && len(url) > 2:
-		Profile(w, r, false)
 	default:
 		InvalidPath(w, r)
 	}
