@@ -107,7 +107,6 @@ func Profile(w http.ResponseWriter, r *http.Request, isMyProfile bool) {
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Posts = structureDate(posts)
-	fmt.Println(displayStructProfile.Posts)
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
 	displayStructProfile.IsConnected = IsConnected

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"forum/pkg/datamanagement"
 	"net/http"
 	"strings"
 )
@@ -22,8 +23,10 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		Register(w, r)
 	case url[1] == "profile" && len(url) == 2:
 		Profile(w, r, true)
-	case url[1] == "profile" && len(url) > 2:
+	case url[1] == "profile" && len(url) == 3 && datamanagement.IsUsernameAlreadyExist(url[2]):
 		Profile(w, r, false)
+	case url[1] == "topic" && len(url) == 3 && datamanagement.IsValidTopic(url[2]):
+		Topic(w, r)
 	default:
 		InvalidPath(w, r)
 	}

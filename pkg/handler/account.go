@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"text/template"
@@ -60,7 +62,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		datamanagement.ExecuterQuery("DELETE FROM Users WHERE UserID ='" + idUser + "';")
 		break
 	case editMail != "":
-		if !datamanagement.IsUserExist(editMail, "") {
+		if !datamanagement.IsEmailAlreadyExist(editMail) {
 			datamanagement.ExecuterQuery("UPDATE Users SET Email = '" + editMail + "' WHERE UserID ='" + idUser + "';")
 		} else {
 			displayStructAccountPage.IsNotValidEditMail = true
@@ -68,7 +70,10 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		break
 	case changedPwd1 != "" && changedPwd2 != "":
 		if changedPwd1 == changedPwd2 {
-			datamanagement.ExecuterQuery("UPDATE Users SET Password = '" + changedPwd1 + "' WHERE UserID = '" + idUser + "';")
+			passwordByte := []byte(changedPwd1)
+			passwordInSha256 := sha256.Sum256(passwordByte)
+			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+			datamanagement.ExecuterQuery("UPDATE Users SET Password = '" + stringPasswordInSha256 + "' WHERE UserID = '" + idUser + "';")
 		} else {
 			displayStructAccountPage.IsNotValidchangedPwd = true
 		}
@@ -83,7 +88,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		datamanagement.ExecuterQuery("UPDATE Users SET Lastname = '" + changedLastname + "' WHERE UserID = '" + idUser + "';")
 		break
 	case changedUsername != "":
-		if !datamanagement.IsUserExist("", changedUsername) {
+		if !datamanagement.IsUsernameAlreadyExist(changedUsername) {
 			datamanagement.ExecuterQuery("UPDATE Users SET Username = '" + changedUsername + "' WHERE UserID = '" + idUser + "';")
 		} else {
 			displayStructAccountPage.IsNotValidchangedUsername = true
