@@ -1,8 +1,21 @@
+/*------------------ Responsive ------------------*/
+
 @media screen and (max-width:900px) {
     .containerExplorePage {
         flex-direction: column;
         margin: 0rem 1vw;
         margin-top:80px ;
+    }
+    .containerCreateComp {
+        max-width: 25rem;
+    }
+    .containerCreateTopic {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1rem 0;
+        padding: 1rem 0;
+        border-radius: 10px;
     }
     .exploreTitle {
         width: 100%;
@@ -10,55 +23,43 @@
     .containerCreateTopic h1 {
         text-align: center;
     }
-    .containerCreateComp {
-        max-width: 25rem;
-    }
-    .containerCreateTopic {
-        border-radius: 10px;
-        margin: 1rem 0;
-        display: flex;
-        padding: 1rem 0;
-        flex-direction: column;
-        align-items: center;
-    }
 }
 
 @media screen and (min-width:900px) and (max-width:1200px) {
     .containerExplorePage {
+        flex-direction: column;
         position: absolute;
+        justify-content: space-between;
         top: 0 ;
         right: 30px;
         width: calc(100vw - 390px);
-        justify-content: space-between;
-        flex-direction: column;
     }
     .containerCreateTopic {
-        border-radius: 10px;
-        margin: 2rem 0;
         display: flex;
-        padding: 1rem 0;
         flex-direction: column;
         align-items: center;
-    }
-    .containerCreateTopic h1 {
-        text-align: center;
+        margin: 2rem 0;
+        padding: 1rem 0;
+        border-radius: 10px;
     }
     .containerCreateComp {
         max-width: 25rem;
+    }
+    .containerCreateTopic h1 {
+        text-align: center;
     }
 }
 
 @media screen and (min-width:1200px) {
     .containerExplorePage {
+        --widthExplorePage :calc(100vw - 350px);
         position: absolute;
+        flex-direction: row;
+        justify-content: space-between;
         top: 0 ;
         right: 0;
-        width: var(--widthExplorePage);
-        justify-content: space-between;
-        flex-direction: row;
-        --widthExplorePage : calc(100vw - 350px);
+        width: calc(100vw - 350px);
     }
-
     .containerCreateTopic {
         position: fixed;
         right: 0;
@@ -75,131 +76,7 @@
     }
 }
 
-
-
-.containerCreateTopic {
-    background-color: #28292F ;
-
-}
-
-
-.containerExplorePage {
-    display: flex;
-}
-
-
-.titleCatExplore {
-    font-family: 'Poppins';
-    color: whitesmoke;
-    text-transform: uppercase;
-    font-size: 24px;
-    text-align: center;
-}
-
-.containerSearchSort {
-    flex-wrap: nowrap;
-}
-
-.searchBar {
-    background-color: #28292F;
-    border: 2px solid #44454F;
-    border-radius: 5px;
-    color: #AFAFAF;
-    font-family: 'Poppins-regular';
-    padding: .5rem 1rem;
-    width: 80%;
-}
-
-.searchBar:focus {
-    outline: none;
-    border: 2px solid #D36638;
-}
-
-.sort {
-    background-color: #28292F;
-    border: 2px solid #44454F;
-    border-radius: 5px;
-    color: #AFAFAF;
-    font-family: 'Poppins-regular';
-    padding: .5rem 1rem;
-    width: 20%;
-}
-
-
-
-.containerTopicsExplore {
-    gap: 3vh;
-    margin: 5vh 0;
-}
-
-.containerTopic{
-    background-color: #28292F;
-    border-radius: 10px;
-    width: 100%;
-    overflow: hidden;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, .5);
-}
-
-.containerHeaderTopic {
-    background-color: #44454F;
-    padding: 1rem 2rem;
-    gap: 2rem;
-}
-
-.containerExplore {
-   width: calc(var(--widthExplorePage) - 500px)
-}
-
-.imgTopic {
-    width: 5rem;
-    object-fit: contain;
-    border-radius: 999px;
-    border: 2px solid #D36638;
-}
-
-.nameTopic {
-    color: whitesmoke;
-    font-family: 'Poppins';
-}
-
-.datetopic {
-    font-family: 'Poppins-regular';
-    color: #C8C8C8 ;
-    padding: 0rem 2rem;
-}
-
-.nbUpvotes {
-    color: #F5F5F5;
-    font-family: 'Poppins-regular';
-}
-
-.bntCheckTopicExplore {
-    padding: 0rem 1rem;
-    border: 2px solid #D36638;
-    border-radius: 999px;
-
-    gap: 1rem;
-    color: whitesmoke;
-    text-transform: uppercase;
-    align-items: center;
-    font-family: 'Poppins';
-    height: 2rem;
-    font-size: 12px;
-}
-
-a {
-    text-decoration: none;
-}
-
-.btnCheckTopic:hover span{
-    animation: moveArrowForward 1s ease;
-    animation-fill-mode: forwards;
-}
-
-.btnCheckTopic:not(:hover) span {
-    animation: moveArrowBackward 1s ease;
-    animation-fill-mode: forwards;
-}
+/*------------------ Animations ------------------*/
 
 @keyframes moveArrowForward {
     0% {
@@ -220,8 +97,41 @@ a {
     }
 }
 
-.exploreTitle {
-    padding-top: 1rem;
+/*------------------ Containers ------------------*/
+
+.containerCreateTopic {
+    background-color: #28292F ;
+}
+
+.containerExplorePage {
+    display: flex;
+}
+
+.containerSearchSort {
+    flex-wrap: nowrap;
+}
+
+.containerTopicsExplore {
+    margin: 5vh 0;
+    gap: 3vh;
+}
+
+.containerTopic{
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, .5);
+    background-color: #28292F;
+}
+
+.containerHeaderTopic {
+    padding: 1rem 2rem;
+    gap: 2rem;
+    background-color: #44454F;
+}
+
+.containerExplore {
+   width: calc(var(--widthExplorePage) - 500px)
 }
 
 .containerFooterTopic {
@@ -232,59 +142,83 @@ a {
 }
 
 .containerPagination {
-     gap: 1rem;
-     width: 100%;
+    width: 100%;
+    gap: 1rem;
 }
-
-.arrowPagination {
-    color: #D36638;
-    text-decoration: none;
-    position: absolute;
-    margin-left: -3rem;
-    cursor: pointer;
-    z-index: -1;
-}
-
-.inputPagination {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    color: transparent;
-    z-index: 1;
-}
-
 
 .containerCreateComp {
-    border: 2px solid #D36638;
-    border-radius: 8px;
     justify-content: space-around;
     padding: 1rem;
+    border: 2px solid #D36638;
+    border-radius: 8px;
+}
 
+.containerFormCreate {
+    justify-content: space-around;
+    gap: 3rem;
+}
+
+/*------------------ Texts ------------------*/
+
+.titleCatExplore {
+    font-family: 'Poppins';
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 24px;
+    color: whitesmoke;
+}
+
+.nameTopic {
+    font-family: 'Poppins';
+    color: whitesmoke;
+}
+
+.datetopic {
+    padding: 0rem 2rem;
+    font-family: 'Poppins-regular';
+    color: #C8C8C8 ;
+}
+
+.nbUpvotes {
+    font-family: 'Poppins-regular';
+    color: #F5F5F5;
+}
+
+.exploreTitle {
+    padding-top: 1rem;
 }
 
 .containerCreateComp h2 {
-    color: whitesmoke;
-    font-family: 'Poppins';
     text-align: center;
+    font-family: 'Poppins';
     font-size: 20px;
+    color: whitesmoke;
 }
 
 .containerCreateComp label {
-    color: white;
+    margin-top: 2vh;
     font-family: 'Poppins';
     font-size: 14px;
-    margin-top: 2vh;
+    color: white;
 }
 
-.aboutWhatInput {
-    border: none;
-    border-bottom: 1px dotted #D36638;
-    background-color: transparent;
-    margin-left: 1vw;
-    color: whitesmoke;
-    font-family: 'Poppins';
+/*------------------ Buttons ------------------*/
+
+a {
+    text-decoration: none;
 }
+
+.bntCheckTopicExplore:hover span{
+    animation: moveArrowForward 1s ease;
+    animation-fill-mode: forwards;
+}
+
+.bntCheckTopicExplore:not(:hover) span {
+    animation: moveArrowBackward 1s ease;
+    animation-fill-mode: forwards;
+}
+
+/*------------------ Inputs ------------------*/
 
 .containerFormCreate label input[type="text"]:focus  {
     border: none;
@@ -297,30 +231,112 @@ a {
     outline: none;
 }
 
+.inputPagination {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: transparent;
+    z-index: 1;
+}
+
+.aboutWhatInput {
+    margin-left: 1vw;
+    border: none;
+    border-bottom: 1px dotted #D36638;
+    font-family: 'Poppins';
+    color: whitesmoke;
+    background-color: transparent;
+}
+
 .aboutWhatInput:focus {
     border-bottom: 1px dashed #D36638;
 }
 
 .inputDescription {
+    padding: 1rem;
     border: 2px solid #929191;
     border-radius: 5px;
-    padding: 1rem;
+    font-family: 'Poppins-regular';
     color: #AEAEAE;
     background-color: transparent;
-    font-family: 'Poppins-regular';
 }
 
 .inputTags {
+    padding: 1rem;
+    margin-bottom: 2vh;
     border: 2px solid #929191;
     border-radius: 5px;
-    padding: 1rem;
-    color: #AEAEAE;
     font-family: 'Poppins-regular';
+    color: #AEAEAE;
     background-color: transparent;
-    margin-bottom: 2vh;
+   
 }
 
-.containerFormCreate {
-    gap: 3rem;
-    justify-content: space-around;
+.searchBar {
+    width: 80%;
+    padding: .5rem 1rem;
+    border: 2px solid #44454F;
+    border-radius: 5px;
+    font-family: 'Poppins-regular';
+    color: #AFAFAF;
+    background-color: #28292F;
+}
+
+.searchBar:focus {
+    outline: none;
+    border: 2px solid #D36638;
+}
+
+.sort {
+    width: 20%;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    border: 2px solid #44454F;
+    border-radius: 5px;
+    font-family: 'Poppins-regular';
+    color: #AFAFAF;
+    background-color: #28292F;
+}
+
+/*------------------ Others ------------------*/
+
+.imgTopic {
+    width: 5rem;
+    object-fit: contain;
+    border-radius: 999px;
+    border: 2px solid #D36638;
+}
+
+
+.bntCheckTopicExplore {
+    align-items: center;
+    height: 2rem;
+    padding: 0rem 1rem;
+    gap: 1rem;
+    border: 2px solid #D36638;
+    border-radius: 999px;
+    text-transform: uppercase;
+    font-family: 'Poppins';
+    font-size: 12px;
+    color: whitesmoke;
+}
+
+.arrowPagination {
+    position: absolute;
+    margin-left: -3rem;
+    z-index: -1;
+    text-decoration: none;
+    cursor: pointer;
+    color: #D36638;
+}
+
+#previous:hover .arrowPagination {
+    transition: .5s;
+    color: #cc7651d7;
+}
+
+#next:hover .arrowPagination {
+    transition: .5s;
+    color: #c45526b6;
 }
