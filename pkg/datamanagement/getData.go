@@ -54,7 +54,7 @@ func GetSortPost() []Posts {
 }
 
 func SearchUserByName(search string) []Users {
-	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE %?%;", search)
+	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE '%" + search + "%';")
 	defer rows.Close()
 
 	result := []Users{}
@@ -88,18 +88,18 @@ func GetUserByID(userId string) Users {
 	return user
 }
 
-func GetTopicId(topicName string) string {
-	rows := SelectDB("SELECT TopicID FROM Topics WHERE Title LIKE ?;", topicName)
+func GetTopicId(topicName string) int {
+	rows := SelectDB("SELECT TopicID FROM Topics WHERE Title LIKE '" + topicName + "';")
 	defer rows.Close()
-	var id string
+	var id int
 	for rows.Next() {
 		rows.Scan(&id)
 	}
 	return id
 }
 
-func GetPostByTopic(topic string) []Posts {
-	rows := SelectDB("SELECT * FROM Posts WHERE TopicID LIKE ?;", topic)
+func GetPostByTopic(topic int) []Posts {
+	rows := SelectDB("SELECT * FROM Posts WHERE TopicID LIKE " + strconv.Itoa(topic) + ";")
 	defer rows.Close()
 
 	result := []Posts{}
@@ -113,7 +113,7 @@ func GetPostByTopic(topic string) []Posts {
 }
 
 func GetAllFromTable(table string) []DataContainer {
-	rows := SelectDB("SELECT * FROM ?;", table)
+	rows := SelectDB("SELECT * FROM " + table + ";")
 	defer rows.Close()
 
 	var result []DataContainer
@@ -400,7 +400,7 @@ func GetTopicByName(topicName string) Topics {
 	}
 	defer db.Close()
 
-	row := db.QueryRow("SELECT * FROM Topics WHERE Title like ?;", topicName)
+	row := db.QueryRow("SELECT * FROM Topics WHERE Title Like ?;", topicName)
 
 	var topic Topics
 	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic); err != nil {
@@ -433,6 +433,28 @@ func GetTopicID(topicID int) Topics {
 	result := Topics{}
 	for topicRow.Next() {
 		topicRow.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
+	}
+	return result
+}
+
+func GetTagByID(tagID int) Tags {
+	topicRow := SelectDB("SELECT * FROM Tags WHERE TagID=?;", tagID)
+	defer topicRow.Close()
+	result := Tags{}
+	for topicRow.Next() {
+		topicRow.Scan(&result.TagID, &result.Title, &result.CreatorID)
+	}
+	return result
+}
+
+func GetTagsByTopic(topicID int) []Tags {
+	tagsID := SelectDB("SELECT TagID FROM TopicsTags WHERE TopicID=?;", topicID)
+	defer tagsID.Close()
+	result := []Tags{}
+	for tagsID.Next() {
+		var tagID int
+		tagsID.Scan(&tagID)
+		result = append(result, GetTagByID(tagID))
 	}
 	return result
 }

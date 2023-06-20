@@ -19,6 +19,7 @@ type DataExplorePage struct {
 	InvalidTopic bool
 	IsConnected  string
 	IsAdmin      bool
+	Tags         [][]string
 }
 
 // return true if some content of the new topic is forbiden
@@ -27,12 +28,13 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 	description := r.FormValue("description")
 	tags := r.FormValue("tags")
 	if title != "" && (datamanagement.GetOneTopicByName(title) == datamanagement.Topics{}) {
+		fmt.Println("test")
 		if !datamanagement.CheckContentByBlackListWord(title) && !datamanagement.CheckContentByBlackListWord(description) && !datamanagement.CheckContentByBlackListWord(tags) && len(strings.Split(title, " ")) == 1 {
 			return true
 		}
 		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: "../img/PP_wb.png", CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0, ValidTopic: true}}
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
-		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetTagByName(title).TagID)
+		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetTopicByName(title).TopicID)
 		http.Redirect(w, r, "http://localhost:8080/topic/"+title, http.StatusSeeOther)
 	}
 	return false
@@ -106,13 +108,17 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 		dataToSend.CanNext = false
 		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt-1)*2].Upvotes))
 		dataToSend.Users = []string{datamanagement.GetUserById(dataToSend.Topics[(pagingInt-1)*2].CreatorID).Username}
+		dataToSend.Tags = [][]string{datamanagement.TransformTags(dataToSend.Topics[(pagingInt-1)*2].TopicID)}
 		if pagingInt*2 == len(dataToSend.Topics) {
+			dataToSend.Tags = append(dataToSend.Tags, datamanagement.TransformTags(dataToSend.Topics[(pagingInt)*2-1].TopicID))
 			dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt)*2-1].Upvotes))
 			dataToSend.Users = append(dataToSend.Users, datamanagement.GetUserById(dataToSend.Topics[(pagingInt)*2-1].CreatorID).Username)
 		}
 		dataToSend.Topics = dataToSend.Topics[(pagingInt-1)*2:]
 		t.Execute(w, dataToSend)
 	} else {
+		dataToSend.Tags = [][]string{datamanagement.TransformTags(dataToSend.Topics[(pagingInt-1)*2].TopicID)}
+		dataToSend.Tags = append(dataToSend.Tags, datamanagement.TransformTags(dataToSend.Topics[(pagingInt)*2-1].TopicID))
 		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt-1)*2].Upvotes))
 		dataToSend.Upvotes = append(dataToSend.Upvotes, changeUpvote(dataToSend.Topics[(pagingInt)*2-1].Upvotes))
 		dataToSend.Users = []string{datamanagement.GetUserById(dataToSend.Topics[(pagingInt-1)*2].CreatorID).Username}
