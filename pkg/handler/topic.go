@@ -94,7 +94,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
 	topicDisplayStruct := DataTopicPage{}
-	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
+	topicDisplayStruct.Topic = datamanagement.GetOneTopicByName(topicName)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
 	if isConnected == "true" {

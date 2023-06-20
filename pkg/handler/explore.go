@@ -34,7 +34,7 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 		}
 		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: "../img/PP_wb.png", CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0, ValidTopic: true}}
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
-		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetTopicByName(title).TopicID)
+		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetOneTopicByName(title).TopicID)
 		http.Redirect(w, r, "http://localhost:8080/topic/"+title, http.StatusSeeOther)
 	}
 	return false

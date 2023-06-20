@@ -393,25 +393,6 @@ func GetTagByName(search string) Tags {
 	return result
 }
 
-func GetTopicByName(topicName string) Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println(err)
-		return Topics{}
-	}
-	defer db.Close()
-
-	row := db.QueryRow("SELECT * FROM Topics WHERE Title Like ?;", topicName)
-
-	var topic Topics
-	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic); err != nil {
-		fmt.Println(err)
-		return Topics{}
-	}
-
-	return topic
-}
-
 func GetTopicsByUser(userId string) []Topics {
 	topicsRows := SelectDB("SELECT DISTINCT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows, t.ValidTopic FROM Topics AS t INNER JOIN Follows AS f ON f.TopicID = t.TopicID WHERE UserID=?;", userId)
 	defer topicsRows.Close()
