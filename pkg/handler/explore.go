@@ -84,9 +84,9 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	if topic != "" {
 		cookieSearch = &http.Cookie{Name: "search", Value: topic}
 		http.SetCookie(w, cookieSearch)
-		dataToSend.Topics = datamanagement.GetTopicsByName(topic)
+		dataToSend.Topics = datamanagement.GetTopicByTagAndTitle(topic)
 	} else if getCookieValue(cookieSearch) != "" {
-		dataToSend.Topics = datamanagement.GetTopicsByName(getCookieValue(cookieSearch))
+		dataToSend.Topics = datamanagement.GetTopicByTagAndTitle(getCookieValue(cookieSearch))
 	} else if sort == "Follows" && userId != "" {
 		dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
 	} else {

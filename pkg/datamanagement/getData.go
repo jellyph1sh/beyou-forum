@@ -458,3 +458,16 @@ func GetTagsByTopic(topicID int) []Tags {
 	}
 	return result
 }
+
+func GetTopicByTagAndTitle(search string) []Topics {
+	topicsRow := SelectDB("SELECT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows, t.ValidTopic	FROM Topics AS t LEFT JOIN TopicsTags AS tt ON tt.TopicID = t.TopicID WHERE t.Title LIKE '%"+search+"%' OR tt.TagID IN (SELECT TagID FROM Tags WHERE Title = ?)", search)
+	defer topicsRow.Close()
+	result := []Topics{}
+	for topicsRow.Next() {
+		var topic Topics
+		topicsRow.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+	fmt.Println(result)
+	return result
+}
