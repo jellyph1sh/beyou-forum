@@ -1,0 +1,25 @@
+@media screen and (min-width:900px) {
+    .containerErrorPath {
+        position: absolute;
+        right: 0;
+        top: 10vh;
+        width: calc(100vw - 350px);
+    }
+}
+
+@media screen and (max-width:900px) {
+    .containerErrorPath {
+      height: calc(100vh - 76px);
+    }
+}
+
+.imgError {
+    width: 40%;
+    object-fit: contain;
+}
+
+.textError {
+    color: #D36638;
+    font-family: 'Poppins';
+    text-transform: uppercase;
+}

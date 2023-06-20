@@ -12,11 +12,33 @@
     <title>Register</title>
 </head>
 <body>
+    <script>
+        function errorPopup(errorMsg){
+           let content = document.getElementById('msgError').innerText = errorMsg
+           document.getElementById('popupError').style.visibility = 'visible';
+       }
+   </script>
     <div class="containerLoginPage">
         {{ template "navBar"}}
-        <div class=""></div>
+        <div id="popupError">
+            <div class="containerPopupError columnContainer">
+                <a href="/register"><span class="closeSpan material-symbols-outlined">close</span></a>
+                <div class="containerTopError rowContainer">
+                    <h2>It seems that something went <span class="coloredText">wrong</span></h2>
+                    <img src="../img/wrong.png" alt="invalid_img">
+                </div>
+                <h2 id="msgError" class="errorMsgEdit">Invalid email</h2>
+            </div>
+        </div>
         <div class="columnContainer containerRegister">
             <h1 class="titleRegister">Register</h1>
+            {{if .EmailAndUsernameIsNotValid}}
+                <script>errorPopup('Invalid Email and Pseudo')</script>  
+            {{ else if .EmailIsNotValid}}
+                <script>errorPopup('Invalid Email')</script>  
+            {{ else if .UsernameIsNotValid}}
+                <script>errorPopup('Invalid Username')</script>  
+            {{end}}
             <h2 class="subTitleLogin">Please enter an email, username and password</h2>
             <form method="post" class="columnContainer formStyleRegister">
                 <div class="containerName">

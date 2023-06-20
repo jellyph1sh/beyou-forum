@@ -1,16 +1,3 @@
-/*--------------------- Fonts ---------------------*/
-
-@font-face {
-    font-family: 'Poppins';
-    src: url('../fonts/Poppins-Semi/Poppins-SemiBold.woff2') format('woff2'),
-     url('../fonts/Poppins-Semi/Poppins-SemiBold.woff') format('woff');
-}
-@font-face {
-    font-family: 'Poppins-regular';
-    src: url('../fonts/Poppins-Reg/Poppins-Regular.woff2') format('woff2'),
-     url('../fonts/Poppins-Reg/Poppins-Regular.woff') format('woff');
-}
-
 /*--------------------- Responsive ---------------------*/
 
 @media screen and (min-width:1200px) {
@@ -49,7 +36,9 @@
     .googleSpan {
         right: 36vw;
     }
-    
+    .containerClose {
+        width: 30rem;
+    }
 }
 
 
@@ -87,6 +76,9 @@
     }
     .googleSpan {
         right: 30vw;
+    }
+    .containerClose {
+        width: 30rem;
     }
 }
 
@@ -130,6 +122,9 @@
     .googleSpan {
         right: 25vw;
     }
+    .containerClose {
+        width: 15rem;
+    }
 }
 
 /*--------------------- Global ---------------------*/
@@ -137,6 +132,20 @@
 body {
     background-color: #32333B;
     margin: 0;
+}
+
+/*------------------------ Animations ------------------------*/
+
+@keyframes disconnectAnim {
+    0% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
 }
 
 /*--------------------- Containers ---------------------*/
@@ -182,7 +191,7 @@ body {
 }
 
 .marginh2Del {
-    margin-top: 5vh;
+    margin-top: 1vh;
     margin-bottom: -0.5rem;
 }
 
@@ -215,6 +224,12 @@ body {
     background-color: rgba(26, 26, 29, 0.35);
     height: 100%;
 }
+.containerDisconnect {
+    color: #D97136;
+    align-items: center;
+    gap: .5vw;
+}
+
 /*--------------------- Texts ---------------------*/
 
 .mainCatAccount {
@@ -231,10 +246,14 @@ body {
     font-size: 16px;
     max-width: 8rem;
     text-align: center;
+    border: 2px solid transparent;
 
 }
-.usernameAccount:focus-visible {
-    outline: 2px solid #d366388f;
+
+.containerUser input[type="text"]:focus{
+    outline: none;
+    border: 2px solid #d36638;
+    border-radius: 2px;
 }
 
 .accountCompEmail  {
@@ -305,7 +324,6 @@ body {
     outline: none !important;
     border:2px dotted #D36638;
     padding-left: 0.2rem;
-    /* padding-right: -0.2rem; */
 }
 
 .containerBio input[type="text"] {
@@ -351,6 +369,7 @@ body {
 .btnChangePassword {
     background-color: #D97136;
     width: max-content;
+    cursor: pointer;
     border-radius: 5px;
     color: whitesmoke;
     border: 3px solid #D97136;
@@ -360,16 +379,11 @@ body {
     min-width: 11rem;
 }
 
-.btnChangePassword:hover {
-    background-color: transparent;
-    transition: 0.5s;
-    cursor: pointer;
-}
-
 
 .btnDeleteAccount {
     background-color: transparent;
     width: max-content;
+    cursor: pointer;
     border-radius: 5px;
     min-width: 11rem;
     color: whitesmoke;
@@ -378,12 +392,23 @@ body {
     font-family: 'Poppins-regular';
     font-weight: 900;
     margin-top: 2vh;
+    margin-bottom: 3vh;
 }
 
-.btnDeleteAccount:hover {
-    background-color: #D97136;
-    transition: 0.5s;
+.transition-button {
+    transition: background-color 0.8s ease;
+}
+
+.btnDisconnect {
+    color: #D97136;
+    font-family: 'Poppins';
+    width: max-content;
+    background-color: transparent;
+    border: none;
+    outline: none;
     cursor: pointer;
+    margin-top: 1rem ;
+    margin-bottom: 1rem ;
 }
 
 /*--------------------- Others ---------------------*/
@@ -401,6 +426,11 @@ body {
     border-radius: 999px;
     margin: 1rem;
     border:3px solid #D97136;
+}
+
+.containerDisconnect:hover span {
+    cursor: pointer;
+    animation: disconnectAnim 2s infinite ease;
 }
 
 /*--------------------- Popup del ---------------------*/
@@ -581,15 +611,20 @@ body {
     background-color: #774128;
 }
 
-a .googleSpan{
-    position: fixed;
-    align-self: flex-start;
-    margin-top: 10px;
+a .googleSpanClosePwd{
+    position: absolute;
+    margin-top: 20px;
+    top: 0;
+    right: 0;
     z-index: 999;
     color: #C1BEBE ;
 }
 
-a .googleSpan:hover {
+.containerClose {
+    position: relative;
+}
+
+a .googleSpanClosePwd:hover {
     cursor: pointer;
 }
 
@@ -599,4 +634,81 @@ a .googleSpan:hover {
     margin-top: -400px;
     font-family: 'Poppins';
     color: #CBCBCB;
+}
+
+/*--------------------- Popup Disconnect ---------------------*/
+
+#popupDisconnect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/*--------------------- Popup Error ---------------------*/
+
+#popupError {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.containerPopupError {
+    background-color: #28292F;
+    border-radius: 10px;
+    width: 30rem;
+    border: 2px solid #44454F;
+}
+
+.coloredText {
+    color: #D36638;
+    font-family: 'Poppins';
+}
+
+.containerTopError {
+    color: white;
+    font-family: 'Poppins';
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+.containerTopError img {
+    width: 10rem;
+    object-fit: contain;
+}
+
+.errorMsgEdit {
+    text-transform: uppercase;
+    color: whitesmoke;
+    font-family: 'Poppins';
+    width: 100%;
+    background-color: #44454F;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    margin: 0;
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+.closeSpan {
+    color: #8D8D8D;
+    cursor: pointer;
+    width: 100%;
+    margin: 0.5rem;
 }

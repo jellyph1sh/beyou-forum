@@ -7,6 +7,39 @@
     <title>topic</title>
 </head>
 <body>
-    <h1>topic</h1>
+    <div id="main-container">
+        <div id="header-topic">
+            <img src="{{.Topic.Picture}}">
+            <h1>{{.Topic.Title}}</h1>
+            <form method="post">
+                <input type="text" name="follow" value="follow" hidden>
+                <input type="submit" value="Follow"></input>
+            </form>
+            <form method="post">
+                <input type="text" name="upvote" value="upvote" hidden>
+                <input type="submit" value="Upvote"></input>
+            </form>
+            {{.Topic.Description}}
+        </div>
+        {{range $Post := .Posts}}
+            <img src="{{$Post.ProfilePicture}}">
+            {{$Post.AuthorName}}
+            {{$Post.StructuredDate}}
+            {{$Post.Content}}
+            {{$Post.IsLikeByConnectedUser}}
+            {{$Post.IsDislikeByConnectedUser}}
+            <form method="post">
+                <input type="text" name="like" value="{{$Post.PostID}}" hidden>
+                <input type="submit" value="like">
+                <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
+                <input type="submit" value="dislike">
+            </form>
+        {{end}}
+        <div id="create-post-form">
+            <form method="post">
+                <input type="text" name="postContent" cols="30" rows="10" placeholder="type your post there"></input>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

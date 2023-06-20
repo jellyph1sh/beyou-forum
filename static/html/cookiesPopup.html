@@ -1,0 +1,22 @@
+{{ define "cookies"}}
+<script>
+    window.onload = function() {
+      var doc = document.getElementById('cookies')
+      doc.style.visibility = "visible"
+    };
+    function setDisplay () {
+        var doc = document.getElementById('cookies')
+        doc.style.visibility = "hidden"
+    }
+  </script>
+  
+<div id="cookies" class="cookiesContainer columnContainer">
+    <img class="cookieImg" src="../img/cookie.png" alt="cookie_img">
+    <h2 class="textCookies">We use cookies to make your 
+        experience  better</h2>
+    <div class="containerBtnCookies rowContainer">
+        <a class="btnPolicy rowContainer alignCenter" href="/policy">Check cookies policy</a>
+        <p onclick="setDisplay()" class="btnOk rowContainer alignCenter" >OK</a>
+    </div>
+</div>
+{{ end }}

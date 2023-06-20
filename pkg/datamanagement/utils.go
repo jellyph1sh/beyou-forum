@@ -3,7 +3,7 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"math"
 	"strings"
 	"time"
 
@@ -18,7 +18,7 @@ const (
 )
 
 type DataFilter struct {
-	number int
+	Number int
 }
 
 type Display struct {
@@ -27,24 +27,24 @@ type Display struct {
 
 type Dislikes struct {
 	PostID int
-	UserID int
+	UserID string
 }
 
 type Follows struct {
 	FollowID int
 	TopicID  int
-	UserID   int
+	UserID   string
 }
 
 type Likes struct {
 	PostID int
-	UserID int
+	UserID string
 }
 
 type Posts struct {
 	PostID       int
 	Content      string
-	AuthorID     int
+	AuthorID     string
 	TopicID      int
 	Likes        int
 	Dislikes     int
@@ -62,7 +62,7 @@ type Reports struct {
 type Tags struct {
 	TagID     int
 	Title     string
-	CreatorID int
+	CreatorID string
 }
 
 type UserConnected struct {
@@ -71,14 +71,15 @@ type UserConnected struct {
 }
 
 type Topics struct {
-	TopicID     int
-	Title       string
-	Description string
-	Picture     string
-	CreatorID   int
-	Upvotes     int
-	Follows     int
-	ValidTopic  bool
+	TopicID      int
+	Title        string
+	Description  string
+	Picture      string
+	CreationDate time.Time
+	CreatorID    string
+	Upvotes      int
+	Follows      int
+	ValidTopic   bool
 }
 
 type TopicsTags struct {
@@ -88,7 +89,7 @@ type TopicsTags struct {
 
 type Upvotes struct {
 	TopicID int
-	UserID  int
+	UserID  string
 }
 
 type Users struct {
@@ -124,44 +125,9 @@ type DataContainer struct {
 	WordsBlacklist
 }
 
-/*don't forget to close the *sql.Rows when you use this func */
-func readDB(query string) *sql.Rows {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return nil
-	}
-	row, err := db.Query(query)
-	if err != nil {
-		fmt.Println("Invalid request :")
-		log.Fatal(err)
-		return nil
-	}
-	return row
-}
-
-func buildQueryAddData(table string, nbValues int) string {
-	result := "INSERT INTO " + table + " Values (?"
-	for i := 1; i < nbValues; i++ {
-		result += ",?"
-	}
-	return result + ");"
-}
-
-func CheckPrepareQuery(err error) {
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-func ExecuterQuery(QUERY string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-	}
-	defer db.Close()
-	db.Exec(QUERY)
+type DataExplorePage struct {
+	Topics []Topics
+	Users  []string
 }
 
 func CheckContentByBlackListWord(content string) bool {
@@ -183,4 +149,74 @@ func arrayContains(array []string, word string) bool {
 		}
 	}
 	return false
+}
+
+func SelectDB(query string, args ...interface{}) *sql.Rows {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	defer db.Close()
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	return rows
+}
+
+func AddDeleteUpdateDB(query string, args ...interface{}) sql.Result {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	defer db.Close()
+
+	res, err := db.Exec(query, args...)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return res
+}
+
+func TransformDateInPostFormat(CreationDate time.Time) string {
+	pastTime := math.Trunc(CreationDate.Sub(time.Now()).Minutes() * -1)
+	if pastTime < 60 {
+		return fmt.Sprintf("%v", pastTime) + " min"
+	} else {
+		pastTime = math.Trunc(CreationDate.Sub(time.Now()).Hours() * -1)
+		if pastTime < 24 {
+			return fmt.Sprintf("%v", pastTime) + " h"
+		} else {
+			pastTime = math.Trunc(pastTime / 24)
+			if pastTime < 30 {
+				if pastTime <= 1 {
+					return fmt.Sprintf("%v", pastTime) + " day"
+				} else {
+					return fmt.Sprintf("%v", pastTime) + " days"
+				}
+			} else {
+				pastTime = math.Trunc(pastTime / 30)
+				if pastTime < 12 {
+					if pastTime <= 1 {
+						return fmt.Sprintf("%v", pastTime) + " month"
+					} else {
+						return fmt.Sprintf("%v", pastTime) + " months"
+					}
+				} else {
+					pastTime = math.Trunc(pastTime / 12)
+					if pastTime <= 1 {
+						return fmt.Sprintf("%v", pastTime) + " year"
+					} else {
+						return fmt.Sprintf("%v", pastTime) + " years"
+					}
+				}
+			}
+		}
+	}
 }

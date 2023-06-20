@@ -4,122 +4,78 @@ import (
 	"database/sql"
 	"fmt"
 	"strconv"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func AddLineIntoTargetTable(data DataContainer, table string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return
-	}
-	var insertDataInTable *sql.Stmt
 	var res sql.Result
 	switch true {
 	case table == "Users":
-		query := "INSERT INTO " + table + "(UserID, Username,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Users.UserID, data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
+		res = AddDeleteUpdateDB("INSERT INTO ? (UserID, Username,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES (?,?,?,?,?,?,?,?,?,?,?);", table, data.Users.UserID, data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
 		break
 	case table == "Posts":
-		query := "INSERT INTO " + table + "(Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
+		res = AddDeleteUpdateDB("INSERT INTO ? (Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?,?);", table, data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
 		break
 	case table == "Topics":
-		query := "INSERT INTO " + table + "(Title,Description,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Topics.Title, data.Topics.Description, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
+		res = AddDeleteUpdateDB("INSERT INTO ? (Title,Description,Picture,CreationDate,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?,?,?);", table, data.Topics.Title, data.Topics.Description, data.Topics.Picture, data.Topics.CreationDate, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
 		break
 	case table == "Tags":
-		query := "INSERT INTO " + table + "(Title,CreatorID) VALUES(?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Tags.Title, data.Tags.CreatorID)
+		res = AddDeleteUpdateDB("INSERT INTO ? (Title,CreatorID) VALUES(?,?);", table, data.Tags.Title, data.Tags.CreatorID)
 		break
 	case table == "WordsBlacklist":
-		query := "INSERT INTO " + table + "(word) VALUES(?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		fmt.Println("test")
-		res, err = insertDataInTable.Exec(data.WordsBlacklist.Word)
+		res = AddDeleteUpdateDB("INSERT INTO ? (word) VALUES(?);", table, data.WordsBlacklist.Word)
 		break
 	case table == "Reports":
-		query := "INSERT INTO " + table + "(PostID,ReportUserID,Comment) VALUES (?,?,?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Reports.PostID, data.Reports.ReportUserID, data.Reports.Comment)
+		res = AddDeleteUpdateDB("INSERT INTO ? (PostID,ReportUserID,Comment) VALUES (?,?,?);", table, data.Reports.PostID, data.Reports.ReportUserID, data.Reports.Comment)
 		break
 	case table == "Follows":
-		query := "INSERT INTO " + table + "(TopicID,UserID) VALUES (?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Follows.TopicID, data.Follows.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO ? (TopicID,UserID) VALUES (?,?);", table, data.Follows.TopicID, data.Follows.UserID)
 		break
 	case table == "Likes":
-		query := "INSERT INTO " + table + " VALUES (?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Likes.PostID, data.Likes.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO ? VALUES (?,?);", table, data.Likes.PostID, data.Likes.UserID)
 		break
 	case table == "Dislikes":
-		query := "INSERT INTO " + table + " VALUES (?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Dislikes.PostID, data.Dislikes.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO ? VALUES (?,?);", table, data.Dislikes.PostID, data.Dislikes.UserID)
 		break
 	case table == "TopicsTags":
-		query := "INSERT INTO " + table + " VALUES (?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.TopicsTags.TopicID, data.TopicsTags.TagID)
+		res = AddDeleteUpdateDB("INSERT INTO ? VALUES (?,?);", table, data.TopicsTags.TopicID, data.TopicsTags.TagID)
 		break
 	case table == "Upvotes":
-		query := "INSERT INTO " + table + " VALUES (?,?);"
-		insertDataInTable, err = db.Prepare(query)
-		CheckPrepareQuery(err)
-		res, err = insertDataInTable.Exec(data.Upvotes.TopicID, data.Upvotes.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO ? VALUES (?,?);", table, data.Upvotes.TopicID, data.Upvotes.UserID)
 		break
 	default:
 		fmt.Println("Invalid Table")
 		return
 	}
-	if err != nil || res == nil {
-		fmt.Println("Could not insert this data : \n", "\n", err)
+	affected, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
-	affected, _ := res.RowsAffected()
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(TopicID, UserID int) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return
-	}
-	var updateUpvotes *sql.Stmt
+func UpdateUpvotes(TopicID int, UserID string) {
 	sign := "+"
-	row := readDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + strconv.Itoa(UserID) + ";")
-	for row.Next() {
-		row.Close()
+	rows := SelectDB("SELECT * FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
+	defer rows.Close()
+	for rows.Next() {
 		sign = "-"
-		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+strconv.Itoa(UserID))
+		res := AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
+		affected, err := res.RowsAffected()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(affected, "deleted!")
 	}
 	if sign == "+" {
 		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")
 	}
-	updateUpvotes, err = db.Prepare("UPDATE Topics SET Upvotes=Upvotes" + sign + "1 WHERE TopicID = ?;")
-	if err != nil {
-		fmt.Println(err)
-	}
-	res, err := updateUpvotes.Exec(TopicID)
+
+	res := AddDeleteUpdateDB("UPDATE Topics SET Upvotes=Upvotes ?1 WHERE TopicID = ?;", sign, TopicID)
 	affected, _ := res.RowsAffected()
 	fmt.Println(affected, " upvote of upvotes/unupvotes")
 }
@@ -127,89 +83,89 @@ func UpdateUpvotes(TopicID, UserID int) {
 /*
 likOrdIS: 'Likes' - 'Dislikes';
 */
-func LikePostManager(idPost, idUser int, likOrdIS string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return
-	}
-	row := readDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
-	for row.Next() {
-		row.Close()
-		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
-		updateLike, err := db.Prepare("UPDATE Posts SET " + likOrdIS + "=" + likOrdIS + "-1 WHERE PostID = ?;")
+func LikePostManager(idPost int, idUser string, likOrdIS string) {
+	rows := SelectDB("SELECT * FROM ? WHERE PostID = ? AND UserID = ?;", likOrdIS, fmt.Sprint(idPost), fmt.Sprint(idUser))
+	defer rows.Close()
+	for rows.Next() {
+		res := AddDeleteUpdateDB("DELETE FROM ? WHERE PostID = ? AND UserID = ?;", likOrdIS, fmt.Sprint(idPost), fmt.Sprint(idUser))
+		affected, err := res.RowsAffected()
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
-		updateLike.Exec(idPost)
+		fmt.Println(affected, "deleted!")
+		res = AddDeleteUpdateDB("UPDATE Posts SET ? = ?-1 WHERE PostID = ?;", likOrdIS, likOrdIS, idPost)
+		affected, err = res.RowsAffected()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(affected, "updated!")
 		return
 	}
 	if likOrdIS == "Likes" {
-		row := readDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
-		for row.Next() {
-			row.Close()
-			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
+		rows := SelectDB("SELECT * FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
+		defer rows.Close()
+		for rows.Next() {
+			res := AddDeleteUpdateDB("DELETE FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
+			affected, err := res.RowsAffected()
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println(affected, "deleted!")
 		}
 		AddLineIntoTargetTable(DataContainer{Likes: Likes{PostID: idPost, UserID: idUser}}, "Likes")
 	} else {
-		row := readDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
-		for row.Next() {
-			row.Close()
-			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
+		rows := SelectDB("SELECT * FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
+		rows.Close()
+		for rows.Next() {
+			res := AddDeleteUpdateDB("DELETE FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
+			affected, err := res.RowsAffected()
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println(affected, "deleted!")
 		}
 		AddLineIntoTargetTable(DataContainer{Dislikes: Dislikes{PostID: idPost, UserID: idUser}}, "Dislikes")
 	}
-	updateLike, err := db.Prepare("UPDATE Posts SET " + likOrdIS + "=" + likOrdIS + "+1 WHERE PostID = ?;")
+	res := AddDeleteUpdateDB("UPDATE Posts SET ? = ?-1 WHERE PostID = ?;", likOrdIS, likOrdIS, idPost)
+	affected, err := res.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-	updateLike.Exec(idPost)
+	fmt.Println(affected, "updated!")
 	return
 }
 
-func DeleteLineIntoTargetTable(table, condition string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return
+func AddTagsToTopic(tags, creatorId string, TopicID int) {
+	tagsArray := strings.Split(tags, " ")
+	for _, tag := range tagsArray {
+		if (GetTagByName(tag) == Tags{}) {
+			AddLineIntoTargetTable(DataContainer{Tags: Tags{Title: tag, CreatorID: creatorId}}, "Tags")
+		}
+		AddLineIntoTargetTable(DataContainer{TopicsTags: TopicsTags{TopicID: TopicID, TagID: GetTagByName(tag).TagID}}, "TopicsTags")
 	}
-	query := "DELETE FROM " + table + " WHERE (" + condition + ");"
-	fmt.Println(query)
-	res, err := db.Exec(query)
-	if err != nil {
-		fmt.Println("invalid condition : \n", err)
-		return
-	}
-	affected, _ := res.RowsAffected()
-	fmt.Println(affected, "line of ", table, "has been deleted")
 }
 
 func AddWordIntoBlacklist(word string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	res := AddDeleteUpdateDB("INSERT INTO WordsBlacklist (WordID, Word) VALUES (?,?);", nil, word)
+	affected, err := res.RowsAffected()
 	if err != nil {
-		fmt.Println("Could not open database : \n", err)
+		fmt.Println(err)
 		return
 	}
-	query := "INSERT INTO WordsBlacklist (WordID, Word) VALUES (?,?);"
-	insertDataInTable, err := db.Prepare(query)
-	CheckPrepareQuery(err)
-	insertDataInTable.Exec(nil, word)
-	defer db.Close()
+	fmt.Println(affected, "updated!")
 }
 
 func SetUserStatus(userID string, status string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return
-	}
-	query, err := db.Prepare("UPDATE Users SET ValidUser = ? WHERE UserID = ?;")
+	res := AddDeleteUpdateDB("UPDATE Users SET ValidUser = ? WHERE UserID = ?;", status, userID)
+	affected, err := res.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-	res, err := query.Exec(status, userID)
-	res.RowsAffected()
-	fmt.Println(userID + " has been unban!")
+	fmt.Println(affected, "updated!")
 }

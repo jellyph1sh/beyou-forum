@@ -11,7 +11,9 @@ import (
 )
 
 type register struct {
-	isValid bool
+	EmailAndUsernameIsNotValid bool
+	EmailIsNotValid            bool
+	UsernameIsNotValid         bool
 }
 
 func CreateUser(UserId string, userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
@@ -24,7 +26,7 @@ func CreateUser(UserId string, userName string, userFirstName string, userLastNa
 	nUser.Lastname = userLastName
 	nUser.Description = ""
 	nUser.CreationDate = time.Now()
-	nUser.ProfilePicture = ""
+	nUser.ProfilePicture = "../img/PP_wb.png"
 	nUser.IsAdmin = false
 	nUser.ValidUser = true
 	return nUser
@@ -46,10 +48,11 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	userName := r.FormValue("username")
 	userPassword := r.FormValue("password")
 	rememberMe := r.FormValue("rememberMe")
-	registerDisplay := register{}
-	registerDisplay.isValid = true
+	registerDisplay := register{false, false, false}
 	if userEmail != "" && userName != "" && userPassword != "" {
-		if !datamanagement.IsUserExist(userEmail, userName) {
+		isUsernameAlreadyExist := datamanagement.IsUsernameAlreadyExist(userName)
+		isEmailAlreadyExist := datamanagement.IsEmailAlreadyExist(userEmail)
+		if !isUsernameAlreadyExist && !isEmailAlreadyExist {
 			newUUID, err := exec.Command("uuidgen").Output()
 			if err != nil {
 				fmt.Println("user creation error ", err)
@@ -62,17 +65,29 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			nDataContainer := datamanagement.DataContainer{}
 			nDataContainer.Users = nUser
 			datamanagement.AddLineIntoTargetTable(nDataContainer, "Users")
+			cookieIdUser := http.Cookie{Name: "idUser", Value: string(newUUID)}
+			http.SetCookie(w, &cookieIdUser)
 			if rememberMe == "true" {
-				cookieIdUser := http.Cookie{Name: "idUser", Value: string(newUUID)}
-				http.SetCookie(w, &cookieIdUser)
+				cookieRememberMe := http.Cookie{Name: "Remember", Value: "true"}
+				cookieIsConnected := http.Cookie{Name: "isConnected", Value: "true"}
+				http.SetCookie(w, &cookieRememberMe)
+				http.SetCookie(w, &cookieIsConnected)
 			} else {
-				uConnected.IdUser = string(newUUID)
-				uConnected.IsUserConnected = true
+				cookieRememberMe := http.Cookie{Name: "Remember", Value: "false"}
+				cookieIsConnected := http.Cookie{Name: "isConnected", Value: "true", Expires: time.Now().Add(6 * time.Hour)}
+				http.SetCookie(w, &cookieRememberMe)
+				http.SetCookie(w, &cookieIsConnected)
 			}
 			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
 		} else {
-			registerDisplay.isValid = false
+			if isEmailAlreadyExist && isUsernameAlreadyExist {
+				registerDisplay.EmailAndUsernameIsNotValid = true
+			} else if isEmailAlreadyExist {
+				registerDisplay.EmailIsNotValid = true
+			} else if isUsernameAlreadyExist {
+				registerDisplay.UsernameIsNotValid = true
+			}
 		}
 	}
-	t.ExecuteTemplate(w, "register", nil)
+	t.ExecuteTemplate(w, "register", registerDisplay)
 }

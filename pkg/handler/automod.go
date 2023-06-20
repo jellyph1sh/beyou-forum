@@ -26,8 +26,8 @@ func Automod(w http.ResponseWriter, r *http.Request) {
 	} else if unban != "" {
 		datamanagement.SetUserStatus(unban, "1")
 	} else if ban != "" {
-		datamanagement.DeleteReport(ban)
-		datamanagement.DeletePost()
+		//datamanagement.DeleteReport(ban)
+		//datamanagement.DeletePost()
 	} else if delete != "" {
 
 	}
