@@ -25,12 +25,14 @@
         </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">MY FOLLOWS</h3>
-        <a href="/Follows">
-            <div class="btnCatContainer marginCat rowContainer">
-                <span class="googleSpan material-symbols-outlined"> favorite </span>
-                <h1 class="nameCatNav">Topics followed</h1>
-            </div>
-        </a>
+        <div class="btnCatContainer marginCat rowContainer">
+            <span class="googleSpan material-symbols-outlined"> favorite </span>
+                <form action="/explore" method="post">
+                    <input type="text" value="Follows" name="sort" hidden>
+                    <input type="submit" value="Topics followed" class="nameCatNav">
+                    <!-- <h1 class="nameCatNav">Topics followed</h1> -->
+                </form>
+                </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">CREATE</h3>
         <a href="/explore#create">

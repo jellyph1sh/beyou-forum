@@ -69,7 +69,14 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	if topic != "" {
 		dataToSend.Topics = datamanagement.GetTopicsByName(topic)
 	} else if sort != "" {
-		dataToSend.Topics = datamanagement.SortTopics(sort)
+		if sort == "Follows" && userId != "" {
+			dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
+		} else {
+			if sort == "Follows" {
+				sort = "default"
+			}
+			dataToSend.Topics = datamanagement.SortTopics(sort)
+		}
 	} else {
 		dataToSend.Topics = datamanagement.SortTopics("default")
 	}
