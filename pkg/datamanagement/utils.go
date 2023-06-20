@@ -220,3 +220,15 @@ func TransformDateInPostFormat(CreationDate time.Time) string {
 		}
 	}
 }
+
+func TransformTags(topicId int) []string {
+	tags := GetTagsByTopic(topicId)
+	result := []string{}
+	for i, tag := range tags {
+		if i > 4 {
+			break
+		}
+		result = append(result, tag.Title)
+	}
+	return result
+}

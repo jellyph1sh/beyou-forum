@@ -37,6 +37,11 @@
                             <img class="imgTopic" src="{{$topic.Picture}}">
                             <h2 class="nameTopic">/{{$topic.Title}}</h2>
                         </div>
+                        <div>
+                            {{range $tag := (index $root.Tags $i)}}
+                                <p>#{{$tag}}</p>
+                            {{end}}
+                        </div>
                         <p class="datetopic">Created - {{$topic.CreationDate.Format "Jan 02, 2006"}} by {{index $root.Users $i}}</p>
                         <div class="rowContainer containerFooterTopic">
                             <p class="nbUpvotes">{{index $root.Upvotes $i}} upvotes</p>
