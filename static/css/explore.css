@@ -6,6 +6,9 @@
         margin: 0rem 1vw;
         margin-top:80px ;
     }
+    .containerTopicsExplore {
+        margin: 5vh 0;
+    }
     .containerCreateComp {
         max-width: 25rem;
     }
@@ -48,11 +51,17 @@
     .containerCreateTopic h1 {
         text-align: center;
     }
+    .containerPagination {
+        margin-bottom: 1rem;
+    }
+    .containerTopicsExplore {
+        margin: 5vh 0;
+    }
 }
 
 @media screen and (min-width:1200px) {
     .containerExplorePage {
-        --widthExplorePage :calc(100vw - 350px);
+        --widthExplorePage :calc(100vw - 370px);
         position: absolute;
         flex-direction: row;
         justify-content: space-between;
@@ -68,11 +77,18 @@
         padding: 1rem 30px;
     }
     .containerCreateComp {
-        margin-top: 10rem;
+        margin-top: 8rem;
     }
     .exploreTitle {
         width: 90%;
         margin-bottom: 5vh;
+    }
+    .containerPagination {
+        margin-bottom: 1rem;
+    }
+    .containerTopicsExplore {
+        margin-top: 4vh;
+        margin-bottom: 1vh;
     }
 }
 
@@ -112,7 +128,6 @@
 }
 
 .containerTopicsExplore {
-    margin: 5vh 0;
     gap: 3vh;
 }
 
@@ -131,7 +146,7 @@
 }
 
 .containerExplore {
-   width: calc(var(--widthExplorePage) - 500px)
+   width: calc(var(--widthExplorePage) - 450px)
 }
 
 .containerFooterTopic {
@@ -155,7 +170,7 @@
 
 .containerFormCreate {
     justify-content: space-around;
-    gap: 3rem;
+    gap: 1rem;
 }
 
 /*------------------ Texts ------------------*/
@@ -209,6 +224,18 @@
     color: whitesmoke;
 }
 
+.indicationsCreateTopic {
+    font-family: 'Poppins-regular';
+    color: #929191;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.indicationsCreateTopicSubmit {
+    text-align: center;
+    margin: 0;
+}
+
 /*------------------ Buttons ------------------*/
 
 a {
@@ -245,6 +272,7 @@ a {
     cursor: pointer;
     color: transparent;
     z-index: 1;
+    width: 1.5rem   ;
 }
 
 .aboutWhatInput {
@@ -331,7 +359,7 @@ a {
 
 .arrowPagination {
     position: absolute;
-    margin-left: -3rem;
+    margin-left: -1rem;
     z-index: -1;
     text-decoration: none;
     cursor: pointer;
