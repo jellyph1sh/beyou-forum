@@ -67,6 +67,18 @@ func isFollowTopic(topicName string, topicDisplayStruct DataTopicPage, idUser st
 	return topicDisplayStruct
 }
 
+func isUpvoteTopic(topicName string, topicDisplayStruct DataTopicPage, idUser string) DataTopicPage {
+	if idUser != "" {
+		rows := datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
+		defer rows.Close()
+		if !rows.Next() {
+			topicDisplayStruct.IsUpvote = false
+		} else {
+			topicDisplayStruct.IsUpvote = true
+		}
+	}
+	return topicDisplayStruct
+}
 func Topic(w http.ResponseWriter, r *http.Request) {
 	url := strings.Split(r.URL.String(), "/")
 	topicName := url[2]
@@ -84,6 +96,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	topicDisplayStruct := DataTopicPage{}
 	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
+	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
@@ -102,11 +115,12 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			}
 			break
 		case clickUpvote != "":
-			datamanagement.UpdateUpvotes(topicDisplayStruct.Topic.TopicID, idUser)
 			if topicDisplayStruct.IsUpvote {
 				topicDisplayStruct.IsUpvote = false
+				datamanagement.UnUpvotesTopic(topicDisplayStruct.Topic.TopicID, idUser)
 			} else {
 				topicDisplayStruct.IsUpvote = true
+				datamanagement.UpvotesTopic(topicDisplayStruct.Topic.TopicID, idUser)
 			}
 			break
 		case like != "":

@@ -3,7 +3,6 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -57,27 +56,12 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(TopicID int, UserID string) {
-	sign := "+"
-	rows := SelectDB("SELECT * FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
-	defer rows.Close()
-	for rows.Next() {
-		sign = "-"
-		res := AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
-		affected, err := res.RowsAffected()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(affected, "deleted!")
-	}
-	if sign == "+" {
-		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")
-	}
+func UpvotesTopic(topicID int, idUser string) {
+	AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: topicID, UserID: idUser}}, "Upvotes")
+}
 
-	res := AddDeleteUpdateDB("UPDATE Topics SET Upvotes=Upvotes ?1 WHERE TopicID = ?;", sign, TopicID)
-	affected, _ := res.RowsAffected()
-	fmt.Println(affected, " upvote of upvotes/unupvotes")
+func UnUpvotesTopic(topicID int, idUser string) {
+	AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", fmt.Sprint(topicID), fmt.Sprint(idUser))
 }
 
 /*
