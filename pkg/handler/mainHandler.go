@@ -19,6 +19,8 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		Home(w, r)
 	case url[1] == "login" && len(url) == 2:
 		Login(w, r)
+	case url[1] == "policy" && len(url) == 2:
+		Policy(w, r)
 	case url[1] == "register" && len(url) == 2:
 		Register(w, r)
 	case url[1] == "profile" && len(url) == 2:
