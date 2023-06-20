@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"forum/pkg/datamanagement"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -103,7 +102,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 				res := datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
 				affected, err := res.RowsAffected()
 				if err != nil {
-					log.Fatal(err)
+					fmt.Println(err)
 					return
 				}
 				fmt.Println(affected, "deleted!")

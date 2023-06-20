@@ -3,7 +3,6 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -24,7 +23,7 @@ func GetPostFromUser(idUser string) []Posts {
 func GetPostData(idPost int) Posts {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Posts{}
 	}
 	defer db.Close()
@@ -33,7 +32,7 @@ func GetPostData(idPost int) Posts {
 
 	var post Posts
 	if err := row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Posts{}
 	}
 
@@ -330,7 +329,7 @@ func SortPosts(typOfSort string) []Posts {
 func GetUserById(id string) Users {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Users{}
 	}
 	defer db.Close()
@@ -339,7 +338,7 @@ func GetUserById(id string) Users {
 
 	var user Users
 	if err := row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Users{}
 	}
 
@@ -398,7 +397,7 @@ func GetTagByName(search string) Tags {
 func GetTopicByName(topicName string) Topics {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Topics{}
 	}
 	defer db.Close()
@@ -407,7 +406,7 @@ func GetTopicByName(topicName string) Topics {
 
 	var topic Topics
 	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Topics{}
 	}
 

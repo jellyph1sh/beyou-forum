@@ -3,7 +3,6 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -52,7 +51,7 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	}
 	affected, err := res.RowsAffected()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return
 	}
 	fmt.Println(affected, " ", table, " has been add to the database")
@@ -67,7 +66,7 @@ func UpdateUpvotes(TopicID int, UserID string) {
 		res := AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
 		affected, err := res.RowsAffected()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 			return
 		}
 		fmt.Println(affected, "deleted!")
@@ -91,14 +90,14 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 		res := AddDeleteUpdateDB("DELETE FROM ? WHERE PostID = ? AND UserID = ?;", likOrdIS, fmt.Sprint(idPost), fmt.Sprint(idUser))
 		affected, err := res.RowsAffected()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 			return
 		}
 		fmt.Println(affected, "deleted!")
 		res = AddDeleteUpdateDB("UPDATE Posts SET ? = ?-1 WHERE PostID = ?;", likOrdIS, likOrdIS, idPost)
 		affected, err = res.RowsAffected()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 			return
 		}
 		fmt.Println(affected, "updated!")
@@ -111,7 +110,7 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 			res := AddDeleteUpdateDB("DELETE FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
 			affected, err := res.RowsAffected()
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(err)
 				return
 			}
 			fmt.Println(affected, "deleted!")
@@ -124,7 +123,7 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 			res := AddDeleteUpdateDB("DELETE FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
 			affected, err := res.RowsAffected()
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(err)
 				return
 			}
 			fmt.Println(affected, "deleted!")
@@ -134,7 +133,7 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 	res := AddDeleteUpdateDB("UPDATE Posts SET ? = ?-1 WHERE PostID = ?;", likOrdIS, likOrdIS, idPost)
 	affected, err := res.RowsAffected()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return
 	}
 	fmt.Println(affected, "updated!")
