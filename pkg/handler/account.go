@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"text/template"
@@ -17,6 +19,7 @@ type AccountPage struct {
 	IsNotValidchangedBIO      bool
 	IsNotValidEditMail        bool
 	IsNotValidchangedUsername bool
+	IsConnected               bool
 }
 
 func setDisplayStructAccount(displayStructAccountPage AccountPage, currentUser datamanagement.Users) AccountPage {
@@ -45,29 +48,36 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	editMail := r.FormValue("editMail")
 	changedPwd1 := r.FormValue("changedPwd1")
 	changedPwd2 := r.FormValue("changedPwd2")
+	currentPwd := r.FormValue("currentPwd")
 	changedBIO := r.FormValue("changedBIO")
 	changedFirstname := r.FormValue("changedFirstname")
 	changedLastname := r.FormValue("changedLastname")
 	changedUsername := r.FormValue("changedUsername")
+	disconnect := r.FormValue("disconnect")
 	cookieIdUser, _ := r.Cookie("idUser")
-	cookieIsConnected, _ := r.Cookie("isConnected")
 	displayStructAccountPage := AccountPage{}
 	idUser := getCookieValue(cookieIdUser)
-	isConnected := getCookieValue(cookieIsConnected)
 	switch true {
 	case delAccount != "":
 		datamanagement.AddDeleteUpdateDB("DELETE FROM Users WHERE UserID = ?;", idUser)
 		break
+	case disconnect != "":
+		cookieIsConnected := http.Cookie{Name: "isConnected", Value: "false"}
+		http.SetCookie(w, &cookieIsConnected)
+		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
 	case editMail != "":
-		if !datamanagement.IsUserExist(editMail, "") {
+		if !datamanagement.IsEmailAlreadyExist(editMail) {
 			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Email = ? WHERE UserID = ?;", editMail, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidEditMail = true
 		}
 		break
 	case changedPwd1 != "" && changedPwd2 != "":
-		if changedPwd1 == changedPwd2 {
-			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Password = ? WHERE UserID = ?;", changedPwd1, idUser)
+		if changedPwd1 == changedPwd2 && datamanagement.IsValidPassword(currentPwd, idUser) {
+			passwordByte := []byte(changedPwd1)
+			passwordInSha256 := sha256.Sum256(passwordByte)
+			stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Password = ? WHERE UserID = ?;", stringPasswordInSha256, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidchangedPwd = true
 		}
@@ -82,7 +92,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Lastname = ? WHERE UserID = ?;", changedLastname, idUser)
 		break
 	case changedUsername != "":
-		if !datamanagement.IsUserExist("", changedUsername) {
+		if !datamanagement.IsUsernameAlreadyExist(changedUsername) {
 			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Username = ? WHERE UserID = ?;", changedUsername, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidchangedUsername = true
@@ -92,8 +102,13 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	currentUser := datamanagement.GetUserById(idUser)
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
+	cookieIsConnected, _ := r.Cookie("isConnected")
+	isConnected := getCookieValue(cookieIsConnected)
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
+		displayStructAccountPage.IsConnected = false
+	} else {
+		displayStructAccountPage.IsConnected = true
 	}
 	t.ExecuteTemplate(w, "account", displayStructAccountPage)
 }

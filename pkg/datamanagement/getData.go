@@ -12,14 +12,12 @@ import (
 func GetPostFromUser(idUser string) []Posts {
 	rows := SelectDB("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
 	defer rows.Close()
-
 	result := []Posts{}
 	for rows.Next() { // Iterate and fetch the records from result cursor
 		var post Posts
 		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
 		result = append(result, post)
 	}
-
 	return result
 }
 
@@ -32,10 +30,6 @@ func GetPostData(idPost int) Posts {
 	defer db.Close()
 
 	row := db.QueryRow("SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = ?;", strconv.Itoa(idPost))
-	if err != nil {
-		log.Fatal(err)
-		return Posts{}
-	}
 
 	var post Posts
 	if err := row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost); err != nil {
@@ -60,7 +54,7 @@ func GetSortPost() []Posts {
 	return result
 }
 
-func GetUserByName(search string) []Users {
+func SearchUserByName(search string) []Users {
 	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE %?%;", search)
 	defer rows.Close()
 
@@ -70,12 +64,43 @@ func GetUserByName(search string) []Users {
 		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
 		result = append(result, user)
 	}
-
 	return result
 }
 
+func GetUserByName(userName string) Users {
+	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE ?;", userName)
+	defer rows.Close()
+
+	var user Users
+	for rows.Next() {
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+	}
+	return user
+}
+
+func GetUserByID(userId string) Users {
+	rows := SelectDB("SELECT * FROM Users WHERE UserID LIKE ?;", userId)
+	defer rows.Close()
+
+	var user Users
+	for rows.Next() {
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+	}
+	return user
+}
+
+func GetTopicId(topicName string) string {
+	rows := SelectDB("SELECT TopicID FROM Topics WHERE Title LIKE ?;", topicName)
+	defer rows.Close()
+	var id string
+	for rows.Next() {
+		rows.Scan(&id)
+	}
+	return id
+}
+
 func GetPostByTopic(topic string) []Posts {
-	rows := SelectDB("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC WHERE TopicID LIKE ?;", topic)
+	rows := SelectDB("SELECT * FROM Posts WHERE TopicID LIKE ?;", topic)
 	defer rows.Close()
 
 	result := []Posts{}
@@ -103,7 +128,7 @@ func GetAllFromTable(table string) []DataContainer {
 			rows.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate, &line.Posts.IsValidPost)
 			break
 		case table == "Topics":
-			rows.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
+			rows.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.CreationDate, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
 			break
 		case table == "Tags":
 			rows.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)
@@ -132,7 +157,6 @@ func GetAllFromTable(table string) []DataContainer {
 		}
 		result = append(result, line)
 	}
-
 	return result
 }
 
@@ -160,6 +184,9 @@ func SortTopics(typOfSort string) []Topics {
 		break
 	case "creator":
 		query = "SELECT * FROM Topics ORDER BY CreatorID DESC;"
+		break
+	case "default":
+		query = "SELECT * FROM Topics;"
 		break
 	default:
 		fmt.Println("invalid type of sort")
@@ -206,13 +233,13 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 		return nil
 	}
 
-	rows := SelectDB(query, fmt.Sprint(data.number))
+	rows := SelectDB(query, fmt.Sprint(data.Number))
 	defer rows.Close()
 
 	var result []Topics
 	for rows.Next() {
 		var line Topics
-		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
 		result = append(result, line)
 	}
 
@@ -248,7 +275,7 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 		return nil
 	}
 
-	rows := SelectDB(query, fmt.Sprint(data.number))
+	rows := SelectDB(query, fmt.Sprint(data.Number))
 	defer rows.Close()
 
 	var result []Posts
@@ -309,10 +336,6 @@ func GetUserById(id string) Users {
 	defer db.Close()
 
 	row := db.QueryRow("SELECT * FROM Users WHERE UserID = ?;", id)
-	if err != nil {
-		log.Fatal(err)
-		return Users{}
-	}
 
 	var user Users
 	if err := row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser); err != nil {
@@ -333,6 +356,60 @@ func GetTopicsById(creatorID string) []Topics {
 		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		topics = append(topics, topic)
 	}
-
 	return topics
+}
+
+func GetTopicsByName(search string) []Topics {
+	rows := SelectDB("SELECT * FROM Topics WHERE Title LIKE '%?%';", search)
+	defer rows.Close()
+
+	result := []Topics{}
+	for rows.Next() {
+		var topic Topics
+		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
+	}
+
+	return result
+}
+
+func GetOneTopicByName(search string) Topics {
+	rows := SelectDB("SELECT * FROM Topics WHERE Title = ?;", search)
+	defer rows.Close()
+
+	result := Topics{}
+	for rows.Next() {
+		rows.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
+	}
+	return result
+}
+
+func GetTagByName(search string) Tags {
+	rows := SelectDB("SELECT * FROM Tags WHERE Title = ?;", search)
+	defer rows.Close()
+
+	result := Tags{}
+	for rows.Next() {
+		rows.Scan(&result.TagID, &result.Title, &result.CreatorID)
+	}
+	return result
+}
+
+func GetTopicByName(topicName string) Topics {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return Topics{}
+	}
+	defer db.Close()
+
+	row := db.QueryRow("SELECT * FROM Topics WHERE Title like ?;", topicName)
+
+	var topic Topics
+	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic); err != nil {
+		log.Fatal(err)
+		return Topics{}
+	}
+
+	return topic
 }

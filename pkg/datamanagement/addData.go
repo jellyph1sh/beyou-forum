@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -138,4 +139,14 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 	}
 	fmt.Println(affected, "updated!")
 	return
+}
+
+func AddTagsToTopic(tags, creatorId string, TopicID int) {
+	tagsArray := strings.Split(tags, " ")
+	for _, tag := range tagsArray {
+		if (GetTagByName(tag) == Tags{}) {
+			AddLineIntoTargetTable(DataContainer{Tags: Tags{Title: tag, CreatorID: creatorId}}, "Tags")
+		}
+		AddLineIntoTargetTable(DataContainer{TopicsTags: TopicsTags{TopicID: TopicID, TagID: GetTagByName(tag).TagID}}, "TopicsTags")
+	}
 }

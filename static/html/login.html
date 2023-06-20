@@ -1,4 +1,3 @@
-
 {{ define "login"}}
 <!DOCTYPE html>
 <html lang="en">
@@ -11,12 +10,28 @@
     <title>login</title>
 </head>
 <body>
+    <script>
+        function errorPopup(errorMsg){
+            let content = document.getElementById('msgError').innerText = errorMsg
+            document.getElementById('popupError').style.visibility = 'visible';
+        }
+    </script>
     <div class="containerLoginPage">
         {{template "navBar"}}
+        <div id="popupError">
+            <div class="containerPopupError columnContainer">
+                <a href="/login"><span class="closeSpan material-symbols-outlined">close</span></a>
+                <div class="containerTopError rowContainer">
+                    <h2>It seems that something went <span class="coloredText">wrong</span></h2>
+                    <img src="../img/wrong.png" alt="invalid_img">
+                </div>
+                <h2 id="msgError" class="errorMsgEdit">Invalid email</h2>
+            </div>
+        </div>
         <div class="columnContainer containerLogin">
             <h1 class="titleLogin">LOGIN</h1>
             {{if .IsNotValid}}
-            <h1>t'es un bouff</h1>
+                <script>errorPopup('Invalid Parameters')</script>  
             {{end}}
             <h2 class="subTitleLogin">Please enter your email and password</h2>
             <form method="post" class="columnContainer formStyleLog">

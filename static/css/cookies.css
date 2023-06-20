@@ -1,16 +1,17 @@
 .cookiesContainer {
-    background-color: #28292F;
+    background-color: #28292fdc;
     border-top-left-radius: 5px;
     gap: 3vh;
     width: max-content;
     align-items: center;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     visibility:hidden;
     z-index: 1000;
     border-top: 2px solid #44454F;
     border-left: 2px solid #44454F;
+    backdrop-filter: blur(10px);
 }
 
 .textCookies {
@@ -44,7 +45,7 @@
     height: 100%;
     padding: 0rem 2rem;
     font-size: 1.25rem;
-
+    cursor: pointer;
 }
 
 .containerBtnCookies {
@@ -64,3 +65,4 @@ a {
     height: 8rem;
     padding-top: 1rem;
 }
+

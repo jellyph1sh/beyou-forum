@@ -18,6 +18,39 @@ func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
 	return false
 }
 
+func IsEmailAlreadyExist(userEmail string) bool {
+	rows := SelectDB("SELECT * FROM Users WHERE (Email = ?);", string(userEmail))
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsUsernameAlreadyExist(userProfilName string) bool {
+	rows := SelectDB("SELECT * FROM Users WHERE ( Username = ?);", string(userProfilName))
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsValidTopic(topic string) bool {
+	rows := SelectDB("SELECT * FROM Topics WHERE (Title = ?);", string(topic))
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
 func IsUserExist(userEmail string, userProfilName string) bool {
 	rows := SelectDB("SELECT * FROM Users WHERE ( Username = ? OR Email = ?);", string(userProfilName), string(userEmail))
 	defer rows.Close()
@@ -43,4 +76,38 @@ func IsRegister(userInput string, password string) (bool, string) {
 	}
 
 	return false, ""
+}
+
+func IsValidPassword(password string, idUser string) bool {
+	dataUser := GetUserByID(idUser)
+	passwordByte := []byte(password)
+	passwordInSha256 := sha256.Sum256(passwordByte)
+	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
+	if dataUser.Password == stringPasswordInSha256 {
+		return true
+	} else {
+		return false
+	}
+}
+
+func IsLikeByUser(userID string, postID int) bool {
+	rows := SelectDB("SELECT * FROM Likes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsDislikeByUser(userID string, postID int) bool {
+	rows := SelectDB("SELECT * FROM Dislikes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
 }

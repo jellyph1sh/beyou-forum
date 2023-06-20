@@ -11,60 +11,95 @@ import (
 	"time"
 )
 
+type DataTopicPage struct {
+	Topic    datamanagement.Topics
+	Posts    []PostInTopicPage
+	IsFollow bool
+	IsUpvote bool
+}
+
+type PostInTopicPage struct {
+	PostID                   int
+	Content                  string
+	Likes                    int
+	Dislikes                 int
+	StructuredDate           string
+	IsValidPost              bool
+	IsLikeByConnectedUser    bool
+	IsDislikeByConnectedUser bool
+	ProfilePicture           string
+	AuthorName               string
+}
+
+func transformPostInPostInTopicPage(posts []datamanagement.Posts, userID string) []PostInTopicPage {
+	result := []PostInTopicPage{}
+	for _, element := range posts {
+		var post PostInTopicPage
+		post.Content = element.Content
+		post.PostID = element.PostID
+		post.Likes = element.Likes
+		post.Dislikes = element.Dislikes
+		post.IsValidPost = element.IsValidPost
+		post.StructuredDate = datamanagement.TransformDateInPostFormat(element.CreationDate)
+		user := datamanagement.GetUserById(element.AuthorID)
+		post.ProfilePicture = user.ProfilePicture
+		post.AuthorName = user.Username
+		if datamanagement.IsLikeByUser(userID, post.PostID) {
+			post.IsDislikeByConnectedUser = true
+		} else if datamanagement.IsDislikeByUser(userID, post.PostID) {
+			post.IsDislikeByConnectedUser = true
+		}
+		result = append(result, post)
+	}
+	return result
+}
+
+func isFollowTopic(topicName string, topicDisplayStruct DataTopicPage, idUser string) DataTopicPage {
+	if idUser != "" {
+		rows := datamanagement.SelectDB("SELECT * FROM Follows WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
+		defer rows.Close()
+
+		if !rows.Next() {
+			topicDisplayStruct.IsFollow = false
+		} else {
+			topicDisplayStruct.IsFollow = true
+		}
+
+		row := datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
+		defer row.Close()
+		if !row.Next() {
+			topicDisplayStruct.IsFollow = false
+		} else {
+			topicDisplayStruct.IsFollow = true
+		}
+	}
+	return topicDisplayStruct
+}
+
 func Topic(w http.ResponseWriter, r *http.Request) {
 	url := strings.Split(r.URL.String(), "/")
 	topicName := url[2]
-	rows := datamanagement.SelectDB("SELECT * FROM Topics WHERE Title = ?;", topicName)
-	defer rows.Close()
-
-	var topic datamanagement.Topics
-	for rows.Next() {
-		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
-	}
-	dataToSend := datamanagement.DataTopicPage{}
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
-	if idUser != "" {
-		rows := datamanagement.SelectDB("SELECT * FROM Follows WHERE UserID = ? AND TopicID = ?;", idUser, strconv.Itoa(topic.TopicID))
-		defer rows.Close()
-		for rows.Next() {
-			dataToSend.IsFollow = true
-		}
-		rows = datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID = ? AND TopicID = ?;", idUser, strconv.Itoa(topic.TopicID))
-		defer rows.Close()
-		for rows.Next() {
-			dataToSend.IsUpvote = true
-		}
-	}
-	dataToSend = datamanagement.DataTopicPage{Topic: topic}
-	rows = datamanagement.SelectDB("SELECT * FROM Posts WHERE TopicID = ?;", strconv.Itoa(topic.TopicID))
-	defer rows.Close()
-	for rows.Next() {
-		var post datamanagement.Posts
-		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
-		dataToSend.Posts = append(dataToSend.Posts, post)
-		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
-	}
-	// idUser = "1" //delete this line
-	dataToSend.IsFollow = false
-	dataToSend.IsUpvote = false
-	// add a post
 	newPost := r.FormValue("postContent")
 	clickFollow := r.FormValue("follow")
 	clickUpvote := r.FormValue("upvote")
 	like := r.FormValue("like")
 	dislike := r.FormValue("dislike")
+	topicDisplayStruct := DataTopicPage{}
+	topicDisplayStruct.Posts = transformPostInPostInTopicPage(datamanagement.GetPostByTopic(datamanagement.GetTopicId(topicName)), idUser)
+	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
+	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
-	// isConnected = "true" //delete this line
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
-			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: dataToSend.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
+			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
 			break
 		case clickFollow != "":
-			if dataToSend.IsFollow {
+			if topicDisplayStruct.IsFollow {
 				res := datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
 				affected, err := res.RowsAffected()
 				if err != nil {
@@ -72,19 +107,19 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				fmt.Println(affected, "deleted!")
-				dataToSend.IsFollow = false
+				topicDisplayStruct.IsFollow = false
 			} else {
-				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topic.TopicID, UserID: idUser}}
+				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topicDisplayStruct.Topic.TopicID, UserID: idUser}}
 				datamanagement.AddLineIntoTargetTable(line, "Follows")
-				dataToSend.IsFollow = true
+				topicDisplayStruct.IsFollow = true
 			}
 			break
 		case clickUpvote != "":
-			datamanagement.UpdateUpvotes(topic.TopicID, idUser)
-			if dataToSend.IsUpvote {
-				dataToSend.IsUpvote = false
+			datamanagement.UpdateUpvotes(topicDisplayStruct.Topic.TopicID, idUser)
+			if topicDisplayStruct.IsUpvote {
+				topicDisplayStruct.IsUpvote = false
 			} else {
-				dataToSend.IsUpvote = true
+				topicDisplayStruct.IsUpvote = true
 			}
 			break
 		case like != "":
@@ -96,11 +131,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			datamanagement.LikePostManager(idPost, idUser, "Dislikes")
 			break
 		}
-		for _, p := range dataToSend.Posts {
-			dataToSend.Likes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Likes"))
-			dataToSend.Dislikes = append(dataToSend.Likes, datamanagement.IsPostDLikeByBYser(p.PostID, idUser, "Dislikes"))
-		}
 	}
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
-	t.Execute(w, dataToSend)
+	t.Execute(w, topicDisplayStruct)
 }
