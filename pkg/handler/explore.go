@@ -62,25 +62,38 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	}
 	cookieFilter, _ := r.Cookie("filter")
 	cookiePaging, _ := r.Cookie("paging")
-	if getCookieValue(cookieFilter) == "" && getCookieValue(cookiePaging) == "" {
-		cookieFilter = &http.Cookie{Name: "filter", Value: "DESC-Upvote"}
+	cookieSearch, _ := r.Cookie("search")
+	sort := r.FormValue("sort")
+	if getCookieValue(cookieFilter) == "" || getCookieValue(cookiePaging) == "" {
+		if sort == "" {
+			sort = "default"
+		}
+		cookieFilter = &http.Cookie{Name: "filter", Value: sort}
 		cookiePaging = &http.Cookie{Name: "paging", Value: "1"}
+		http.SetCookie(w, cookieFilter)
+		http.SetCookie(w, cookiePaging)
+	}
+	if sort != "" {
+		cookieFilter = &http.Cookie{Name: "filter", Value: sort}
+		http.SetCookie(w, cookieFilter)
+		cookieSearch = &http.Cookie{Name: "search", Value: ""}
+		http.SetCookie(w, cookieSearch)
 	}
 	topic := r.FormValue("topicSearch")
-	sort := r.FormValue("sort")
+	fmt.Println(getCookieValue(cookieFilter))
 	if topic != "" {
+		cookieSearch = &http.Cookie{Name: "search", Value: topic}
+		http.SetCookie(w, cookieSearch)
 		dataToSend.Topics = datamanagement.GetTopicsByName(topic)
-	} else if sort != "" {
-		if sort == "Follows" && userId != "" {
-			dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
-		} else {
-			if sort == "Follows" {
-				sort = "default"
-			}
-			dataToSend.Topics = datamanagement.SortTopics(sort)
-		}
+	} else if getCookieValue(cookieSearch) != "" {
+		dataToSend.Topics = datamanagement.GetTopicsByName(getCookieValue(cookieSearch))
+	} else if sort == "Follows" && userId != "" {
+		dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
 	} else {
-		dataToSend.Topics = datamanagement.SortTopics("default")
+		if sort == "Follows" {
+			sort = "default"
+		}
+		dataToSend.Topics = datamanagement.SortTopics(getCookieValue(cookieFilter))
 	}
 	prev := r.FormValue("previous")
 	next := r.FormValue("next")
@@ -94,9 +107,11 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	if next != "" && pagingInt*2 < len(dataToSend.Topics) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt + 1)}
 		pagingInt++
+		http.SetCookie(w, cookiePaging)
 	} else if prev != "" && pagingInt > 1 {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt - 1)}
 		pagingInt--
+		http.SetCookie(w, cookiePaging)
 	}
 	if pagingInt == 1 {
 		dataToSend.CanPrevious = false
