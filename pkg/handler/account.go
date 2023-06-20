@@ -20,6 +20,7 @@ type AccountPage struct {
 	IsNotValidEditMail        bool
 	IsNotValidchangedUsername bool
 	IsConnected               bool
+	IsAdmin                   bool
 }
 
 func setDisplayStructAccount(displayStructAccountPage AccountPage, currentUser datamanagement.Users) AccountPage {
@@ -100,6 +101,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		break
 	}
 	currentUser := datamanagement.GetUserById(idUser)
+	displayStructAccountPage.IsAdmin = currentUser.IsAdmin
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
 	cookieIsConnected, _ := r.Cookie("isConnected")

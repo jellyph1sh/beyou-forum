@@ -38,6 +38,7 @@ type TopicsWithUserInfo struct {
 type structDisplayHome struct {
 	AllTopics   []TopicsWithUserInfo
 	IsConnected string
+	IsAdmin     bool
 }
 
 func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWithUserInfo {
@@ -71,5 +72,11 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
 	structDisplayHome.IsConnected = IsConnected
+	structDisplayHome.IsAdmin = false
+	if IsConnected == "true" {
+		cookieIdUser, _ := r.Cookie("idUser")
+		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))
+		structDisplayHome.IsAdmin = currentUser.IsAdmin
+	}
 	t.ExecuteTemplate(w, "home", structDisplayHome)
 }
