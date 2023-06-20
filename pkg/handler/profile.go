@@ -17,7 +17,6 @@ type PostWithStructuredDate struct {
 	Dislikes       int
 	CreationDate   time.Time
 	StructuredDate string
-	IsValidPost    bool
 	ProfilePicture string
 	AuthorName     string
 }
@@ -43,7 +42,6 @@ func StructureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 		post.Likes = element.Likes
 		post.Dislikes = element.Dislikes
 		post.CreationDate = element.CreationDate
-		post.IsValidPost = element.IsValidPost
 		post.StructuredDate = datamanagement.TransformDateInPostFormat(post.CreationDate)
 		user := datamanagement.GetUserById(post.AuthorID)
 		post.ProfilePicture = user.ProfilePicture

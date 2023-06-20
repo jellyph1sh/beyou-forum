@@ -111,3 +111,13 @@ func IsDislikeByUser(userID string, postID int) bool {
 		return true
 	}
 }
+
+func IsWordInBlacklist(word string) bool {
+	rows := SelectDB("SELECT word FROM WordsBlacklist WHERE word = ?", word)
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	}
+	return true
+}

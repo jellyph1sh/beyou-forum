@@ -49,7 +49,6 @@ type Posts struct {
 	Likes        int
 	Dislikes     int
 	CreationDate time.Time
-	IsValidPost  bool
 }
 
 type Reports struct {
@@ -57,6 +56,7 @@ type Reports struct {
 	PostID       int
 	ReportUserID string
 	Comment      string
+	TopicID      int
 }
 
 type Tags struct {
@@ -79,7 +79,6 @@ type Topics struct {
 	CreatorID    string
 	Upvotes      int
 	Follows      int
-	ValidTopic   bool
 }
 
 type TopicsTags struct {

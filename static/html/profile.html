@@ -29,7 +29,6 @@
             <div class="containerPosts columnContainer">
                 <h2 class="catProfile">My posts</h2>
                 {{range $Post := .Posts}}
-                    {{if $Post.IsValidPost}}
                     <div class="columnContainer containerPostProfile">
                         <div class="rowContainer containerHeaderProfile">
                             <img class="imgPostProfile" src="{{ $Post.ProfilePicture}}" alt="pp">
@@ -46,19 +45,16 @@
                             <span class="material-symbols-outlined">thumb_down</span>
                         </div>
                     </div>
-                    {{end}}
                 {{end}}
             </div>
             <div class="containerTopics columnContainer">
                 <h2 class="catProfile">My topics</h2>
                 <div class="topicsContainer columnContainer">
                     {{range $Topic := .Topics}}
-                        {{if $Topic.ValidTopic}}
                         <div class="topic rowContainer">
                             <img class="imgPostProfile" src=" {{$Topic.Picture}}" alt="pp">
                             <p class="topicTitle">/{{$Topic.Title}}</p>
                         </div>
-                        {{end}}
                     {{end}}
                 </div>
             </div>

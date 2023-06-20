@@ -30,7 +30,6 @@ type TopicsWithUserInfo struct {
 	CreatorID    string
 	Upvotes      int
 	Follows      int
-	ValidTopic   bool
 	CreationDate string
 	CreatorName  string
 }
@@ -52,7 +51,6 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 		topic.CreatorID = element.CreatorID
 		topic.Upvotes = element.Upvotes
 		topic.Follows = element.Follows
-		topic.ValidTopic = element.ValidTopic
 		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + " " + fmt.Sprint(element.CreationDate.Month()) + " " + fmt.Sprint(element.CreationDate.Year())
 		user := datamanagement.GetUserById(topic.CreatorID)
 		topic.CreatorName = user.Username

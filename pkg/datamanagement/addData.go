@@ -16,10 +16,10 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		res = AddDeleteUpdateDB("INSERT INTO ? (UserID, Username,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES (?,?,?,?,?,?,?,?,?,?,?);", table, data.Users.UserID, data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
 		break
 	case table == "Posts":
-		res = AddDeleteUpdateDB("INSERT INTO ? (Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?,?);", table, data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
+		res = AddDeleteUpdateDB("INSERT INTO ? (Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?);", table, data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate)
 		break
 	case table == "Topics":
-		res = AddDeleteUpdateDB("INSERT INTO ? (Title,Description,Picture,CreationDate,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?,?,?);", table, data.Topics.Title, data.Topics.Description, data.Topics.Picture, data.Topics.CreationDate, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
+		res = AddDeleteUpdateDB("INSERT INTO ? (Title,Description,Picture,CreationDate,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?,?);", table, data.Topics.Title, data.Topics.Description, data.Topics.Picture, data.Topics.CreationDate, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows)
 		break
 	case table == "Tags":
 		res = AddDeleteUpdateDB("INSERT INTO ? (Title,CreatorID) VALUES(?,?);", table, data.Tags.Title, data.Tags.CreatorID)
@@ -151,13 +151,17 @@ func AddTagsToTopic(tags, creatorId string, TopicID int) {
 }
 
 func AddWordIntoBlacklist(word string) {
+	if IsWordInBlacklist(word) {
+		fmt.Println(word, "is already in the blacklist.")
+		return
+	}
 	res := AddDeleteUpdateDB("INSERT INTO WordsBlacklist (WordID, Word) VALUES (?,?);", nil, word)
-	affected, err := res.RowsAffected()
+	_, err := res.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(affected, "updated!")
+	fmt.Println(word, "added in the blacklist.")
 }
 
 func SetUserStatus(userID string, status string) {
@@ -168,4 +172,24 @@ func SetUserStatus(userID string, status string) {
 		return
 	}
 	fmt.Println(affected, "updated!")
+}
+
+func DeleteReportFromPost(postID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE PostID = ?", postID)
+	affected, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(affected, "deleted!")
+}
+
+func DeletePost(postID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Posts WHERE PostID = ?", postID)
+	affected, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(affected, "deleted!")
 }

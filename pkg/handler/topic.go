@@ -23,7 +23,6 @@ type PostInTopicPage struct {
 	Likes                    int
 	Dislikes                 int
 	StructuredDate           string
-	IsValidPost              bool
 	IsLikeByConnectedUser    bool
 	IsDislikeByConnectedUser bool
 	ProfilePicture           string
@@ -38,7 +37,6 @@ func transformPostInPostInTopicPage(posts []datamanagement.Posts, userID string)
 		post.PostID = element.PostID
 		post.Likes = element.Likes
 		post.Dislikes = element.Dislikes
-		post.IsValidPost = element.IsValidPost
 		post.StructuredDate = datamanagement.TransformDateInPostFormat(element.CreationDate)
 		user := datamanagement.GetUserById(element.AuthorID)
 		post.ProfilePicture = user.ProfilePicture
@@ -94,7 +92,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
-			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
+			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now()}}
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
 			break
 		case clickFollow != "":
