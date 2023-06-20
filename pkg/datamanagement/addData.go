@@ -3,7 +3,6 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -34,16 +33,16 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		res = AddDeleteUpdateDB("INSERT INTO Follows (TopicID,UserID) VALUES (?,?);", data.Follows.TopicID, data.Follows.UserID)
 		break
 	case table == "Likes":
-		res = AddDeleteUpdateDB("INSERT INTO Likes VALUES (?,?);", data.Likes.PostID, data.Likes.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO Likes (PostID,UserID) VALUES (?,?);", data.Likes.PostID, data.Likes.UserID)
 		break
 	case table == "Dislikes":
-		res = AddDeleteUpdateDB("INSERT INTO Dislikes VALUES (?,?);", data.Dislikes.PostID, data.Dislikes.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO Dislikes (PostID,UserID) VALUES (?,?);", data.Dislikes.PostID, data.Dislikes.UserID)
 		break
 	case table == "TopicsTags":
-		res = AddDeleteUpdateDB("INSERT INTO TopicsTags VALUES (?,?);", data.TopicsTags.TopicID, data.TopicsTags.TagID)
+		res = AddDeleteUpdateDB("INSERT INTO TopicsTags (TopicID,TagID) VALUES (?,?);", data.TopicsTags.TopicID, data.TopicsTags.TagID)
 		break
 	case table == "Upvotes":
-		res = AddDeleteUpdateDB("INSERT INTO Upvotes VALUES (?,?);", data.Upvotes.TopicID, data.Upvotes.UserID)
+		res = AddDeleteUpdateDB("INSERT INTO Upvotes (TopicID,UserID) VALUES (?,?);", data.Upvotes.TopicID, data.Upvotes.UserID)
 		break
 	default:
 		fmt.Println("Invalid Table")
@@ -57,87 +56,57 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 	fmt.Println(affected, " ", table, " has been add to the database")
 }
 
-func UpdateUpvotes(TopicID int, UserID string) {
-	sign := "+"
-	rows := SelectDB("SELECT * FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
-	defer rows.Close()
-	for rows.Next() {
-		sign = "-"
-		res := AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", strconv.Itoa(TopicID), UserID)
-		affected, err := res.RowsAffected()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(affected, "deleted!")
-	}
-	if sign == "+" {
-		AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: TopicID, UserID: UserID}}, "Upvotes")
-	}
+func UpvotesTopic(topicID int, idUser string) {
+	AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: topicID, UserID: idUser}}, "Upvotes")
+}
 
-	res := AddDeleteUpdateDB("UPDATE Topics SET Upvotes=Upvotes ?1 WHERE TopicID = ?;", sign, TopicID)
-	affected, _ := res.RowsAffected()
-	fmt.Println(affected, " upvote of upvotes/unupvotes")
+func UnUpvotesTopic(topicID int, idUser string) {
+	AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", fmt.Sprint(topicID), fmt.Sprint(idUser))
 }
 
 /*
 likOrdIS: 'Likes' - 'Dislikes';
 */
 func LikePostManager(idPost int, idUser string, likOrdIS string) {
-	rows := SelectDB("SELECT * FROM ? WHERE PostID = ? AND UserID = ?;", likOrdIS, fmt.Sprint(idPost), fmt.Sprint(idUser))
-	defer rows.Close()
-	for rows.Next() {
-		res := AddDeleteUpdateDB("DELETE FROM ? WHERE PostID = ? AND UserID = ?;", likOrdIS, fmt.Sprint(idPost), fmt.Sprint(idUser))
-		affected, err := res.RowsAffected()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(affected, "deleted!")
-		res = AddDeleteUpdateDB("UPDATE Posts SET ? = ?-1 WHERE PostID = ?;", likOrdIS, likOrdIS, idPost)
-		affected, err = res.RowsAffected()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(affected, "updated!")
-		return
-	}
 	if likOrdIS == "Likes" {
-		rows := SelectDB("SELECT * FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
-		defer rows.Close()
-		for rows.Next() {
-			res := AddDeleteUpdateDB("DELETE FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
-			affected, err := res.RowsAffected()
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			fmt.Println(affected, "deleted!")
-		}
+		AddDeleteUpdateDB("DELETE FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
 		AddLineIntoTargetTable(DataContainer{Likes: Likes{PostID: idPost, UserID: idUser}}, "Likes")
 	} else {
-		rows := SelectDB("SELECT * FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
-		rows.Close()
-		for rows.Next() {
-			res := AddDeleteUpdateDB("DELETE FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
-			affected, err := res.RowsAffected()
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			fmt.Println(affected, "deleted!")
-		}
+		AddDeleteUpdateDB("DELETE FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
 		AddLineIntoTargetTable(DataContainer{Dislikes: Dislikes{PostID: idPost, UserID: idUser}}, "Dislikes")
 	}
-	res := AddDeleteUpdateDB("UPDATE Posts SET ? = ?-1 WHERE PostID = ?;", likOrdIS, likOrdIS, idPost)
-	affected, err := res.RowsAffected()
-	if err != nil {
-		fmt.Println(err)
-		return
+	updateDislikeFromPost(idPost)
+	updateLikeFromPost(idPost)
+}
+
+func UnLikePostManager(idPost int, idUser string, likOrdIS string) {
+	if likOrdIS == "unLike" {
+		AddDeleteUpdateDB("DELETE FROM Likes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
+	} else {
+		AddDeleteUpdateDB("DELETE FROM Dislikes WHERE PostID = ? AND UserID = ?;", fmt.Sprint(idPost), fmt.Sprint(idUser))
 	}
-	fmt.Println(affected, "updated!")
-	return
+	updateDislikeFromPost(idPost)
+	updateLikeFromPost(idPost)
+}
+
+func updateDislikeFromPost(idPost int) {
+	rows := SelectDB("SELECT * FROM Dislikes WHERE PostID=?;", idPost)
+	defer rows.Close()
+	count := 0
+	for rows.Next() {
+		count++
+	}
+	AddDeleteUpdateDB("UPDATE Posts SET Dislikes=? WHERE PostID=?", fmt.Sprint(count), idPost)
+}
+
+func updateLikeFromPost(idPost int) {
+	rows := SelectDB("SELECT * FROM Likes WHERE PostID=?;", idPost)
+	defer rows.Close()
+	count := 0
+	for rows.Next() {
+		count++
+	}
+	AddDeleteUpdateDB("UPDATE Posts SET Likes=? WHERE PostID=?", fmt.Sprint(count), idPost)
 }
 
 func AddTagsToTopic(tags, creatorId string, TopicID int) {

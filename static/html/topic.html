@@ -11,14 +11,28 @@
         <div id="header-topic">
             <img src="{{.Topic.Picture}}">
             <h1>{{.Topic.Title}}</h1>
-            <form method="post">
-                <input type="text" name="follow" value="follow" hidden>
-                <input type="submit" value="Follow"></input>
-            </form>
-            <form method="post">
-                <input type="text" name="upvote" value="upvote" hidden>
-                <input type="submit" value="Upvote"></input>
-            </form>
+            {{ if .IsFollow}}
+                <form method="post">
+                    <input type="text" name="follow" value="follow" hidden>
+                    <input type="submit" value="unFollow"></input>
+                </form>
+            {{ else }}
+                <form method="post">
+                    <input type="text" name="follow" value="follow" hidden>
+                    <input type="submit" value="Follow"></input>
+                </form>
+            {{end}}
+            {{ if .IsUpvote}}
+                <form method="post">
+                    <input type="text" name="upvote" value="upvote" hidden>
+                    <input type="submit" value="unUpvote"></input>
+                </form>
+            {{ else }}
+                <form method="post">
+                    <input type="text" name="upvote" value="upvote" hidden>
+                    <input type="submit" value="Upvote"></input>
+                </form>
+            {{end}}
             {{.Topic.Description}}
         </div>
         {{range $Post := .Posts}}
@@ -28,12 +42,30 @@
             {{$Post.Content}}
             {{$Post.IsLikeByConnectedUser}}
             {{$Post.IsDislikeByConnectedUser}}
-            <form method="post">
-                <input type="text" name="like" value="{{$Post.PostID}}" hidden>
-                <input type="submit" value="like">
-                <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
-                <input type="submit" value="dislike">
-            </form>
+            {{$Post.Likes}}
+            {{$Post.Dislikes}}
+            {{if $Post.IsLikeByConnectedUser}}
+                <form method="post">
+                    <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="unLike">
+                </form>
+            {{ else }}
+                <form method="post">
+                    <input type="text" name="like" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="like">
+                </form>
+            {{end}}
+            {{if $Post.IsDislikeByConnectedUser}}
+                <form method="post">
+                    <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="unDislike">
+                </form>
+            {{ else }}
+                <form method="post">
+                    <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="dislike">
+                </form>
+            {{end}}
         {{end}}
         <div id="create-post-form">
             <form method="post">
