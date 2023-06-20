@@ -214,14 +214,11 @@ func SelectDB(query string, args ...interface{}) *sql.Rows {
 	}
 	defer db.Close()
 
-	fmt.Println(args...)
-
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		log.Fatal(err)
 		return nil
 	}
-	defer rows.Close()
 
 	return rows
 }

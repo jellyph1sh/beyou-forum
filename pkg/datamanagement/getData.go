@@ -10,18 +10,7 @@ import (
 )
 
 func GetPostFromUser(idUser string) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
 	defer rows.Close()
 
 	result := []Posts{}
@@ -58,18 +47,7 @@ func GetPostData(idPost int) Posts {
 }
 
 func GetSortPost() []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC;")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC;")
 	defer rows.Close()
 
 	result := []Posts{}
@@ -83,18 +61,7 @@ func GetSortPost() []Posts {
 }
 
 func GetUserByName(search string) []Users {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE Username LIKE %?%;", search)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE %?%;", search)
 	defer rows.Close()
 
 	result := []Users{}
@@ -108,18 +75,7 @@ func GetUserByName(search string) []Users {
 }
 
 func GetPostByTopic(topic string) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC WHERE TopicID LIKE ?;", topic)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC WHERE TopicID LIKE ?;", topic)
 	defer rows.Close()
 
 	result := []Posts{}
@@ -133,18 +89,7 @@ func GetPostByTopic(topic string) []Posts {
 }
 
 func GetAllFromTable(table string) []DataContainer {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM ?;", table)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM ?;", table)
 	defer rows.Close()
 
 	var result []DataContainer
@@ -196,13 +141,6 @@ typofsort: 'a-z' - 'z-a' - 'DESC-Upvote' - 'ASC-Upvote' - 'creator'
 */
 
 func SortTopics(typOfSort string) []Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch typOfSort {
 	case "a-z":
@@ -228,11 +166,7 @@ func SortTopics(typOfSort string) []Topics {
 		return nil
 	}
 
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query)
 	defer rows.Close()
 
 	var result []Topics
@@ -250,13 +184,6 @@ condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'.
 refer a number in data for these conditions
 */
 func FilterTopics(condition string, data DataFilter) []Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch condition {
 	case "min upvote":
@@ -279,11 +206,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 		return nil
 	}
 
-	rows, err := db.Query(query, fmt.Sprint(data.number))
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query, fmt.Sprint(data.number))
 	defer rows.Close()
 
 	var result []Topics
@@ -297,13 +220,6 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 }
 
 func FilterPosts(condition string, data DataFilter) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch condition {
 	case "min like":
@@ -332,11 +248,7 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 		return nil
 	}
 
-	rows, err := db.Query(query, fmt.Sprint(data.number))
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query, fmt.Sprint(data.number))
 	defer rows.Close()
 
 	var result []Posts
@@ -353,13 +265,6 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 typofsort: 'a-z' - 'z-a' - 'like' - 'dislike' - 'creator'
 */
 func SortPosts(typOfSort string) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch typOfSort {
 	case "a-z":
@@ -382,11 +287,7 @@ func SortPosts(typOfSort string) []Posts {
 		return nil
 	}
 
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query)
 	defer rows.Close()
 
 	var result []Posts
@@ -422,44 +323,12 @@ func GetUserById(id string) Users {
 	return user
 }
 
-func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM ? WHERE PostID = ? AND UserID = ?", DisOrLike, strconv.Itoa(PostID), UserID)
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		return true
-	}
-	return false
-}
-
 func GetTopicsById(creatorID string) []Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
+	rows := SelectDB("SELECT * FROM Topics WHERE CreatorID = ? AND ValidTopic = true;", creatorID)
+	defer rows.Close()
 
 	topics := []Topics{}
-	rows, err := db.Query("SELECT * FROM Topics WHERE CreatorID = ? AND ValidTopic = true;", creatorID)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer rows.Close()
-
-	for rows.Next() { // Iterate and fetch the records from result cursor
+	for rows.Next() {
 		var topic Topics
 		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		topics = append(topics, topic)
