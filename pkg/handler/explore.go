@@ -78,11 +78,15 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, cookieFilter)
 		cookieSearch = &http.Cookie{Name: "search", Value: ""}
 		http.SetCookie(w, cookieSearch)
+		cookiePaging = &http.Cookie{Name: "paging", Value: "1"}
+		http.SetCookie(w, cookiePaging)
 	}
 	topic := r.FormValue("topicSearch")
 	fmt.Println(getCookieValue(cookieFilter))
 	if topic != "" {
+		cookiePaging = &http.Cookie{Name: "paging", Value: "1"}
 		cookieSearch = &http.Cookie{Name: "search", Value: topic}
+		http.SetCookie(w, cookiePaging)
 		http.SetCookie(w, cookieSearch)
 		dataToSend.Topics = datamanagement.GetTopicByTagAndTitle(topic)
 	} else if getCookieValue(cookieSearch) != "" {
