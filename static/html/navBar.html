@@ -25,12 +25,14 @@
         </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">MY FOLLOWS</h3>
-        <a href="/Follows">
-            <div class="btnCatContainer marginCat rowContainer">
-                <span class="googleSpan material-symbols-outlined"> favorite </span>
-                <h1 class="nameCatNav">Topics followed</h1>
-            </div>
-        </a>
+        <div class="btnCatContainer marginCat rowContainer">
+            <span class="googleSpan material-symbols-outlined"> favorite </span>
+                <form action="/explore" method="post">
+                    <input type="text" value="Follows" name="sort" hidden>
+                    <input type="submit" value="Topics followed" class="nameCatNav">
+                    <!-- <h1 class="nameCatNav">Topics followed</h1> -->
+                </form>
+                </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">CREATE</h3>
         <a href="/explore#create">
@@ -39,6 +41,7 @@
                 <h1 class="nameCatNav">Create topic</h1>
             </div>
         </a>
+        {{ if .IsAdmin}}
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">ADMIN</h3>
         <div class="columnContainer containerCatNav">
@@ -49,9 +52,10 @@
                 </div>
             </a>
         </div>
+        {{end}}
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">MY PROFILE</h3>
-        {{ if .}}
+        {{ if .IsConnected}}
         <a href="/account">
             <div class="btnCatContainer marginProfile rowContainer">
                 <span class="googleSpan material-symbols-outlined">manage_accounts</span>

@@ -360,16 +360,14 @@ func GetTopicsById(creatorID string) []Topics {
 }
 
 func GetTopicsByName(search string) []Topics {
-	rows := SelectDB("SELECT * FROM Topics WHERE Title LIKE '%?%';", search)
+	rows := SelectDB("SELECT * FROM Topics WHERE Title LIKE '%" + search + "%';")
 	defer rows.Close()
-
 	result := []Topics{}
 	for rows.Next() {
 		var topic Topics
 		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		result = append(result, topic)
 	}
-
 	return result
 }
 
@@ -412,4 +410,30 @@ func GetTopicByName(topicName string) Topics {
 	}
 
 	return topic
+}
+
+func GetTopicsByUser(userId string) []Topics {
+	IDrows := SelectDB("SELECT TopicID FROM Follows WHERE UserID=?;", userId)
+	defer IDrows.Close()
+	topicsID := []int{}
+	for IDrows.Next() {
+		var id int
+		IDrows.Scan(&id)
+		topicsID = append(topicsID, id)
+	}
+	result := []Topics{}
+	for _, id := range topicsID {
+		result = append(result, GetTopicID(id))
+	}
+	return result
+}
+
+func GetTopicID(topicID int) Topics {
+	topicRow := SelectDB("SELECT * FROM Topics WHERE TopicID=?;", topicID)
+	defer topicRow.Close()
+	result := Topics{}
+	for topicRow.Next() {
+		topicRow.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
+	}
+	return result
 }

@@ -10,7 +10,7 @@
     <title>Explore</title>
 </head>
 <body>
-    <div class="nav"></div>
+    {{ template "navBar" .}}
     <div class="containerExplorePage">
         <div class="containerExplore columnContainer">
             <h1 class="titleCatExplore exploreTitle">EXPLORE TOPICS</h1>
@@ -23,6 +23,7 @@
                     <option value="DESC-Upvote">DESC-Upvote</option>
                     <option value="ASC-Upvote">ASC-Upvote</option>
                     <option value="creator">creator</option>
+                    <option value="Follows">Follows</option>
                 </select>
             </form>
             {{if not .Topics}}
@@ -69,8 +70,15 @@
                     <label>
                         About what? <input class="aboutWhatInput" type="text" name="topicTitle" required>
                     </label>
-                    <input class="inputDescription" type="text" name="description" placeholder="Add a description ..." required>
-                    <input class="inputTags" type="text" name="tags" placeholder="Add tags ..."/>
+                    <div class="columnContainer">
+                        <h3 class="indicationsCreateTopic">Description</h3>
+                        <input class="inputDescription" type="text" name="description" placeholder="Add a description ..." required>
+                    </div>
+                    <div class="columnContainer">
+                        <h3 class="indicationsCreateTopic">Tags need to be separates by spaces</h3>
+                        <input class="inputTags" type="text" name="tags" placeholder="Add tags ..."/>
+                    </div>
+                    <h3 class="indicationsCreateTopic indicationsCreateTopicSubmit">Press enter to create</h3>
                     <input type="submit" hidden>
                 </form>
             </div>

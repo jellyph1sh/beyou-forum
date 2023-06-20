@@ -13,7 +13,7 @@
     <title>home</title>
 </head>
 <body>
-    {{ template "navBar" .IsConnected}}
+    {{ template "navBar" .}}
     <div class="containerHomePage columnContainer">
         <h1 class="titleHomePage">New on <span class="coloredText">Bword</span> Studio ?</h1>
         <h3 class="subtitle1">Log in first to explore the site better</h3>
@@ -59,7 +59,7 @@
             {{ end }}
         </div>
     </div>
-    {{ template "cookies"}}
+    {{ template "cookies" .}}
 </body>
 </html>
 {{ end }}

@@ -17,6 +17,8 @@ type DataExplorePage struct {
 	CanPrevious  bool
 	CanNext      bool
 	InvalidTopic bool
+	IsConnected  string
+	IsAdmin      bool
 }
 
 // return true if some content of the new topic is forbiden
@@ -47,8 +49,11 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	cookieUserID, _ := r.Cookie("idUser")
 	userId := getCookieValue(cookieUserID)
 	dataToSend := DataExplorePage{}
+	dataToSend.IsAdmin = false
 	dataToSend.InvalidTopic = false
 	if userId != "" {
+		currentUser := datamanagement.GetUserById(userId)
+		dataToSend.IsAdmin = currentUser.IsAdmin
 		if createTopic(w, r, userId) {
 			dataToSend.InvalidTopic = true
 		}
@@ -64,7 +69,14 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	if topic != "" {
 		dataToSend.Topics = datamanagement.GetTopicsByName(topic)
 	} else if sort != "" {
-		dataToSend.Topics = datamanagement.SortTopics(sort)
+		if sort == "Follows" && userId != "" {
+			dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
+		} else {
+			if sort == "Follows" {
+				sort = "default"
+			}
+			dataToSend.Topics = datamanagement.SortTopics(sort)
+		}
 	} else {
 		dataToSend.Topics = datamanagement.SortTopics("default")
 	}
@@ -74,6 +86,9 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend.CanNext = true
 	dataToSend.CanPrevious = true
 	dataToSend.InvalidTopic = false
+	cookieConnected, _ := r.Cookie("isConnected")
+	IsConnected := getCookieValue(cookieConnected)
+	dataToSend.IsConnected = IsConnected
 	if next != "" && pagingInt*2 < len(dataToSend.Topics) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt + 1)}
 		pagingInt++
@@ -84,7 +99,7 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	if pagingInt == 1 {
 		dataToSend.CanPrevious = false
 	}
-	t := template.Must(template.ParseFiles("./static/html/explore.html"))
+	t := template.Must(template.ParseFiles("./static/html/explore.html", "./static/html/navBar.html"))
 	if len(dataToSend.Topics) == 0 {
 		t.Execute(w, dataToSend)
 	} else if pagingInt*2 >= len(dataToSend.Topics) {
