@@ -4,7 +4,10 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"forum/pkg/datamanagement"
+	"io"
 	"net/http"
+	"os"
+	"strings"
 	"text/template"
 )
 
@@ -46,6 +49,7 @@ func setDefaultValue(displayStructAccountPage AccountPage) AccountPage {
 func Account(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
 	delAccount := r.FormValue("delAccount")
+	file, handler, err := r.FormFile("photo")
 	editMail := r.FormValue("editMail")
 	changedPwd1 := r.FormValue("changedPwd1")
 	changedPwd2 := r.FormValue("changedPwd2")
@@ -101,6 +105,22 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		break
 	}
 	currentUser := datamanagement.GetUserById(idUser)
+	if file != nil && err == nil {
+		defer file.Close()
+		destinationPath := "./static/img/" + idUser + "." + strings.Split(handler.Filename, ".")[1]
+		destinationFile, err := os.Create(destinationPath)
+		if err != nil {
+			fmt.Println("Failed to create destination file")
+		}
+		defer destinationFile.Close()
+		_, err = io.Copy(destinationFile, file)
+		if err != nil {
+			fmt.Println("Failed to save photo on server")
+		}
+		fileName := "../img/" + idUser + "." + strings.Split(handler.Filename, ".")[1]
+		datamanagement.AddDeleteUpdateDB("UPDATE Users SET ProfilePicture = ? WHERE UserID = ?;", fileName, idUser)
+		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
+	}
 	displayStructAccountPage.IsAdmin = currentUser.IsAdmin
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
