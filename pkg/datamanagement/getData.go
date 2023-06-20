@@ -413,17 +413,13 @@ func GetTopicByName(topicName string) Topics {
 }
 
 func GetTopicsByUser(userId string) []Topics {
-	IDrows := SelectDB("SELECT TopicID FROM Follows WHERE UserID=?;", userId)
-	defer IDrows.Close()
-	topicsID := []int{}
-	for IDrows.Next() {
-		var id int
-		IDrows.Scan(&id)
-		topicsID = append(topicsID, id)
-	}
+	topicsRows := SelectDB("SELECT DISTINCT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows, t.ValidTopic FROM Topics AS t INNER JOIN Follows AS f ON f.TopicID = t.TopicID WHERE UserID=?;", userId)
+	defer topicsRows.Close()
 	result := []Topics{}
-	for _, id := range topicsID {
-		result = append(result, GetTopicID(id))
+	for topicsRows.Next() {
+		var topic Topics
+		topicsRows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		result = append(result, topic)
 	}
 	return result
 }

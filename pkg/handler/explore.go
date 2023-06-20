@@ -96,8 +96,14 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	} else {
 		if sort == "Follows" {
 			sort = "default"
+			cookieFilter = &http.Cookie{Name: "filter", Value: "default"}
+			http.SetCookie(w, cookieFilter)
 		}
-		dataToSend.Topics = datamanagement.SortTopics(getCookieValue(cookieFilter))
+		if getCookieValue(cookieFilter) == "Follows" {
+			dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
+		} else {
+			dataToSend.Topics = datamanagement.SortTopics(getCookieValue(cookieFilter))
+		}
 	}
 	prev := r.FormValue("previous")
 	next := r.FormValue("next")
