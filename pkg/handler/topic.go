@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"database/sql"
+	"fmt"
 	"forum/pkg/datamanagement"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,41 +14,37 @@ import (
 func Topic(w http.ResponseWriter, r *http.Request) {
 	url := strings.Split(r.URL.String(), "/")
 	topicName := url[2]
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		return
-	}
-	row := datamanagement.ReadDBAlreadyOpen("SELECT * FROM Topics WHERE Title = '"+topicName+"';", db)
+	rows := datamanagement.SelectDB("SELECT * FROM Topics WHERE Title = ?;", topicName)
+	defer rows.Close()
+
 	var topic datamanagement.Topics
-	for row.Next() {
-		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+	for rows.Next() {
+		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 	}
-	row.Close()
 	dataToSend := datamanagement.DataTopicPage{}
 	cookie, _ := r.Cookie("idUser")
 	idUser := getCookieValue(cookie)
 	if idUser != "" {
-		row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Follows WHERE UserID = "+idUser+" AND TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
-		for row.Next() {
+		rows := datamanagement.SelectDB("SELECT * FROM Follows WHERE UserID = ? AND TopicID = ?;", idUser, strconv.Itoa(topic.TopicID))
+		defer rows.Close()
+		for rows.Next() {
 			dataToSend.IsFollow = true
-			row.Close()
 		}
-		row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Upvotes WHERE UserID = "+idUser+" AND TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
-		for row.Next() {
+		rows = datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID = ? AND TopicID = ?;", idUser, strconv.Itoa(topic.TopicID))
+		defer rows.Close()
+		for rows.Next() {
 			dataToSend.IsUpvote = true
-			row.Close()
 		}
 	}
 	dataToSend = datamanagement.DataTopicPage{Topic: topic}
-	row = datamanagement.ReadDBAlreadyOpen("SELECT * FROM Posts WHERE TopicID = "+strconv.Itoa(topic.TopicID)+";", db)
-	db.Close()
-	for row.Next() {
+	rows = datamanagement.SelectDB("SELECT * FROM Posts WHERE TopicID = ?;", strconv.Itoa(topic.TopicID))
+	defer rows.Close()
+	for rows.Next() {
 		var post datamanagement.Posts
-		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
 		dataToSend.Posts = append(dataToSend.Posts, post)
 		dataToSend.Authors = append(dataToSend.Authors, datamanagement.GetUserById(post.AuthorID))
 	}
-	row.Close()
 	// idUser = "1" //delete this line
 	dataToSend.IsFollow = false
 	dataToSend.IsUpvote = false
@@ -68,7 +65,13 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			break
 		case clickFollow != "":
 			if dataToSend.IsFollow {
-				datamanagement.DeleteLineIntoTargetTable("Follows", "UserID = "+idUser)
+				res := datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
+				affected, err := res.RowsAffected()
+				if err != nil {
+					log.Fatal(err)
+					return
+				}
+				fmt.Println(affected, "deleted!")
 				dataToSend.IsFollow = false
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topic.TopicID, UserID: idUser}}

@@ -56,34 +56,34 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	isConnected := getCookieValue(cookieIsConnected)
 	switch true {
 	case delAccount != "":
-		datamanagement.ExecuterQuery("DELETE FROM Users WHERE UserID ='" + idUser + "';")
+		datamanagement.AddDeleteUpdateDB("DELETE FROM Users WHERE UserID = ?;", idUser)
 		break
 	case editMail != "":
 		if !datamanagement.IsUserExist(editMail, "") {
-			datamanagement.ExecuterQuery("UPDATE Users SET Email = '" + editMail + "' WHERE UserID ='" + idUser + "';")
+			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Email = ? WHERE UserID = ?;", editMail, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidEditMail = true
 		}
 		break
 	case changedPwd1 != "" && changedPwd2 != "":
 		if changedPwd1 == changedPwd2 {
-			datamanagement.ExecuterQuery("UPDATE Users SET Password = '" + changedPwd1 + "' WHERE UserID = '" + idUser + "';")
+			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Password = ? WHERE UserID = ?;", changedPwd1, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidchangedPwd = true
 		}
 		break
 	case changedBIO != "":
-		datamanagement.ExecuterQuery("UPDATE Users SET Description = '" + changedBIO + "' WHERE UserID = '" + idUser + "';")
+		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Description = ? WHERE UserID = ?;", changedBIO, idUser)
 		break
 	case changedFirstname != "":
-		datamanagement.ExecuterQuery("UPDATE Users SET Firstname = '" + changedFirstname + "' WHERE UserID = '" + idUser + "';")
+		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Firstname = ? WHERE UserID = ?;", changedFirstname, idUser)
 		break
 	case changedLastname != "":
-		datamanagement.ExecuterQuery("UPDATE Users SET Lastname = '" + changedLastname + "' WHERE UserID = '" + idUser + "';")
+		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Lastname = ? WHERE UserID = ?;", changedLastname, idUser)
 		break
 	case changedUsername != "":
 		if !datamanagement.IsUserExist("", changedUsername) {
-			datamanagement.ExecuterQuery("UPDATE Users SET Username = '" + changedUsername + "' WHERE UserID = '" + idUser + "';")
+			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Username = ? WHERE UserID = ?;", changedUsername, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidchangedUsername = true
 		}
