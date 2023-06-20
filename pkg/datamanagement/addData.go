@@ -106,10 +106,10 @@ func UpdateUpvotes(TopicID int, UserID string) {
 	}
 	var updateUpvotes *sql.Stmt
 	sign := "+"
-	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = " + UserID + ";")
+	row := ReadDB("SELECT * FROM Upvotes WHERE TopicID = " + strconv.Itoa(TopicID) + " AND UserID = '" + UserID + "';")
 	for row.Next() {
 		sign = "-"
-		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = "+UserID)
+		DeleteLineIntoTargetTable("Upvotes", "TopicID = "+strconv.Itoa(TopicID)+" AND UserID = '"+UserID+"'")
 		row.Close()
 	}
 	if sign == "+" {
@@ -134,10 +134,10 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 		fmt.Println("Could not open database : \n", err)
 		return
 	}
-	row := ReadDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+	row := ReadDB("SELECT * FROM " + likOrdIS + " WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = '" + idUser + "';")
 	for row.Next() {
 		row.Close()
-		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
+		DeleteLineIntoTargetTable(likOrdIS, "PostID = "+fmt.Sprint(idPost)+" AND UserID = '"+idUser+"'")
 		updateLike, err := db.Prepare("UPDATE Posts SET " + likOrdIS + "=" + likOrdIS + "-1 WHERE PostID = ?;")
 		if err != nil {
 			fmt.Println(err)
@@ -146,17 +146,17 @@ func LikePostManager(idPost int, idUser string, likOrdIS string) {
 		return
 	}
 	if likOrdIS == "Likes" {
-		row := ReadDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+		row := ReadDB("SELECT * FROM Dislikes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = '" + idUser + "';")
 		for row.Next() {
 			row.Close()
-			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
+			DeleteLineIntoTargetTable("Dislikes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = '"+idUser+"'")
 		}
 		AddLineIntoTargetTable(DataContainer{Likes: Likes{PostID: idPost, UserID: idUser}}, "Likes")
 	} else {
-		row := ReadDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = " + fmt.Sprint(idUser) + ";")
+		row := ReadDB("SELECT * FROM Likes WHERE PostID = " + fmt.Sprint(idPost) + " AND UserID = '" + idUser + "';")
 		for row.Next() {
 			row.Close()
-			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = "+fmt.Sprint(idUser))
+			DeleteLineIntoTargetTable("Likes", "PostID = "+fmt.Sprint(idPost)+" AND UserID = '"+idUser+"'")
 		}
 		AddLineIntoTargetTable(DataContainer{Dislikes: Dislikes{PostID: idPost, UserID: idUser}}, "Dislikes")
 	}
@@ -177,7 +177,6 @@ func DeleteLineIntoTargetTable(table, condition string) {
 		return
 	}
 	query := "DELETE FROM " + table + " WHERE (" + condition + ");"
-	fmt.Println(query)
 	res, err := db.Exec(query)
 	if err != nil {
 		fmt.Println("delete is not possible")
