@@ -2,27 +2,24 @@ package datamanagement
 
 import (
 	"crypto/sha256"
-	"database/sql"
 	"fmt"
-	"log"
-	"time"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func IsEmailAlreadyExist(userEmail string) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
+func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
+	rows := SelectDB("SELECT * FROM ? WHERE PostID = ? AND UserID = ?", DisOrLike, strconv.Itoa(PostID), UserID)
+	defer rows.Close()
 
-	rows, err := db.Query("SELECT * FROM Users WHERE (Email = ?);", string(userEmail))
-	if err != nil {
-		log.Fatal(err)
-		return false
+	for rows.Next() {
+		return true
 	}
+	return false
+}
+
+func IsEmailAlreadyExist(userEmail string) bool {
+	rows := SelectDB("SELECT * FROM Users WHERE (Email = ?);", string(userEmail))
 	defer rows.Close()
 
 	if !rows.Next() {
@@ -33,18 +30,7 @@ func IsEmailAlreadyExist(userEmail string) bool {
 }
 
 func IsUsernameAlreadyExist(userProfilName string) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ?);", string(userProfilName))
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
+	rows := SelectDB("SELECT * FROM Users WHERE ( Username = ?);", string(userProfilName))
 	defer rows.Close()
 
 	if !rows.Next() {
@@ -55,18 +41,18 @@ func IsUsernameAlreadyExist(userProfilName string) bool {
 }
 
 func IsValidTopic(topic string) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
+	rows := SelectDB("SELECT * FROM Topics WHERE (Title = ?);", string(topic))
+	defer rows.Close()
 
-	rows, err := db.Query("SELECT * FROM Topics WHERE (Title = ?);", string(topic))
-	if err != nil {
-		log.Fatal(err)
+	if !rows.Next() {
 		return false
+	} else {
+		return true
 	}
+}
+
+func IsUserExist(userEmail string, userProfilName string) bool {
+	rows := SelectDB("SELECT * FROM Users WHERE ( Username = ? OR Email = ?);", string(userProfilName), string(userEmail))
 	defer rows.Close()
 
 	if !rows.Next() {
@@ -80,36 +66,16 @@ func IsRegister(userInput string, password string) (bool, string) {
 	passwordByte := []byte(password)
 	passwordInSha256 := sha256.Sum256(passwordByte)
 	stringPasswordInSha256 := fmt.Sprintf("%x", passwordInSha256[:])
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false, ""
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE ( Username = ? OR Email = ? ) AND Password = ?;", string(userInput), string(userInput), string(stringPasswordInSha256))
-	if err != nil {
-		log.Fatal(err)
-		return false, "2"
-	}
+	rows := SelectDB("SELECT userID FROM Users WHERE ( Username = ? OR Email = ? ) AND Password = ?;", string(userInput), string(userInput), string(stringPasswordInSha256))
 	defer rows.Close()
 
 	for rows.Next() {
 		var id string
-		var name string
-		var first_name string
-		var user_name string
-		var email string
-		var password string
-		var is_admin bool
-		var is_valid bool
-		var description string
-		var profile_image string
-		var creation_date time.Time
-		rows.Scan(&id, &name, &first_name, &user_name, &email, &password, &is_admin, &is_valid, &description, &profile_image, &creation_date)
+		rows.Scan(&id)
 		return true, id
 	}
-	return false, "3"
+
+	return false, ""
 }
 
 func IsValidPassword(password string, idUser string) bool {
@@ -125,18 +91,7 @@ func IsValidPassword(password string, idUser string) bool {
 }
 
 func IsLikeByUser(userID string, postID int) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Likes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
+	rows := SelectDB("SELECT * FROM Likes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
 	defer rows.Close()
 
 	if !rows.Next() {
@@ -147,18 +102,7 @@ func IsLikeByUser(userID string, postID int) bool {
 }
 
 func IsDislikeByUser(userID string, postID int) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Dislikes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
+	rows := SelectDB("SELECT * FROM Dislikes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
 	defer rows.Close()
 
 	if !rows.Next() {

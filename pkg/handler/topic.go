@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -54,15 +55,17 @@ func transformPostInPostInTopicPage(posts []datamanagement.Posts, userID string)
 
 func isFollowTopic(topicName string, topicDisplayStruct DataTopicPage, idUser string) DataTopicPage {
 	if idUser != "" {
-		row := datamanagement.ReadDB("SELECT * FROM Follows WHERE UserID LIKE '" + idUser + "' AND TopicID LIKE '" + strconv.Itoa(topicDisplayStruct.Topic.TopicID) + "';")
-		row.Close()
-		if !row.Next() {
+		rows := datamanagement.SelectDB("SELECT * FROM Follows WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
+		defer rows.Close()
+
+		if !rows.Next() {
 			topicDisplayStruct.IsFollow = false
 		} else {
 			topicDisplayStruct.IsFollow = true
 		}
-		row = datamanagement.ReadDB("SELECT * FROM Upvotes WHERE UserID LIKE '" + idUser + "' AND TopicID LIKE '" + strconv.Itoa(topicDisplayStruct.Topic.TopicID) + "';")
-		row.Close()
+
+		row := datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
+		defer row.Close()
 		if !row.Next() {
 			topicDisplayStruct.IsFollow = false
 		} else {
@@ -96,7 +99,13 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
-				datamanagement.DeleteLineIntoTargetTable("Follows", "UserID = "+idUser)
+				res := datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
+				affected, err := res.RowsAffected()
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				fmt.Println(affected, "deleted!")
 				topicDisplayStruct.IsFollow = false
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topicDisplayStruct.Topic.TopicID, UserID: idUser}}

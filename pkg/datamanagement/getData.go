@@ -3,24 +3,13 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func GetPostFromUser(idUser string) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-	rows, err := db.Query("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
 	defer rows.Close()
 	result := []Posts{}
 	for rows.Next() { // Iterate and fetch the records from result cursor
@@ -34,20 +23,16 @@ func GetPostFromUser(idUser string) []Posts {
 func GetPostData(idPost int) Posts {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Posts{}
 	}
 	defer db.Close()
 
 	row := db.QueryRow("SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = ?;", strconv.Itoa(idPost))
-	if err != nil {
-		log.Fatal(err)
-		return Posts{}
-	}
 
 	var post Posts
 	if err := row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Posts{}
 	}
 
@@ -55,18 +40,7 @@ func GetPostData(idPost int) Posts {
 }
 
 func GetSortPost() []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC;")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Posts ORDER BY Likes - Dislikes DESC;")
 	defer rows.Close()
 
 	result := []Posts{}
@@ -80,18 +54,7 @@ func GetSortPost() []Posts {
 }
 
 func SearchUserByName(search string) []Users {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE Username LIKE %?%;", search)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE %?%;", search)
 	defer rows.Close()
 
 	result := []Users{}
@@ -104,18 +67,7 @@ func SearchUserByName(search string) []Users {
 }
 
 func GetUserByName(userName string) Users {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return Users{}
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE Username LIKE ?;", userName)
-	if err != nil {
-		log.Fatal(err)
-		return Users{}
-	}
+	rows := SelectDB("SELECT * FROM Users WHERE Username LIKE ?;", userName)
 	defer rows.Close()
 
 	var user Users
@@ -126,18 +78,7 @@ func GetUserByName(userName string) Users {
 }
 
 func GetUserByID(userId string) Users {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return Users{}
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Users WHERE UserID LIKE ?;", userId)
-	if err != nil {
-		log.Fatal(err)
-		return Users{}
-	}
+	rows := SelectDB("SELECT * FROM Users WHERE UserID LIKE ?;", userId)
 	defer rows.Close()
 
 	var user Users
@@ -147,37 +88,18 @@ func GetUserByID(userId string) Users {
 	return user
 }
 
-func GetTopicId(topicName string) int {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT TopicID FROM Topics WHERE Title LIKE ?;", topicName)
-	if err != nil {
-		log.Fatal(err)
-	}
+func GetTopicId(topicName string) string {
+	rows := SelectDB("SELECT TopicID FROM Topics WHERE Title LIKE ?;", topicName)
 	defer rows.Close()
-	var id int
+	var id string
 	for rows.Next() {
 		rows.Scan(&id)
 	}
 	return id
 }
-func GetPostByTopic(topic int) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM Posts WHERE TopicID LIKE ?;", topic)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+func GetPostByTopic(topic string) []Posts {
+	rows := SelectDB("SELECT * FROM Posts WHERE TopicID LIKE ?;", topic)
 	defer rows.Close()
 
 	result := []Posts{}
@@ -191,18 +113,7 @@ func GetPostByTopic(topic int) []Posts {
 }
 
 func GetAllFromTable(table string) []DataContainer {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM " + table + ";")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB("SELECT * FROM ?;", table)
 	defer rows.Close()
 
 	var result []DataContainer
@@ -253,13 +164,6 @@ typofsort: 'a-z' - 'z-a' - 'DESC-Upvote' - 'ASC-Upvote' - 'creator'
 */
 
 func SortTopics(typOfSort string) []Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch typOfSort {
 	case "a-z":
@@ -288,11 +192,7 @@ func SortTopics(typOfSort string) []Topics {
 		return nil
 	}
 
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query)
 	defer rows.Close()
 
 	var result []Topics
@@ -310,13 +210,6 @@ condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'.
 refer a number in data for these conditions
 */
 func FilterTopics(condition string, data DataFilter) []Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch condition {
 	case "min upvote":
@@ -339,11 +232,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 		return nil
 	}
 
-	rows, err := db.Query(query, fmt.Sprint(data.Number))
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query, fmt.Sprint(data.Number))
 	defer rows.Close()
 
 	var result []Topics
@@ -357,13 +246,6 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 }
 
 func FilterPosts(condition string, data DataFilter) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch condition {
 	case "min like":
@@ -392,11 +274,7 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 		return nil
 	}
 
-	rows, err := db.Query(query, fmt.Sprint(data.Number))
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query, fmt.Sprint(data.Number))
 	defer rows.Close()
 
 	var result []Posts
@@ -413,13 +291,6 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 typofsort: 'a-z' - 'z-a' - 'like' - 'dislike' - 'creator'
 */
 func SortPosts(typOfSort string) []Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
-
 	var query string
 	switch typOfSort {
 	case "a-z":
@@ -442,11 +313,7 @@ func SortPosts(typOfSort string) []Posts {
 		return nil
 	}
 
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	rows := SelectDB(query)
 	defer rows.Close()
 
 	var result []Posts
@@ -462,64 +329,28 @@ func SortPosts(typOfSort string) []Posts {
 func GetUserById(id string) Users {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Users{}
 	}
 	defer db.Close()
 
 	row := db.QueryRow("SELECT * FROM Users WHERE UserID = ?;", id)
-	if err != nil {
-		log.Fatal(err)
-		return Users{}
-	}
 
 	var user Users
 	if err := row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return Users{}
 	}
 
 	return user
 }
 
-func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM ? WHERE PostID = ? AND UserID = ?", DisOrLike, strconv.Itoa(PostID), UserID)
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		return true
-	}
-	return false
-}
-
 func GetTopicsById(creatorID string) []Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer db.Close()
+	rows := SelectDB("SELECT * FROM Topics WHERE CreatorID = ? AND ValidTopic = true;", creatorID)
+	defer rows.Close()
 
 	topics := []Topics{}
-	rows, err := db.Query("SELECT * FROM Topics WHERE CreatorID = '?' AND ValidTopic = true;", creatorID)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	defer rows.Close()
-
-	for rows.Next() { // Iterate and fetch the records from result cursor
+	for rows.Next() {
 		var topic Topics
 		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		topics = append(topics, topic)
@@ -528,55 +359,56 @@ func GetTopicsById(creatorID string) []Topics {
 }
 
 func GetTopicsByName(search string) []Topics {
+	rows := SelectDB("SELECT * FROM Topics WHERE Title LIKE '%?%';", search)
+	defer rows.Close()
+
 	result := []Topics{}
-	query := "SELECT * FROM Topics WHERE Title LIKE '%" + search + "%';"
-	row := ReadDB(query)
-	for row.Next() {
+	for rows.Next() {
 		var topic Topics
-		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		result = append(result, topic)
 	}
-	row.Close()
+
 	return result
 }
 
 func GetOneTopicByName(search string) Topics {
+	rows := SelectDB("SELECT * FROM Topics WHERE Title = ?;", search)
+	defer rows.Close()
+
 	result := Topics{}
-	query := "SELECT * FROM Topics WHERE Title='" + search + "';"
-	row := ReadDB(query)
-	for row.Next() {
-		row.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
-		row.Close()
+	for rows.Next() {
+		rows.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
 	}
 	return result
 }
 
 func GetTagByName(search string) Tags {
+	rows := SelectDB("SELECT * FROM Tags WHERE Title = ?;", search)
+	defer rows.Close()
+
 	result := Tags{}
-	query := "SELECT * FROM Tags WHERE Title ='" + search + "';"
-	row := ReadDB(query)
-	for row.Next() {
-		row.Scan(&result.TagID, &result.Title, &result.CreatorID)
-		row.Close()
+	for rows.Next() {
+		rows.Scan(&result.TagID, &result.Title, &result.CreatorID)
 	}
 	return result
 }
 
 func GetTopicByName(topicName string) Topics {
-	var topic Topics
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return Topics{}
+	}
 	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
+
+	row := db.QueryRow("SELECT * FROM Topics WHERE Title like ?;", topicName)
+
+	var topic Topics
+	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic); err != nil {
+		fmt.Println(err)
+		return Topics{}
 	}
-	row, err := db.Query("SELECT * FROM Topics WHERE Title like ?;", topicName)
-	if err != nil {
-		fmt.Println("Invalid request :")
-		log.Fatal(err)
-	}
-	for row.Next() {
-		row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
-	}
-	row.Close()
+
 	return topic
 }

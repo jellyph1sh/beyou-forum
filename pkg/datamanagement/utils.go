@@ -3,7 +3,6 @@ package datamanagement
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"math"
 	"strings"
 	"time"
@@ -131,56 +130,6 @@ type DataExplorePage struct {
 	Users  []string
 }
 
-/*don't forget to close the *sql.Rows when you use this func */
-func ReadDB(query string) *sql.Rows {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	defer db.Close()
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-		return nil
-	}
-	row, err := db.Query(query)
-	if err != nil {
-		fmt.Println("Invalid request :")
-		log.Fatal(err)
-		return nil
-	}
-	return row
-}
-
-func ReadDBAlreadyOpen(query string, db *sql.DB) *sql.Rows {
-	row, err := db.Query(query)
-	if err != nil {
-		fmt.Println("Invalid request :")
-		log.Fatal(err)
-		return nil
-	}
-	return row
-}
-
-func buildQueryAddData(table string, nbValues int) string {
-	result := "INSERT INTO " + table + " Values (?"
-	for i := 1; i < nbValues; i++ {
-		result += ",?"
-	}
-	return result + ");"
-}
-
-func CheckPrepareQuery(err error) {
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-func ExecuterQuery(QUERY string) {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println("Could not open database : \n", err)
-	}
-	defer db.Close()
-	db.Exec(QUERY)
-}
-
 func CheckContentByBlackListWord(content string) bool {
 	blackListWords := GetAllFromTable("WordsBlacklist")
 	contentArray := strings.Split(content, " ")
@@ -205,21 +154,34 @@ func arrayContains(array []string, word string) bool {
 func SelectDB(query string, args ...interface{}) *sql.Rows {
 	db, err := sql.Open("sqlite3", "./DB-Forum.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return nil
 	}
 	defer db.Close()
 
-	fmt.Println(args...)
-
 	rows, err := db.Query(query, args...)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return nil
 	}
-	defer rows.Close()
 
 	return rows
+}
+
+func AddDeleteUpdateDB(query string, args ...interface{}) sql.Result {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	defer db.Close()
+
+	res, err := db.Exec(query, args...)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return res
 }
 
 func TransformDateInPostFormat(CreationDate time.Time) string {
