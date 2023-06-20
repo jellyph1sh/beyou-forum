@@ -17,6 +17,7 @@ type DataExplorePage struct {
 	CanPrevious  bool
 	CanNext      bool
 	InvalidTopic bool
+	IsConnected  string
 }
 
 // return true if some content of the new topic is forbiden
@@ -74,6 +75,9 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend.CanNext = true
 	dataToSend.CanPrevious = true
 	dataToSend.InvalidTopic = false
+	cookieConnected, _ := r.Cookie("isConnected")
+	IsConnected := getCookieValue(cookieConnected)
+	dataToSend.IsConnected = IsConnected
 	if next != "" && pagingInt*2 < len(dataToSend.Topics) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt + 1)}
 		pagingInt++
@@ -84,7 +88,7 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	if pagingInt == 1 {
 		dataToSend.CanPrevious = false
 	}
-	t := template.Must(template.ParseFiles("./static/html/explore.html"))
+	t := template.Must(template.ParseFiles("./static/html/explore.html", "./static/html/navBar.html"))
 	if len(dataToSend.Topics) == 0 {
 		t.Execute(w, dataToSend)
 	} else if pagingInt*2 >= len(dataToSend.Topics) {
