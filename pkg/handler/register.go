@@ -78,7 +78,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 				http.SetCookie(w, &cookieRememberMe)
 				http.SetCookie(w, &cookieIsConnected)
 			}
-			http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
+			http.Redirect(w, r, "http://localhost:8080/", http.StatusSeeOther)
 		} else {
 			if isEmailAlreadyExist && isUsernameAlreadyExist {
 				registerDisplay.EmailAndUsernameIsNotValid = true

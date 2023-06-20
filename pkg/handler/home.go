@@ -5,6 +5,7 @@ import (
 	"forum/pkg/datamanagement"
 	"net/http"
 	"text/template"
+	"time"
 )
 
 func getCookieValue(cookie *http.Cookie) string {
@@ -36,9 +37,10 @@ type TopicsWithUserInfo struct {
 }
 
 type structDisplayHome struct {
-	AllTopics   []TopicsWithUserInfo
-	IsConnected string
-	IsAdmin     bool
+	AllTopics         []TopicsWithUserInfo
+	IsConnected       string
+	HasAcceptedCookie string
+	IsAdmin           bool
 }
 
 func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWithUserInfo {
@@ -73,6 +75,15 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	IsConnected := getCookieValue(cookieConnected)
 	structDisplayHome.IsConnected = IsConnected
 	structDisplayHome.IsAdmin = false
+	getAcceptCookies := r.FormValue("AcceptCookies")
+	if getAcceptCookies == "OK" {
+		cookieHasAccepted := http.Cookie{Name: "hasAcceptedCookies", Value: getAcceptCookies, Expires: time.Now().Add(24 * time.Hour)}
+		http.SetCookie(w, &cookieHasAccepted)
+		http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
+	}
+	cookieHasAcceptedCookies, _ := r.Cookie("hasAcceptedCookies")
+	CAcceptCookies := getCookieValue(cookieHasAcceptedCookies)
+	structDisplayHome.HasAcceptedCookie = CAcceptCookies
 	if IsConnected == "true" {
 		cookieIdUser, _ := r.Cookie("idUser")
 		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))

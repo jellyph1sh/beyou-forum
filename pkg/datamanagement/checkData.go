@@ -11,7 +11,6 @@ import (
 func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
 	rows := SelectDB("SELECT * FROM ? WHERE PostID = ? AND UserID = ?", DisOrLike, strconv.Itoa(PostID), UserID)
 	defer rows.Close()
-
 	for rows.Next() {
 		return true
 	}
@@ -91,9 +90,8 @@ func IsValidPassword(password string, idUser string) bool {
 }
 
 func IsLikeByUser(userID string, postID int) bool {
-	rows := SelectDB("SELECT * FROM Likes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
+	rows := SelectDB("SELECT * FROM Likes WHERE (PostID = ? AND UserID = ?);", postID, userID)
 	defer rows.Close()
-
 	if !rows.Next() {
 		return false
 	} else {
@@ -102,9 +100,8 @@ func IsLikeByUser(userID string, postID int) bool {
 }
 
 func IsDislikeByUser(userID string, postID int) bool {
-	rows := SelectDB("SELECT * FROM Dislikes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
+	rows := SelectDB("SELECT * FROM Dislikes WHERE (PostID = ? AND UserID = ?);", postID, userID)
 	defer rows.Close()
-
 	if !rows.Next() {
 		return false
 	} else {
