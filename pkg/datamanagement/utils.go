@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math"
 	"strings"
 	"time"
 
@@ -125,14 +126,9 @@ type DataContainer struct {
 	WordsBlacklist
 }
 
-type DataTopicPage struct {
-	Topic    Topics
-	Posts    []Posts
-	Authors  []Users
-	IsFollow bool
-	IsUpvote bool
-	Likes    []bool
-	Dislikes []bool
+type DataExplorePage struct {
+	Topics []Topics
+	Users  []string
 }
 
 /*don't forget to close the *sql.Rows when you use this func */
@@ -224,4 +220,41 @@ func SelectDB(query string, args ...interface{}) *sql.Rows {
 	defer rows.Close()
 
 	return rows
+}
+
+func TransformDateInPostFormat(CreationDate time.Time) string {
+	pastTime := math.Trunc(CreationDate.Sub(time.Now()).Minutes() * -1)
+	if pastTime < 60 {
+		return fmt.Sprintf("%v", pastTime) + " min"
+	} else {
+		pastTime = math.Trunc(CreationDate.Sub(time.Now()).Hours() * -1)
+		if pastTime < 24 {
+			return fmt.Sprintf("%v", pastTime) + " h"
+		} else {
+			pastTime = math.Trunc(pastTime / 24)
+			if pastTime < 30 {
+				if pastTime <= 1 {
+					return fmt.Sprintf("%v", pastTime) + " day"
+				} else {
+					return fmt.Sprintf("%v", pastTime) + " days"
+				}
+			} else {
+				pastTime = math.Trunc(pastTime / 30)
+				if pastTime < 12 {
+					if pastTime <= 1 {
+						return fmt.Sprintf("%v", pastTime) + " month"
+					} else {
+						return fmt.Sprintf("%v", pastTime) + " months"
+					}
+				} else {
+					pastTime = math.Trunc(pastTime / 12)
+					if pastTime <= 1 {
+						return fmt.Sprintf("%v", pastTime) + " year"
+					} else {
+						return fmt.Sprintf("%v", pastTime) + " years"
+					}
+				}
+			}
+		}
+	}
 }

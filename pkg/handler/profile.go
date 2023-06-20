@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"fmt"
 	"forum/pkg/datamanagement"
-	"math"
 	"net/http"
 	"strings"
 	"text/template"
@@ -34,7 +32,7 @@ type profile struct {
 	IsConnected      string
 }
 
-func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
+func StructureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 	result := []PostWithStructuredDate{}
 	for _, element := range posts {
 		var post PostWithStructuredDate
@@ -46,40 +44,7 @@ func structureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
 		post.Dislikes = element.Dislikes
 		post.CreationDate = element.CreationDate
 		post.IsValidPost = element.IsValidPost
-		pastTime := math.Trunc(post.CreationDate.Sub(time.Now()).Minutes() * -1)
-		if pastTime < 60 {
-			post.StructuredDate = fmt.Sprintf("%v", pastTime) + " min"
-		} else {
-			pastTime = math.Trunc(post.CreationDate.Sub(time.Now()).Hours() * -1)
-			if pastTime < 24 {
-				post.StructuredDate = fmt.Sprintf("%v", pastTime) + " h"
-			} else {
-				pastTime = math.Trunc(pastTime / 24)
-				if pastTime < 30 {
-					if pastTime <= 1 {
-						post.StructuredDate = fmt.Sprintf("%v", pastTime) + " day"
-					} else {
-						post.StructuredDate = fmt.Sprintf("%v", pastTime) + " days"
-					}
-				} else {
-					pastTime = math.Trunc(pastTime / 30)
-					if pastTime < 12 {
-						if pastTime <= 1 {
-							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " month"
-						} else {
-							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " months"
-						}
-					} else {
-						pastTime = math.Trunc(pastTime / 12)
-						if pastTime <= 1 {
-							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " year"
-						} else {
-							post.StructuredDate = fmt.Sprintf("%v", pastTime) + " years"
-						}
-					}
-				}
-			}
-		}
+		post.StructuredDate = datamanagement.TransformDateInPostFormat(post.CreationDate)
 		user := datamanagement.GetUserById(post.AuthorID)
 		post.ProfilePicture = user.ProfilePicture
 		post.AuthorName = user.Username
@@ -106,7 +71,7 @@ func Profile(w http.ResponseWriter, r *http.Request, isMyProfile bool) {
 	displayStructProfile.UserCreationDate = displayStructProfile.UserInfo.CreationDate.Format("02-01-2006")
 	posts := datamanagement.GetPostFromUser(displayStructProfile.UserInfo.UserID)
 	displayStructProfile.Topics = datamanagement.GetTopicsById(displayStructProfile.UserInfo.UserID)
-	displayStructProfile.Posts = structureDate(posts)
+	displayStructProfile.Posts = StructureDate(posts)
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
 	displayStructProfile.IsConnected = IsConnected

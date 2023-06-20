@@ -123,3 +123,47 @@ func IsValidPassword(password string, idUser string) bool {
 		return false
 	}
 }
+
+func IsLikeByUser(userID string, postID int) bool {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Likes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
+
+func IsDislikeByUser(userID string, postID int) bool {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Dislikes WHERE (PostID = '?' AND UserID = ?);", userID, postID)
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	} else {
+		return true
+	}
+}
