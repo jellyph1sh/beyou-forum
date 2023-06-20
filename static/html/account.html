@@ -60,6 +60,10 @@
                 <span class="backgroundAccountCont"></span>
                 <div class="accountCompCont">
                     <div class="rowContainer containerImg alignCenter">
+                        <form action="/account" method="post" enctype="multipart/form-data">
+                            <input type="file" name="photo">
+                            <input type="submit" value="Upload">
+                        </form>
                         <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
                     </div>
                     {{ if .IsNotValidchangedPwd}}
