@@ -359,16 +359,14 @@ func GetTopicsById(creatorID string) []Topics {
 }
 
 func GetTopicsByName(search string) []Topics {
-	rows := SelectDB("SELECT * FROM Topics WHERE Title LIKE '%?%';", search)
+	rows := SelectDB("SELECT * FROM Topics WHERE Title LIKE '%" + search + "%';")
 	defer rows.Close()
-
 	result := []Topics{}
 	for rows.Next() {
 		var topic Topics
 		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
 		result = append(result, topic)
 	}
-
 	return result
 }
 

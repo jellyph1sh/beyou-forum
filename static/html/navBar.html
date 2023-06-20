@@ -39,6 +39,7 @@
                 <h1 class="nameCatNav">Create topic</h1>
             </div>
         </a>
+        {{ if .IsAdmin}}
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">ADMIN</h3>
         <div class="columnContainer containerCatNav">
@@ -49,9 +50,10 @@
                 </div>
             </a>
         </div>
+        {{end}}
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">MY PROFILE</h3>
-        {{ if .}}
+        {{ if .IsConnected}}
         <a href="/account">
             <div class="btnCatContainer marginProfile rowContainer">
                 <span class="googleSpan material-symbols-outlined">manage_accounts</span>

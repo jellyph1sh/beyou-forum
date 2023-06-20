@@ -18,6 +18,7 @@ type DataExplorePage struct {
 	CanNext      bool
 	InvalidTopic bool
 	IsConnected  string
+	IsAdmin      bool
 }
 
 // return true if some content of the new topic is forbiden
@@ -48,8 +49,11 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	cookieUserID, _ := r.Cookie("idUser")
 	userId := getCookieValue(cookieUserID)
 	dataToSend := DataExplorePage{}
+	dataToSend.IsAdmin = false
 	dataToSend.InvalidTopic = false
 	if userId != "" {
+		currentUser := datamanagement.GetUserById(userId)
+		dataToSend.IsAdmin = currentUser.IsAdmin
 		if createTopic(w, r, userId) {
 			dataToSend.InvalidTopic = true
 		}
