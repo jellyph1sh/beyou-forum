@@ -44,9 +44,11 @@ func transformPostInPostInTopicPage(posts []datamanagement.Posts, userID string)
 		post.ProfilePicture = user.ProfilePicture
 		post.AuthorName = user.Username
 		if datamanagement.IsLikeByUser(userID, post.PostID) {
-			post.IsDislikeByConnectedUser = true
+			post.IsLikeByConnectedUser = true
+			post.IsDislikeByConnectedUser = false
 		} else if datamanagement.IsDislikeByUser(userID, post.PostID) {
 			post.IsDislikeByConnectedUser = true
+			post.IsLikeByConnectedUser = false
 		}
 		result = append(result, post)
 	}
@@ -57,13 +59,11 @@ func isFollowTopic(topicName string, topicDisplayStruct DataTopicPage, idUser st
 	if idUser != "" {
 		rows := datamanagement.SelectDB("SELECT * FROM Follows WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
 		defer rows.Close()
-
 		if !rows.Next() {
 			topicDisplayStruct.IsFollow = false
 		} else {
 			topicDisplayStruct.IsFollow = true
 		}
-
 		row := datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
 		defer row.Close()
 		if !row.Next() {
@@ -83,19 +83,19 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	newPost := r.FormValue("postContent")
 	clickFollow := r.FormValue("follow")
 	clickUpvote := r.FormValue("upvote")
+	unLike := r.FormValue("unLike")
+	unDislike := r.FormValue("unDislike")
 	like := r.FormValue("like")
 	dislike := r.FormValue("dislike")
-	topicDisplayStruct := DataTopicPage{}
-	topicDisplayStruct.Posts = transformPostInPostInTopicPage(datamanagement.GetPostByTopic(datamanagement.GetTopicId(topicName)), idUser)
-	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
-	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
+	topicDisplayStruct := DataTopicPage{}
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
 			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
+			http.Redirect(w, r, r.URL.String(), http.StatusSeeOther)
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
@@ -129,8 +129,19 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			idPost, _ := strconv.Atoi(dislike)
 			datamanagement.LikePostManager(idPost, idUser, "Dislikes")
 			break
+		case unLike != "":
+			idPost, _ := strconv.Atoi(unLike)
+			datamanagement.UnLikePostManager(idPost, idUser, "unLike")
+			break
+		case unDislike != "":
+			idPost, _ := strconv.Atoi(unDislike)
+			datamanagement.UnLikePostManager(idPost, idUser, "unDislike")
+			break
 		}
 	}
+	topicDisplayStruct.Posts = transformPostInPostInTopicPage(datamanagement.GetPostByTopic(datamanagement.GetTopicId(topicName)), idUser)
+	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
+	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, topicDisplayStruct)
 }

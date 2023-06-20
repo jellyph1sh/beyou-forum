@@ -51,11 +51,9 @@
                     <p class="creationInformations">Created - {{ .CreationDate }} by {{ .CreatorName }}</p>
                     <div class="rowContainer containerFooterTopic">
                         <p class="upvoteNb">{{ .Upvotes }} Upvotes</p>
-                        <form action="" method="post">
-                            <div class="rowContainer btnCheckTopic">
-                                <button type="submit" value="{{ .TopicID }}">Check Topic <span class="material-symbols-outlined">arrow_forward</span></button>
-                            </div>
-                        </form>
+                        <div class="rowContainer btnCheckTopic">
+                            <a href="/topic/{{.Title}}">Check Topic<span class="material-symbols-outlined">arrow_forward</span></a>
+                        </div>
                     </div>
                 </div>
             {{ end }}

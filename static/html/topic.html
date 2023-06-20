@@ -28,12 +28,30 @@
             {{$Post.Content}}
             {{$Post.IsLikeByConnectedUser}}
             {{$Post.IsDislikeByConnectedUser}}
-            <form method="post">
-                <input type="text" name="like" value="{{$Post.PostID}}" hidden>
-                <input type="submit" value="like">
-                <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
-                <input type="submit" value="dislike">
-            </form>
+            {{$Post.Likes}}
+            {{$Post.Dislikes}}
+            {{if $Post.IsLikeByConnectedUser}}
+                <form method="post">
+                    <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="unLike">
+                </form>
+            {{ else }}
+                <form method="post">
+                    <input type="text" name="like" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="like">
+                </form>
+            {{end}}
+            {{if $Post.IsDislikeByConnectedUser}}
+                <form method="post">
+                    <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="unDislike">
+                </form>
+            {{ else }}
+                <form method="post">
+                    <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
+                    <input type="submit" value="dislike">
+                </form>
+            {{end}}
         {{end}}
         <div id="create-post-form">
             <form method="post">

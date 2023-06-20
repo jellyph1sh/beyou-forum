@@ -113,7 +113,8 @@ func GetPostByTopic(topic string) []Posts {
 }
 
 func GetAllFromTable(table string) []DataContainer {
-	rows := SelectDB("SELECT * FROM ?;", table)
+	QUERY := "SELECT * FROM '" + table + "';"
+	rows := SelectDB(QUERY)
 	defer rows.Close()
 
 	var result []DataContainer
