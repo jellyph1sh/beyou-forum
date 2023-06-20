@@ -11,14 +11,28 @@
         <div id="header-topic">
             <img src="{{.Topic.Picture}}">
             <h1>{{.Topic.Title}}</h1>
+            {{ if .Topic.IsFollow}}
+            <form method="post">
+                <input type="text" name="follow" value="follow" hidden>
+                <input type="submit" value="unFollow"></input>
+            </form>
+            {{ else }}
             <form method="post">
                 <input type="text" name="follow" value="follow" hidden>
                 <input type="submit" value="Follow"></input>
             </form>
+            {{end}}
+            {{ if .Topic.IsUpvote}}
+            <form method="post">
+                <input type="text" name="upvote" value="upvote" hidden>
+                <input type="submit" value="unUpvote"></input>
+            </form>
+            {{ else }}
             <form method="post">
                 <input type="text" name="upvote" value="upvote" hidden>
                 <input type="submit" value="Upvote"></input>
             </form>
+            {{end}}
             {{.Topic.Description}}
         </div>
         {{range $Post := .Posts}}

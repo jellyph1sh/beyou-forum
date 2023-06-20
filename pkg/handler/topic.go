@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -64,13 +63,6 @@ func isFollowTopic(topicName string, topicDisplayStruct DataTopicPage, idUser st
 		} else {
 			topicDisplayStruct.IsFollow = true
 		}
-		row := datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
-		defer row.Close()
-		if !row.Next() {
-			topicDisplayStruct.IsFollow = false
-		} else {
-			topicDisplayStruct.IsFollow = true
-		}
 	}
 	return topicDisplayStruct
 }
@@ -90,6 +82,8 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
 	topicDisplayStruct := DataTopicPage{}
+	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
+	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	if isConnected == "true" {
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
@@ -99,13 +93,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
-				res := datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
-				affected, err := res.RowsAffected()
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				fmt.Println(affected, "deleted!")
+				datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
 				topicDisplayStruct.IsFollow = false
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topicDisplayStruct.Topic.TopicID, UserID: idUser}}
@@ -140,8 +128,6 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	topicDisplayStruct.Posts = transformPostInPostInTopicPage(datamanagement.GetPostByTopic(datamanagement.GetTopicId(topicName)), idUser)
-	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
-	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	t := template.Must(template.ParseFiles("./static/html/topic.html"))
 	t.Execute(w, topicDisplayStruct)
 }
