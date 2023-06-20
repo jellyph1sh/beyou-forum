@@ -449,19 +449,19 @@ func GetTagByID(tagID int) Tags {
 }
 
 func GetTagsByTopic(topicID int) []Tags {
-	tagsID := SelectDB("SELECT TagID FROM TopicsTags WHERE TopicID=?;", topicID)
-	defer tagsID.Close()
+	tagsRow := SelectDB("SELECT DISTINCT tg.TagID,tg.Title,tg.CreatorID FROM Tags AS tg LEFT JOIN TopicsTags AS tt ON tt.TagID = tg.TagID WHERE tt.TopicID=?;", topicID)
+	defer tagsRow.Close()
 	result := []Tags{}
-	for tagsID.Next() {
-		var tagID int
-		tagsID.Scan(&tagID)
-		result = append(result, GetTagByID(tagID))
+	for tagsRow.Next() {
+		var tag Tags
+		tagsRow.Scan(&tag.TagID, &tag.Title, &tag.CreatorID)
+		result = append(result, tag)
 	}
 	return result
 }
 
 func GetTopicByTagAndTitle(search string) []Topics {
-	topicsRow := SelectDB("SELECT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows, t.ValidTopic	FROM Topics AS t LEFT JOIN TopicsTags AS tt ON tt.TopicID = t.TopicID WHERE t.Title LIKE '%"+search+"%' OR tt.TagID IN (SELECT TagID FROM Tags WHERE Title = ?)", search)
+	topicsRow := SelectDB("SELECT DISTINCT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows, t.ValidTopic FROM Topics AS t LEFT JOIN TopicsTags AS tt ON tt.TopicID = t.TopicID WHERE t.Title LIKE '%"+search+"%' OR tt.TagID IN (SELECT TagID FROM Tags WHERE Title = ?)", search)
 	defer topicsRow.Close()
 	result := []Topics{}
 	for topicsRow.Next() {
