@@ -56,15 +56,27 @@
                     <h2 id="msgError" class="errorMsgEdit">Invalid email</h2>
                 </div>
             </div>
+            <div id="popupUpload">
+                <div class="deletePopup">
+                    <div class="popup-content columnContainer">
+                        <h2 class="titleDelPop alignUploadTexts">Edit your profile picture ?</h2>
+                        <p class="textPopDel alignUploadTexts">Select your profile picture, then upload it.</p>
+                    </div>
+                    <div class="rowContainer uploadPopBtnCont">
+                        <form action="/account" method="post" enctype="multipart/form-data">
+                            <input id="file-upload" type="file" class="inputFocus"  name="photo">
+                            <label for="file-upload" class="uploadBtn delPopBtn delPopBtnCancel">Select a file</label>
+                            <input class="delPopBtn delPopBtnDelete" type="submit" value="Upload">
+                        </form>
+                        <a href="/account" class="cancelUpload delPopBtn delPopBtnCancel">Cancel</a>
+                    </div>
+                </div>
+            </div>
             <div class="columnContainer accountCompContGlobal marginContentAccount">
                 <span class="backgroundAccountCont"></span>
                 <div class="accountCompCont">
                     <div class="rowContainer containerImg alignCenter">
-                        <form action="/account" method="post" enctype="multipart/form-data">
-                            <input type="file" name="photo">
-                            <input type="submit" value="Upload">
-                        </form>
-                        <img class="imgAccount" src="{{.Profile_picture}}" alt="pp">
+                        <img onclick="showPopup('popupUpload')" class="imgAccount" src="{{.Profile_picture}}" alt="pp">
                     </div>
                     {{ if .IsNotValidchangedPwd}}
                         <script>errorPopup('Invalid password')</script>

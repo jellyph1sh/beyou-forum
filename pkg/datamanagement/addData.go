@@ -15,10 +15,10 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 		res = AddDeleteUpdateDB("INSERT INTO Users (UserID, Username,Email,Password,Firstname,Lastname,Description,CreationDate,ProfilePicture,IsAdmin,ValidUser) VALUES (?,?,?,?,?,?,?,?,?,?,?);", data.Users.UserID, data.Users.Username, data.Users.Email, data.Users.Password, data.Users.Firstname, data.Users.Lastname, data.Users.Description, data.Users.CreationDate, data.Users.ProfilePicture, data.Users.IsAdmin, data.Users.ValidUser)
 		break
 	case table == "Posts":
-		res = AddDeleteUpdateDB("INSERT INTO Posts (Content,AuthorID,TopicID,Likes,Dislikes,CreationDate,IsValidPost) VALUES(?,?,?,?,?,?,?);", data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate, data.Posts.IsValidPost)
+		res = AddDeleteUpdateDB("INSERT INTO Posts (Content,AuthorID,TopicID,Likes,Dislikes,CreationDate) VALUES(?,?,?,?,?,?);", data.Posts.Content, data.Posts.AuthorID, data.Posts.TopicID, data.Posts.Likes, data.Posts.Dislikes, data.Posts.CreationDate)
 		break
 	case table == "Topics":
-		res = AddDeleteUpdateDB("INSERT INTO Topics (Title,Description,Picture,CreationDate,CreatorID,Upvotes,Follows,ValidTopic) VALUES(?,?,?,?,?,?,?,?);", data.Topics.Title, data.Topics.Description, data.Topics.Picture, data.Topics.CreationDate, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows, data.Topics.ValidTopic)
+		res = AddDeleteUpdateDB("INSERT INTO Topics (Title,Description,Picture,CreationDate,CreatorID,Upvotes,Follows) VALUES(?,?,?,?,?,?,?);", data.Topics.Title, data.Topics.Description, data.Topics.Picture, data.Topics.CreationDate, data.Topics.CreatorID, data.Topics.Upvotes, data.Topics.Follows)
 		break
 	case table == "Tags":
 		res = AddDeleteUpdateDB("INSERT INTO Tags (Title,CreatorID) VALUES(?,?);", data.Tags.Title, data.Tags.CreatorID)
@@ -117,4 +117,153 @@ func AddTagsToTopic(tags, creatorId string, TopicID int) {
 		}
 		AddLineIntoTargetTable(DataContainer{TopicsTags: TopicsTags{TopicID: TopicID, TagID: GetTagByName(tag).TagID}}, "TopicsTags")
 	}
+}
+
+/*--------------------*/
+/* MODERATION SYSTEM: */
+/*--------------------*/
+func BanUser(userID string) {
+	AddDeleteUpdateDB("DELETE FROM Dislikes WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Likes WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Upvotes WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Topics WHERE CreatorID = ?", userID)
+	AddDeleteUpdateDB("DELETE FROM Tags WHERE CreatorID = ?", userID)
+	AddDeleteUpdateDB("DELETE FROM Posts WHERE AuthorID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Reports WHERE ReportUserID = ?;", userID)
+	SetUserStatus(userID, false)
+}
+
+func AddWordIntoBlacklist(word string) {
+	if IsWordInBlacklist(word) {
+		fmt.Println(word, "is already in the blacklist.")
+		return
+	}
+	res := AddDeleteUpdateDB("INSERT INTO WordsBlacklist (WordID, Word) VALUES (?,?);", nil, word)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(word, "added in the blacklist.")
+}
+
+func SetUserStatus(userID string, status bool) {
+	res := AddDeleteUpdateDB("UPDATE Users SET ValidUser = ? WHERE UserID = ?;", status, userID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(userID, "has been ban!")
+}
+
+func DeleteReport(reportID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE ReportID = ?", reportID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("ReportID:", reportID, "deleted!")
+}
+
+func DeleteReportsFromPost(postID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE PostID = ?", postID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("All reports concerned by PostID:", postID, "were delete!")
+}
+
+func DeletePost(postID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Posts WHERE Posts.PostID = ?", postID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("PostID:", postID, "deleted!")
+}
+
+func DeletePostsFromTopic(topicID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Posts WHERE Posts.TopicID = ?", topicID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Posts of TopicID:", topicID, "were delete!")
+}
+
+func DeleteTopic(topicID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Topics WHERE Topics.TopicID = ?", topicID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("TopicID:", topicID, "has been delete!")
+}
+
+func DeleteReportsFromTopic(topicID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE TopicID = ?", topicID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("All reports concerned by PostID:", topicID, "were delete!")
+}
+
+func AddPostReport(postID string, reason string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
+
+	row := db.QueryRow("SELECT AuthorID FROM Posts WHERE PostID = ?;", postID)
+
+	var userID string
+	if err := row.Scan(&userID); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res := AddDeleteUpdateDB("INSERT INTO Reports (ReportID, PostID, ReportUserID, Comment, TopicID) VALUES(?,?,?,?,?);", nil, postID, userID, reason, nil)
+	_, err = res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("New post report! PostID:", postID, "Reason:", reason)
+}
+
+func AddTopicReport(topicID string, reason string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
+
+	row := db.QueryRow("SELECT CreatorID FROM Topics WHERE TopicID = ?;", topicID)
+
+	var userID string
+	if err := row.Scan(&userID); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res := AddDeleteUpdateDB("INSERT INTO Reports (ReportID, PostID, ReportUserID, Comment, TopicID) VALUES(?,?,?,?,?);", nil, nil, userID, reason, topicID)
+	_, err = res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("New topic report! TopicID:", topicID, "Reason:", reason)
 }

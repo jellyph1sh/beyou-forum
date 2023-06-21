@@ -8,6 +8,17 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func IsAdmin(userID string) bool {
+	rows := SelectDB("SELECT IsAdmin FROM Users WHERE UserID = ?;", userID)
+	defer rows.Close()
+	for rows.Next() {
+		var isAdmin bool
+		rows.Scan(&isAdmin)
+		return isAdmin
+	}
+	return false
+}
+
 func IsPostDLikeByBYser(PostID int, UserID string, DisOrLike string) bool {
 	rows := SelectDB("SELECT * FROM ? WHERE PostID = ? AND UserID = ?", DisOrLike, strconv.Itoa(PostID), UserID)
 	defer rows.Close()
@@ -107,4 +118,14 @@ func IsDislikeByUser(userID string, postID int) bool {
 	} else {
 		return true
 	}
+}
+
+func IsWordInBlacklist(word string) bool {
+	rows := SelectDB("SELECT word FROM WordsBlacklist WHERE word = ?", word)
+	defer rows.Close()
+
+	if !rows.Next() {
+		return false
+	}
+	return true
 }

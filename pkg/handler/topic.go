@@ -9,11 +9,25 @@ import (
 	"time"
 )
 
+type TopicsDate struct {
+	TopicID      int
+	Title        string
+	Description  string
+	Picture      string
+	CreationDate string
+	CreatorID    string
+	Upvotes      int
+	Follows      int
+}
+
 type DataTopicPage struct {
-	Topic    datamanagement.Topics
-	Posts    []PostInTopicPage
-	IsFollow bool
-	IsUpvote bool
+	Topic       TopicsDate
+	Tags        []datamanagement.Tags
+	Posts       []PostInTopicPage
+	IsFollow    bool
+	IsUpvote    bool
+	IsConnected string
+	IsAdmin     bool
 }
 
 type PostInTopicPage struct {
@@ -22,7 +36,6 @@ type PostInTopicPage struct {
 	Likes                    int
 	Dislikes                 int
 	StructuredDate           string
-	IsValidPost              bool
 	IsLikeByConnectedUser    bool
 	IsDislikeByConnectedUser bool
 	ProfilePicture           string
@@ -37,7 +50,6 @@ func transformPostInPostInTopicPage(posts []datamanagement.Posts, userID string)
 		post.PostID = element.PostID
 		post.Likes = element.Likes
 		post.Dislikes = element.Dislikes
-		post.IsValidPost = element.IsValidPost
 		post.StructuredDate = datamanagement.TransformDateInPostFormat(element.CreationDate)
 		user := datamanagement.GetUserById(element.AuthorID)
 		post.ProfilePicture = user.ProfilePicture
@@ -91,16 +103,36 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	unDislike := r.FormValue("unDislike")
 	like := r.FormValue("like")
 	dislike := r.FormValue("dislike")
+	reportPostID := r.FormValue("reportPostID")
+	reportTopicID := r.FormValue("reportTopicID")
+	reportReason := r.FormValue("reportReason")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
+
 	topicDisplayStruct := DataTopicPage{}
-	topicDisplayStruct.Topic = datamanagement.GetOneTopicByName(topicName)
+	topic := datamanagement.GetOneTopicByName(topicName)
+
+	topicDisplayStruct.Topic = TopicsDate{
+		TopicID:      topic.TopicID,
+		Title:        topic.Title,
+		Description:  topic.Description,
+		Picture:      topic.Picture,
+		CreationDate: datamanagement.TransformDateInPostFormat(topic.CreationDate),
+		CreatorID:    topic.CreatorID,
+		Upvotes:      topic.Upvotes,
+		Follows:      topic.Follows,
+	}
+	topicDisplayStruct.Tags = datamanagement.GetTagsByTopic(topicDisplayStruct.Topic.TopicID)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
 	if isConnected == "true" {
+		cookieIdUser, _ := r.Cookie("idUser")
+		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))
+		topicDisplayStruct.IsAdmin = currentUser.IsAdmin
+		topicDisplayStruct.IsConnected = isConnected
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
-			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now(), IsValidPost: true}}
+			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now()}}
 			datamanagement.AddLineIntoTargetTable(post, "Posts")
 			http.Redirect(w, r, r.URL.String(), http.StatusSeeOther)
 			break
@@ -139,9 +171,15 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			idPost, _ := strconv.Atoi(unDislike)
 			datamanagement.UnLikePostManager(idPost, idUser, "unDislike")
 			break
+		case reportPostID != "" && reportReason != "":
+			datamanagement.AddPostReport(reportPostID, reportReason)
+			break
+		case reportTopicID != "" && reportReason != "":
+			datamanagement.AddTopicReport(reportTopicID, reportReason)
+			break
 		}
 	}
 	topicDisplayStruct.Posts = transformPostInPostInTopicPage(datamanagement.GetPostByTopic(datamanagement.GetTopicId(topicName)), idUser)
-	t := template.Must(template.ParseFiles("./static/html/topic.html"))
-	t.Execute(w, topicDisplayStruct)
+	t := template.Must(template.ParseFiles("./static/html/topic.html", "./static/html/navBar.html"))
+	t.ExecuteTemplate(w, "topic", topicDisplayStruct)
 }
