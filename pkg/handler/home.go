@@ -77,7 +77,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	if getAcceptCookies == "OK" {
 		cookieHasAccepted := http.Cookie{Name: "hasAcceptedCookies", Value: getAcceptCookies, Expires: time.Now().Add(24 * time.Hour)}
 		http.SetCookie(w, &cookieHasAccepted)
-		http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
+		http.Redirect(w, r, "http://localhost:8080/", http.StatusSeeOther)
 	}
 	cookieHasAcceptedCookies, _ := r.Cookie("hasAcceptedCookies")
 	CAcceptCookies := getCookieValue(cookieHasAcceptedCookies)

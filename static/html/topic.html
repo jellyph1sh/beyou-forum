@@ -74,7 +74,7 @@
                 {{range $Post := .Posts}}
                     <div class="columnContainer containerPostTopics">
                         <div class="rowContainer containerHeaderPost">
-                            <img class="imgPost" src="{{$Post.ProfilePicture}}">
+                            <a href="/profile/{{$Post.AuthorName}}"><img class="imgPost" src="{{$Post.ProfilePicture}}"></a>
                             <p class="authorNamePost">{{$Post.AuthorName}}</p>
                             <span class="separationCreationDate"></span>
                             <p class="postTopicDate">{{$Post.StructuredDate}}</p>
@@ -97,11 +97,11 @@
                         <div class="containerLikesPost rowContainer">
                             <div class="rowContainer containerLikeComp">
                                 {{if $Post.IsLikeByConnectedUser}}
-                                <form method="post">
-                                    <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
-                                    <input  id="like" type="submit" value="unLike" hidden>
-                                    <label for="like"><span class="material-symbols-outlined"> thumb_up</span></label>
-                                </form>
+                                    <form method="post">
+                                        <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
+                                        <input  id="like" type="submit" value="unLike" hidden>
+                                        <label for="like"><span class="material-symbols-outlined"> thumb_up</span></label>
+                                    </form>
                                 {{ else }}
                                     <form method="post">
                                         <input type="text" name="like" value="{{$Post.PostID}}" hidden>
@@ -114,11 +114,11 @@
                             <div class="rowContainer containerLikeComp">
                                 <p>{{$Post.Dislikes}}</p>
                                 {{if $Post.IsDislikeByConnectedUser}}
-                                <form method="post">
-                                    <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
-                                    <input id="dislike" type="submit" value="unDislike" hidden>
-                                    <label for="dislike"><span class="material-symbols-outlined"> thumb_down</span></label>
-                                </form>
+                                    <form method="post">
+                                        <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
+                                        <input id="dislike" type="submit" value="unDislike" hidden>
+                                        <label for="dislike"><span class="material-symbols-outlined"> thumb_down</span></label>
+                                    </form>
                                 {{ else }}
                                     <form method="post">
                                         <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
