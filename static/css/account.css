@@ -16,8 +16,6 @@
     }
     .accountCompCont {
         gap: 0.5vw;
-    }
-    .accountCompCont {
         flex-direction: row;
     }
     .underlineAccountPage {
@@ -80,6 +78,15 @@
     .containerClose {
         width: 30rem;
     }
+    .containerEditFormNames {
+        align-items: center;
+    }
+    .nameUser {
+        text-align: center;
+    }
+    .bioTitle {
+        text-align: center;
+    }
 }
 
 
@@ -125,6 +132,15 @@
     }
     .containerClose {
         width: 15rem;
+    }
+    .containerEditFormNames {
+        align-items: center;
+    }
+    .nameUser {
+        text-align: center;
+    }
+    .bioTitle {
+        text-align: center;
     }
 }
 
@@ -267,7 +283,6 @@ body {
    background-color: transparent;
    border-radius: 5px;
    font-weight: 700;
-   width: 17rem;
    margin-left: 0.1rem;
    align-items: center;
 }
