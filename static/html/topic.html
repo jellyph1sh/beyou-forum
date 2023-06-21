@@ -10,6 +10,14 @@
     <title>topic</title>
 </head>
 <body>
+    <script>
+        function showPopup(id) {
+          document.getElementById(id).style.visibility = 'visible';
+        }
+        function hidePopup(id) {
+          document.getElementById(id).style.visibility = 'hidden';
+        }
+    </script>
     {{ template "navBar" .}}
     <div id="main-container" class="containerExplorePage">
         <div id="header-topic" class="containerHeaderTopic">
@@ -20,20 +28,32 @@
                         <h1 class="titleTopicPage">/{{.Topic.Title}}</h1>
                         <span class="separationCreationDate"></span>
                         <h2 class="createTopicDate">{{.Topic.CreationDate}}</h2> 
-                        <span class="flagReportIcon material-symbols-outlined">flag</span>
-                        <div class="FORMREPORTTOPIC">
-                            <h4>Report</h4>
-                            <h5>Are you sure you want to report this topic?</h5>
-                            <p>TOPIC INFORMATIONS</p>
-                            <p>Title: {{.Topic.Title}}</p>
-                            <p>Description: {{.Topic.Description}}</p>
-                            <form method="post">
-                                <input type="text" name="reportTopicID" value="{{ .Topic.TopicID }}" style="visibility: hidden;">
-                                <label for="reportReason">What's your reason to report this topic?</label>
-                                <input type="text" name="reportReason" value="Your reason">
-                                <button>Cancel</button>
-                                <input type="submit" value="Send">
-                            </form>
+                        <span onclick="showPopup('popupReport')" class="flagReportIcon material-symbols-outlined">flag</span>
+                        <div id="popupReport">
+                            <div class="formReportTopic columnContainer">
+                                <h4>Report</h4>
+                                <h5>Are you sure you want to report this topic?</h5>
+                                <p class="topInfoText">TOPIC INFORMATIONS</p>
+                                <div class="rowContainer containerInfoReportTopic">
+                                    <div class="columnContainer">
+                                        <h5>Title:</p>
+                                        <p class="textInfo">{{.Topic.Title}}</p>
+                                    </div>
+                                    <div class="columnContainer">
+                                        <h5>Description:</p>
+                                        <p class="textInfo">{{.Topic.Description}}</p>
+                                    </div>                                  
+                                </div>
+                                <form method="post" class="columnContainer">
+                                    <input type="text" name="reportTopicID" value="{{ .Topic.TopicID }}" hidden>
+                                    <label class="labelReportTopic" for="reportReason">What's your reason to report this topic?</label>
+                                    <textarea class="inputDescriptionReport" name="reportReason" id="" cols="30" rows="10"></textarea>
+                                    <div class="rowContainer containerBtnRpTopic">
+                                        <button class="btnCancel" onclick="hidePopup('popupReport')">Cancel</button>
+                                        <input class="btnSubmitRp" type="submit" value="Send">
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <h3 class="descriptionTopic">{{.Topic.Description}}</h3>
@@ -44,7 +64,7 @@
                     </div>
                 </div>
             </div>
-            <div class="columnContainer containerBtnTopic">
+            <div class="containerBtnTopic">
                 {{ if .IsFollow}}
                     <form method="post">
                         <input type="text" name="follow" value="follow" hidden>
@@ -78,30 +98,34 @@
                             <p class="authorNamePost">{{$Post.AuthorName}}</p>
                             <span class="separationCreationDate"></span>
                             <p class="postTopicDate">{{$Post.StructuredDate}}</p>
-                            <span class="flagReportPostIcon material-symbols-outlined">flag</span>
-                            <div class="FORMREPORTPOST">
-                                <h4>Report</h4>
-                                <h5>Are you sure you want to report:"{{ $Post.AuthorName }}"?</h5>
-                                <p>POST CONTENT</p>
-                                <p>{{ $Post.Content }}</p>
-                                <form method="post">
-                                    <input type="text" name="reportPostID" value="{{ $Post.PostID }}" style="visibility: hidden;">
-                                    <label for="reportReason">What's your reason to report this user?</label>
-                                    <input type="text" name="reportReason" value="Your reason">
-                                    <button>Cancel</button>
-                                    <input type="submit" value="Send">
-                                </form>
+                            <span onclick="showPopup('popupReportPost')" class="flagReportPostIcon material-symbols-outlined">flag</span>
+                            <div id="popupReportPost">
+                                <div class="formReportTopic columnContainer">
+                                    <h4>Report</h4>
+                                    <h5>Are you sure you want to report: " <span class="coloredText">{{ $Post.AuthorName }}</span> "?</h5>
+                                    <p class="topInfoText">POST CONTENT</p>
+                                    <p class="contentPostReport">{{ $Post.Content }}</p>
+                                    <form method="post" class="columnContainer">
+                                        <input type="text" name="reportPostID" value="{{ $Post.PostID }}" hidden>
+                                        <label class="labelReportTopic" for="reportReason">What's your reason to report this topic?</label>
+                                        <textarea class="inputDescriptionReport" name="reportReason" id="" cols="30" rows="10"></textarea>
+                                        <div class="rowContainer containerBtnRpTopic">
+                                            <button class="btnCancel" onclick="hidePopup('popupReportPost')">Cancel</button>
+                                            <input class="btnSubmitRp" type="submit" value="Send">
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <p class="contentPost">{{$Post.Content}}</p>
                         <div class="containerLikesPost rowContainer">
                             <div class="rowContainer containerLikeComp">
                                 {{if $Post.IsLikeByConnectedUser}}
-                                    <form method="post">
-                                        <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
-                                        <input  id="like" type="submit" value="unLike" hidden>
-                                        <label for="like"><span class="material-symbols-outlined"> thumb_up</span></label>
-                                    </form>
+                                <form method="post">
+                                    <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
+                                    <input  id="like" type="submit" value="unLike" hidden>
+                                    <label for="like"><span class="isLiked material-symbols-outlined"> thumb_up</span></label>
+                                </form>
                                 {{ else }}
                                     <form method="post">
                                         <input type="text" name="like" value="{{$Post.PostID}}" hidden>
@@ -114,11 +138,11 @@
                             <div class="rowContainer containerLikeComp">
                                 <p>{{$Post.Dislikes}}</p>
                                 {{if $Post.IsDislikeByConnectedUser}}
-                                    <form method="post">
-                                        <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
-                                        <input id="dislike" type="submit" value="unDislike" hidden>
-                                        <label for="dislike"><span class="material-symbols-outlined"> thumb_down</span></label>
-                                    </form>
+                                <form method="post">
+                                    <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
+                                    <input id="dislike" type="submit" value="unDislike" hidden>
+                                    <label for="dislike"><span class="isLiked material-symbols-outlined"> thumb_down</span></label>
+                                </form>
                                 {{ else }}
                                     <form method="post">
                                         <input type="text" name="dislike" value="{{$Post.PostID}}" hidden>
