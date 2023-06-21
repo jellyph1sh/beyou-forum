@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strings"
@@ -29,6 +30,7 @@ type profile struct {
 	Posts            []PostWithStructuredDate
 	Topics           []datamanagement.Topics
 	IsConnected      string
+	IsAdmin          bool
 }
 
 func StructureDate(posts []datamanagement.Posts) []PostWithStructuredDate {
@@ -73,5 +75,13 @@ func Profile(w http.ResponseWriter, r *http.Request, isMyProfile bool) {
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
 	displayStructProfile.IsConnected = IsConnected
+	displayStructProfile.IsConnected = IsConnected
+	displayStructProfile.IsAdmin = false
+	if IsConnected == "true" {
+		cookieIdUser, _ := r.Cookie("idUser")
+		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))
+		displayStructProfile.IsAdmin = currentUser.IsAdmin
+	}
+	fmt.Println(displayStructProfile)
 	t.ExecuteTemplate(w, "profile", displayStructProfile)
 }

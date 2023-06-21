@@ -13,7 +13,7 @@
     <title>home</title>
 </head>
 <body>
-    {{ template "navBar" .IsConnected}}
+    {{ template "navBar" .}}
     <div class="containerHomePage columnContainer">
         <h1 class="titleHomePage">New on <span class="coloredText">Bword</span> Studio ?</h1>
         <h3 class="subtitle1">Log in first to explore the site better</h3>
@@ -51,17 +51,15 @@
                     <p class="creationInformations">Created - {{ .CreationDate }} by {{ .CreatorName }}</p>
                     <div class="rowContainer containerFooterTopic">
                         <p class="upvoteNb">{{ .Upvotes }} Upvotes</p>
-                        <form action="" method="post">
-                            <div class="rowContainer btnCheckTopic">
-                                <button type="submit" value="{{ .TopicID }}">Check Topic <span class="material-symbols-outlined">arrow_forward</span></button>
-                            </div>
-                        </form>
+                        <div class="rowContainer btnCheckTopic">
+                            <a href="/topic/{{.Title}}">Check Topic<span class="material-symbols-outlined">arrow_forward</span></a>
+                        </div>
                     </div>
                 </div>
             {{ end }}
         </div>
     </div>
-    {{ template "cookies"}}
+    {{ template "cookies" .}}
 </body>
 </html>
 {{ end }}

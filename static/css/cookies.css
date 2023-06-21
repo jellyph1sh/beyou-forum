@@ -1,3 +1,5 @@
+
+
 .cookiesContainer {
     background-color: #28292fdc;
     border-top-left-radius: 5px;
@@ -7,8 +9,8 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    visibility:hidden;
     z-index: 1000;
+    visibility: visible;
     border-top: 2px solid #44454F;
     border-left: 2px solid #44454F;
     backdrop-filter: blur(10px);
@@ -40,12 +42,13 @@
     background-color: #D36638;
     color: white;
     font-family: 'Poppins';
-    width: 20%;
     text-align: center;
     height: 100%;
-    padding: 0rem 2rem;
+    padding: .5rem 2rem;
     font-size: 1.25rem;
     cursor: pointer;
+    border: none;
+    outline: none;
 }
 
 .containerBtnCookies {
