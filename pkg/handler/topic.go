@@ -137,10 +137,12 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
+				datamanagement.AddDeleteUpdateDB("UPDATE Topics SET Follows = Follows + 1 WHERE TopicID = ?;", topicDisplayStruct.Topic.TopicID)
 				datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
 				topicDisplayStruct.IsFollow = false
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topicDisplayStruct.Topic.TopicID, UserID: idUser}}
+				datamanagement.AddDeleteUpdateDB("UPDATE Topics SET Follows = Follows - 1 WHERE TopicID = ?;", topicDisplayStruct.Topic.TopicID)
 				datamanagement.AddLineIntoTargetTable(line, "Follows")
 				topicDisplayStruct.IsFollow = true
 			}
