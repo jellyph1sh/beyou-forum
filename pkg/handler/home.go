@@ -37,8 +37,8 @@ type TopicsWithUserInfo struct {
 
 type structDisplayHome struct {
 	AllTopics         []TopicsWithUserInfo
-	IsConnected       string
 	HasAcceptedCookie string
+	IsConnected       bool
 	IsAdmin           bool
 }
 
@@ -71,13 +71,17 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	structDisplayHome.AllTopics = updateTopicsInTopicsWithUserInfo(allTop)
 	cookieConnected, _ := r.Cookie("isConnected")
 	IsConnected := getCookieValue(cookieConnected)
-	structDisplayHome.IsConnected = IsConnected
+	if IsConnected == "true" {
+		structDisplayHome.IsConnected = true
+	} else {
+		structDisplayHome.IsConnected = false
+	}
 	structDisplayHome.IsAdmin = false
 	getAcceptCookies := r.FormValue("AcceptCookies")
 	if getAcceptCookies == "OK" {
 		cookieHasAccepted := http.Cookie{Name: "hasAcceptedCookies", Value: getAcceptCookies, Expires: time.Now().Add(24 * time.Hour)}
 		http.SetCookie(w, &cookieHasAccepted)
-		http.Redirect(w, r, "http://localhost:8080/home", http.StatusSeeOther)
+		http.Redirect(w, r, "http://localhost:8080/", http.StatusSeeOther)
 	}
 	cookieHasAcceptedCookies, _ := r.Cookie("hasAcceptedCookies")
 	CAcceptCookies := getCookieValue(cookieHasAcceptedCookies)

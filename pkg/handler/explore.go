@@ -3,7 +3,9 @@ package handler
 import (
 	"fmt"
 	"forum/pkg/datamanagement"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"text/template"
@@ -17,7 +19,7 @@ type DataExplorePage struct {
 	CanPrevious  bool
 	CanNext      bool
 	InvalidTopic bool
-	IsConnected  string
+	IsConnected  bool
 	IsAdmin      bool
 	Tags         [][]string
 }
@@ -27,13 +29,38 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 	title := r.FormValue("topicTitle")
 	description := r.FormValue("description")
 	tags := r.FormValue("tags")
+	file, handler, err := r.FormFile("photo")
+	fmt.Println(title, description, tags)
 	if title != "" && (datamanagement.GetOneTopicByName(title) == datamanagement.Topics{}) {
 		if !datamanagement.CheckContentByBlackListWord(title) && !datamanagement.CheckContentByBlackListWord(description) && !datamanagement.CheckContentByBlackListWord(tags) && len(strings.Split(title, " ")) == 1 {
 			return true
 		}
 		title := strings.Title(title)
-		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: "../img/PP_wb.png", CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0}}
+		fileName := "../img/PP_wb.png"
+		if file != nil && err == nil {
+			defer file.Close()
+			row := datamanagement.SelectDB("SELECT TopicID FROM Topics WHERE title =?", title)
+			defer row.Close()
+			var id int
+			for row.Next() {
+				row.Scan(&id)
+			}
+			destinationPath := "./static/img/" + title + "." + strings.Split(handler.Filename, ".")[1]
+			destinationFile, err := os.Create(destinationPath)
+			if err != nil {
+				fmt.Println("Failed to create destination file")
+			}
+			defer destinationFile.Close()
+			_, err = io.Copy(destinationFile, file)
+			if err != nil {
+				fmt.Println("Failed to save photo on server")
+			}
+			fileName = "../img/" + title + "." + strings.Split(handler.Filename, ".")[1]
+		}
+		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: fileName, CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0}}
+		println("ok1")
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
+		println("ok2")
 		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetOneTopicByName(title).TopicID)
 		http.Redirect(w, r, "http://localhost:8080/topic/"+title, http.StatusSeeOther)
 	}
@@ -53,7 +80,10 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend := DataExplorePage{}
 	dataToSend.IsAdmin = false
 	dataToSend.InvalidTopic = false
+	dataToSend.IsConnected = false
 	if userId != "" {
+		dataToSend.IsConnected = true
+		fmt.Println(userId)
 		currentUser := datamanagement.GetUserById(userId)
 		dataToSend.IsAdmin = currentUser.IsAdmin
 		if createTopic(w, r, userId) {
@@ -111,9 +141,6 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend.CanNext = true
 	dataToSend.CanPrevious = true
 	dataToSend.InvalidTopic = false
-	cookieConnected, _ := r.Cookie("isConnected")
-	IsConnected := getCookieValue(cookieConnected)
-	dataToSend.IsConnected = IsConnected
 	if next != "" && pagingInt*2 < len(dataToSend.Topics) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt + 1)}
 		pagingInt++

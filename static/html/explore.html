@@ -71,7 +71,7 @@
             <h1 class="titleCatExplore">CREATE A TOPIC</h1>
             <div id='create' class="containerCreateComp columnContainer">
                 <h2>Wanna talk about a new topic ?</h2>
-                <form method="post" class="containerFormCreate columnContainer">
+                <form method="post" class="containerFormCreate columnContainer" enctype="multipart/form-data">
                     <label>
                         About what? <input class="aboutWhatInput" type="text" name="topicTitle" required>
                     </label>
@@ -85,6 +85,8 @@
                     </div>
                     <h3 class="indicationsCreateTopic indicationsCreateTopicSubmit">Press enter to create</h3>
                     <input type="submit" hidden>
+                    <input type="file" name="photo">
+                    <input type="submit" value="Upload">
                 </form>
             </div>
         </div>

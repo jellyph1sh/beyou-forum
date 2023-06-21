@@ -33,6 +33,8 @@ type Moderation struct {
 	ReportsTopicInformations []ReportTopicInformations
 	BannedUsers              []datamanagement.Users
 	WordsBlacklist           []datamanagement.WordsBlacklist
+	IsConnected              bool
+	IsAdmin                  bool
 }
 
 func GetReportsPostInformations() []ReportPostInformations {
@@ -107,5 +109,7 @@ func Automod(w http.ResponseWriter, r *http.Request) {
 		ReportsTopicInformations: GetReportsTopicInformations(),
 		BannedUsers:              datamanagement.GetAllBannedUsers(),
 		WordsBlacklist:           datamanagement.GetAllBlacklistWords(),
+		IsConnected:              true,
+		IsAdmin:                  true,
 	})
 }

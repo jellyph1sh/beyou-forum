@@ -94,7 +94,7 @@
                 {{range $Post := .Posts}}
                     <div class="columnContainer containerPostTopics">
                         <div class="rowContainer containerHeaderPost">
-                            <img class="imgPost" src="{{$Post.ProfilePicture}}">
+                            <a href="/profile/{{$Post.AuthorName}}"><img class="imgPost" src="{{$Post.ProfilePicture}}"></a>
                             <p class="authorNamePost">{{$Post.AuthorName}}</p>
                             <span class="separationCreationDate"></span>
                             <p class="postTopicDate">{{$Post.StructuredDate}}</p>

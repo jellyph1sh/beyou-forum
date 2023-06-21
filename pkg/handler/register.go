@@ -14,6 +14,8 @@ type register struct {
 	EmailAndUsernameIsNotValid bool
 	EmailIsNotValid            bool
 	UsernameIsNotValid         bool
+	IsConnected                bool
+	IsAdmin                    bool
 }
 
 func CreateUser(UserId string, userName string, userFirstName string, userLastName string, userEmail string, stringPasswordInSha256 string) datamanagement.Users {
@@ -48,7 +50,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	userName := r.FormValue("username")
 	userPassword := r.FormValue("password")
 	rememberMe := r.FormValue("rememberMe")
-	registerDisplay := register{false, false, false}
+	registerDisplay := register{false, false, false, false, false}
 	if userEmail != "" && userName != "" && userPassword != "" {
 		isUsernameAlreadyExist := datamanagement.IsUsernameAlreadyExist(userName)
 		isEmailAlreadyExist := datamanagement.IsEmailAlreadyExist(userEmail)
