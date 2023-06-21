@@ -1,4 +1,4 @@
-
+/*---------------------- Containers ----------------------*/
 
 .cookiesContainer {
     background-color: #28292fdc;
@@ -16,6 +16,16 @@
     backdrop-filter: blur(10px);
 }
 
+.containerBtnCookies {
+    align-self: baseline;
+    width: 100%;
+    align-items: center;
+    height: 3rem;
+    justify-content: center;
+}
+
+/*---------------------- Texts ----------------------*/
+
 .textCookies {
     color: whitesmoke;
     font-family: 'Poppins';
@@ -25,6 +35,12 @@
     font-size: 1rem;
     margin: 0;
 }
+
+a {
+    text-decoration: none;
+}
+
+/*---------------------- Buttons ----------------------*/
 
 .btnPolicy {
     background-color: #44454F ;
@@ -51,17 +67,7 @@
     outline: none;
 }
 
-.containerBtnCookies {
-    align-self: baseline;
-    width: 100%;
-    align-items: center;
-    height: 3rem;
-    justify-content: center;
-}
-
-a {
-    text-decoration: none;
-}
+/*---------------------- Others ----------------------*/
 
 .cookieImg {
     width: 8rem;
