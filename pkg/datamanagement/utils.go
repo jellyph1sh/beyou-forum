@@ -137,7 +137,15 @@ func CheckContentByBlackListWord(content string) bool {
 			return false
 		}
 	}
-
+	contentArray = strings.Split(content, "")
+	blackListCaracter := []string{"<", ">", ",", "(", ")", "\"", "'", "{", "}", "|", "[", "]", "!", "?", ";", "/", "\\", "#", "$", "£", "¤", "@", "^"}
+	for _, c := range content {
+		for _, cb := range blackListCaracter {
+			if string(c) == cb {
+				return false
+			}
+		}
+	}
 	return true
 }
 

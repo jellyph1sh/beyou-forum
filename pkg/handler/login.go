@@ -14,7 +14,6 @@ type login struct {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./static/html/login.html", "./static/html/navBar.html"))
 	userInput := r.FormValue("userInput")
 	userPassword := r.FormValue("userPassword")
 	rememberMe := r.FormValue("rememberMe")
@@ -47,5 +46,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			loginDisplay.IsNotValid = true
 		}
 	}
+	t := template.Must(template.ParseFiles("./static/html/login.html", "./static/html/navBar.html"))
 	t.ExecuteTemplate(w, "login", loginDisplay)
 }

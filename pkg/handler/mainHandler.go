@@ -30,6 +30,9 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	case url[1] == "topic" && len(url) == 3 && datamanagement.IsValidTopic(url[2]):
 		Topic(w, r)
 	default:
+		if len(url) >= 3 {
+			http.Redirect(w, r, "http://localhost:8080/InvalidPath", http.StatusSeeOther)
+		}
 		InvalidPath(w, r)
 	}
 }
