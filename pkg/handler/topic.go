@@ -108,10 +108,8 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	reportReason := r.FormValue("reportReason")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
-
 	topicDisplayStruct := DataTopicPage{}
 	topic := datamanagement.GetOneTopicByName(topicName)
-
 	topicDisplayStruct.Topic = TopicsDate{
 		TopicID:      topic.TopicID,
 		Title:        topic.Title,

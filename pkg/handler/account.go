@@ -69,15 +69,19 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookieIsConnected)
 		cookieIdUser := http.Cookie{Name: "idUser", Value: ""}
 		http.SetCookie(w, &cookieIdUser)
+		cookieRemenberMe := http.Cookie{Name: "Remember", Value: "false"}
+		http.SetCookie(w, &cookieRemenberMe)
 		break
 	case disconnect != "":
 		cookieIsConnected := http.Cookie{Name: "isConnected", Value: "false"}
 		http.SetCookie(w, &cookieIsConnected)
 		cookieIdUser := http.Cookie{Name: "idUser", Value: ""}
 		http.SetCookie(w, &cookieIdUser)
+		cookieRemenberMe := http.Cookie{Name: "Remember", Value: "false"}
+		http.SetCookie(w, &cookieRemenberMe)
 		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
 	case editMail != "":
-		if !datamanagement.IsEmailAlreadyExist(editMail) {
+		if !datamanagement.IsEmailAlreadyExist(editMail) && datamanagement.CheckContentByBlackListWord(editMail) {
 			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Email = ? WHERE UserID = ?;", editMail, idUser)
 		} else {
 			displayStructAccountPage.IsNotValidEditMail = true
@@ -93,16 +97,16 @@ func Account(w http.ResponseWriter, r *http.Request) {
 			displayStructAccountPage.IsNotValidchangedPwd = true
 		}
 		break
-	case changedBIO != "":
+	case changedBIO != "" && datamanagement.CheckContentByBlackListWord(changedBIO):
 		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Description = ? WHERE UserID = ?;", changedBIO, idUser)
 		break
-	case changedFirstname != "":
+	case changedFirstname != "" && datamanagement.CheckContentByBlackListWord(changedFirstname):
 		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Firstname = ? WHERE UserID = ?;", changedFirstname, idUser)
 		break
-	case changedLastname != "":
+	case changedLastname != "" && datamanagement.CheckContentByBlackListWord(changedLastname):
 		datamanagement.AddDeleteUpdateDB("UPDATE Users SET Lastname = ? WHERE UserID = ?;", changedLastname, idUser)
 		break
-	case changedUsername != "":
+	case changedUsername != "" && datamanagement.CheckContentByBlackListWord(changedUsername):
 		if !datamanagement.IsUsernameAlreadyExist(changedUsername) {
 			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Username = ? WHERE UserID = ?;", changedUsername, idUser)
 		} else {

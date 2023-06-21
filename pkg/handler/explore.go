@@ -83,7 +83,6 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend.IsConnected = false
 	if userId != "" {
 		dataToSend.IsConnected = true
-		fmt.Println(userId)
 		currentUser := datamanagement.GetUserById(userId)
 		dataToSend.IsAdmin = currentUser.IsAdmin
 		if createTopic(w, r, userId) {
@@ -112,13 +111,16 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, cookiePaging)
 	}
 	topic := r.FormValue("topicSearch")
-	fmt.Println(getCookieValue(cookieFilter))
 	if topic != "" {
-		cookiePaging = &http.Cookie{Name: "paging", Value: "1"}
-		cookieSearch = &http.Cookie{Name: "search", Value: topic}
-		http.SetCookie(w, cookiePaging)
-		http.SetCookie(w, cookieSearch)
-		dataToSend.Topics = datamanagement.GetTopicByTagAndTitle(topic)
+		if datamanagement.CheckContentByBlackListWord(topic) {
+			cookiePaging = &http.Cookie{Name: "paging", Value: "1"}
+			cookieSearch = &http.Cookie{Name: "search", Value: topic}
+			http.SetCookie(w, cookiePaging)
+			http.SetCookie(w, cookieSearch)
+			dataToSend.Topics = datamanagement.GetTopicByTagAndTitle(topic)
+		} else {
+			dataToSend.Topics = nil
+		}
 	} else if getCookieValue(cookieSearch) != "" {
 		dataToSend.Topics = datamanagement.GetTopicByTagAndTitle(getCookieValue(cookieSearch))
 	} else if sort == "Follows" && userId != "" {
