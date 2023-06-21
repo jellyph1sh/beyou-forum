@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strconv"
@@ -171,6 +172,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			datamanagement.UnLikePostManager(idPost, idUser, "unDislike")
 			break
 		case reportPostID != "" && reportReason != "":
+			fmt.Println(reportPostID)
 			datamanagement.AddPostReport(reportPostID, reportReason)
 			break
 		case reportTopicID != "" && reportReason != "":
