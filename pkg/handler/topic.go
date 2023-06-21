@@ -9,8 +9,20 @@ import (
 	"time"
 )
 
+type TopicsDate struct {
+	TopicID      int
+	Title        string
+	Description  string
+	Picture      string
+	CreationDate string
+	CreatorID    string
+	Upvotes      int
+	Follows      int
+}
+
 type DataTopicPage struct {
-	Topic       datamanagement.Topics
+	Topic       TopicsDate
+	Tags        []datamanagement.Tags
 	Posts       []PostInTopicPage
 	IsFollow    bool
 	IsUpvote    bool
@@ -98,7 +110,19 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	isConnected := getCookieValue(cookieIsConnected)
 
 	topicDisplayStruct := DataTopicPage{}
-	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
+	topic := datamanagement.GetTopicByName(topicName)
+
+	topicDisplayStruct.Topic = TopicsDate{
+		TopicID:      topic.TopicID,
+		Title:        topic.Title,
+		Description:  topic.Description,
+		Picture:      topic.Picture,
+		CreationDate: datamanagement.TransformDateInPostFormat(topic.CreationDate),
+		CreatorID:    topic.CreatorID,
+		Upvotes:      topic.Upvotes,
+		Follows:      topic.Follows,
+	}
+	topicDisplayStruct.Tags = datamanagement.GetTagsByTopic(topicDisplayStruct.Topic.TopicID)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
 	if isConnected == "true" {

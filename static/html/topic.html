@@ -19,7 +19,7 @@
                     <div class="rowContainer containerHeaderInfo">
                         <h1 class="titleTopicPage">/{{.Topic.Title}}</h1>
                         <span class="separationCreationDate"></span>
-                        <h2 class="createTopicDate">Created 8 Jul 2015</h2> 
+                        <h2 class="createTopicDate">{{.Topic.CreationDate}}</h2> 
                         <span class="flagReportIcon material-symbols-outlined">flag</span>
                         <div class="FORMREPORTTOPIC">
                             <h4>Report</h4>
@@ -36,11 +36,11 @@
                             </form>
                         </div>
                     </div>
-                    <h3 class="descriptionTopic">Le topic où on dit la vérité de la vérité {{.Topic.Description}}</h3>
+                    <h3 class="descriptionTopic">{{.Topic.Description}}</h3>
                     <div class="containerTags rowContainer">
-                        <p class="tag">#MacronExplosion</p>
-                        <p class="tag">#MacronExplosion</p>
-                        <p class="tag">#MacronExplosion</p>
+                        {{ range .Tags }}
+                            <p class="tag">#{{.Title}}</p>
+                        {{ end }}
                     </div>
                 </div>
             </div>
