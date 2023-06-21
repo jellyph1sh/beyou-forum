@@ -7,51 +7,100 @@ import (
 	"text/template"
 )
 
+type ReportPostInformations struct {
+	ReportID       int
+	Reason         string
+	UserID         string
+	Username       string
+	ProfilePicture string
+	PostID         int
+	Message        string
+}
+
+type ReportTopicInformations struct {
+	ReportID    int
+	Reason      string
+	UserID      string
+	Username    string
+	TopicID     int
+	Title       string
+	Description string
+	Picture     string
+}
+
 type Moderation struct {
-	Reports        []datamanagement.Reports
-	Posts          []datamanagement.Posts
-	BannedUsers    []datamanagement.Users
-	ReportedUsers  []datamanagement.Users
-	WordsBlacklist []datamanagement.WordsBlacklist
-	Topics         []datamanagement.Topics
+	ReportsPostInformations  []ReportPostInformations
+	ReportsTopicInformations []ReportTopicInformations
+	BannedUsers              []datamanagement.Users
+	WordsBlacklist           []datamanagement.WordsBlacklist
+}
+
+func GetReportsPostInformations() []ReportPostInformations {
+	rows := datamanagement.SelectDB("SELECT Reports.ReportID, Posts.PostID, Reports.Comment, Users.UserID, Users.Username, Users.ProfilePicture, Posts.Content FROM Reports JOIN Users ON Reports.ReportUserID = Users.UserID JOIN Posts ON Reports.PostID = Posts.PostID;")
+	defer rows.Close()
+
+	var reportsPosts []ReportPostInformations
+	for rows.Next() {
+		var reportPost ReportPostInformations
+		rows.Scan(&reportPost.ReportID, &reportPost.PostID, &reportPost.Reason, &reportPost.UserID, &reportPost.Username, &reportPost.ProfilePicture, &reportPost.Message)
+		reportsPosts = append(reportsPosts, reportPost)
+	}
+
+	return reportsPosts
+}
+
+func GetReportsTopicInformations() []ReportTopicInformations {
+	rows := datamanagement.SelectDB("SELECT Reports.ReportID, Reports.Comment, Users.UserID, Users.Username, Topics.TopicID, Topics.Title, Topics.Description, Topics.Picture FROM Reports JOIN Users ON Users.UserID = Reports.ReportUserID JOIN Topics ON Topics.TopicID = Reports.TopicID;")
+	defer rows.Close()
+
+	var reportsTopics []ReportTopicInformations
+	for rows.Next() {
+		var reportTopic ReportTopicInformations
+		rows.Scan(&reportTopic.ReportID, &reportTopic.Reason, &reportTopic.UserID, &reportTopic.Username, &reportTopic.TopicID, &reportTopic.Title, &reportTopic.Description, &reportTopic.Picture)
+		reportsTopics = append(reportsTopics, reportTopic)
+	}
+
+	return reportsTopics
 }
 
 func Automod(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./static/html/automod.html", "./static/html/navBar.html"))
-
-	banpost := r.FormValue("banpost")
-	deletepost := r.FormValue("deletepost")
-	cancelreport := r.FormValue("cancelreport")
-	word := r.FormValue("word")
-	unban := r.FormValue("unban")
-	deleteword := r.FormValue("deleteword")
-	if word != "" {
-		datamanagement.AddWordIntoBlacklist(word)
-	} else if unban != "" {
-		datamanagement.SetUserStatus(unban, "1")
-	} else if banpost != "" {
-		datamanagement.DeleteReportFromPost(banpost)
-		datamanagement.DeletePost(banpost)
-	} else if deletepost != "" {
-		datamanagement.DeletePost(deletepost)
-	} else if cancelreport != "" {
-		datamanagement.DeleteReportFromPost(cancelreport)
-	} else if deleteword != "" {
-		res := datamanagement.AddDeleteUpdateDB("DELETE FROM WordsBlacklist WHERE Word = ?", deleteword)
-		affected, err := res.RowsAffected()
+	banPost := r.FormValue("banUser")
+	deletePost := r.FormValue("deletePost")
+	deleteTopic := r.FormValue("deleteTopic")
+	removeReport := r.FormValue("removeReport")
+	unbanUser := r.FormValue("unbanUser")
+	addWord := r.FormValue("addWord")
+	deleteWord := r.FormValue("deleteWord")
+	if banPost != "" {
+		datamanagement.BanUser(banPost)
+	} else if deletePost != "" {
+		datamanagement.DeletePost(deletePost)
+		datamanagement.DeleteReportsFromPost(deletePost)
+	} else if deleteTopic != "" {
+		datamanagement.DeletePostsFromTopic(deleteTopic)
+		datamanagement.DeleteTopic(deleteTopic)
+		datamanagement.DeleteReportsFromTopic(deleteTopic)
+	} else if removeReport != "" {
+		datamanagement.DeleteReport(removeReport)
+	} else if unbanUser != "" {
+		datamanagement.SetUserStatus(unbanUser, true)
+	} else if addWord != "" {
+		datamanagement.AddWordIntoBlacklist(addWord)
+	} else if deleteWord != "" {
+		res := datamanagement.AddDeleteUpdateDB("DELETE FROM WordsBlacklist WHERE Word = ?", deleteWord)
+		_, err := res.RowsAffected()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(affected, "deleted!")
+		fmt.Println(deleteWord, "deleted!")
 	}
 
 	t.ExecuteTemplate(w, "automod", Moderation{
-		Reports:        datamanagement.GetAllReports(),
-		Posts:          datamanagement.GetAllReportedPosts(),
-		BannedUsers:    datamanagement.GetAllBannedUsers(),
-		ReportedUsers:  datamanagement.GetAllReportedUsers(),
-		WordsBlacklist: datamanagement.GetAllBlacklistWords(),
-		Topics:         datamanagement.GetAllReportedTopics(),
+		ReportsPostInformations:  GetReportsPostInformations(),
+		ReportsTopicInformations: GetReportsTopicInformations(),
+		BannedUsers:              datamanagement.GetAllBannedUsers(),
+		WordsBlacklist:           datamanagement.GetAllBlacklistWords(),
 	})
 }

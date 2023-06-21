@@ -150,6 +150,21 @@ func AddTagsToTopic(tags, creatorId string, TopicID int) {
 	}
 }
 
+/*--------------------*/
+/* MODERATION SYSTEM: */
+/*--------------------*/
+func BanUser(userID string) {
+	AddDeleteUpdateDB("DELETE FROM Dislikes WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Likes WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Upvotes WHERE UserID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Topics WHERE CreatorID = ?", userID)
+	AddDeleteUpdateDB("DELETE FROM Tags WHERE CreatorID = ?", userID)
+	AddDeleteUpdateDB("DELETE FROM Posts WHERE AuthorID = ?;", userID)
+	AddDeleteUpdateDB("DELETE FROM Reports WHERE ReportUserID = ?;", userID)
+	SetUserStatus(userID, false)
+}
+
 func AddWordIntoBlacklist(word string) {
 	if IsWordInBlacklist(word) {
 		fmt.Println(word, "is already in the blacklist.")
@@ -164,32 +179,72 @@ func AddWordIntoBlacklist(word string) {
 	fmt.Println(word, "added in the blacklist.")
 }
 
-func SetUserStatus(userID string, status string) {
+func SetUserStatus(userID string, status bool) {
 	res := AddDeleteUpdateDB("UPDATE Users SET ValidUser = ? WHERE UserID = ?;", status, userID)
-	affected, err := res.RowsAffected()
+	_, err := res.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(affected, "updated!")
+	fmt.Println(userID, "has been ban!")
 }
 
-func DeleteReportFromPost(postID string) {
-	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE PostID = ?", postID)
-	affected, err := res.RowsAffected()
+func DeleteReport(reportID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE ReportID = ?", reportID)
+	_, err := res.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(affected, "deleted!")
+	fmt.Println("ReportID:", reportID, "deleted!")
+}
+
+func DeleteReportsFromPost(postID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE PostID = ?", postID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("All reports concerned by PostID:", postID, "were delete!")
 }
 
 func DeletePost(postID string) {
-	res := AddDeleteUpdateDB("DELETE FROM Posts WHERE PostID = ?", postID)
-	affected, err := res.RowsAffected()
+	res := AddDeleteUpdateDB("DELETE FROM Posts WHERE Posts.PostID = ?", postID)
+	_, err := res.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(affected, "deleted!")
+	fmt.Println("PostID:", postID, "deleted!")
+}
+
+func DeletePostsFromTopic(topicID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Posts WHERE Posts.TopicID = ?", topicID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Posts of TopicID:", topicID, "were delete!")
+}
+
+func DeleteTopic(topicID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Topics WHERE Topics.TopicID = ?", topicID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("TopicID:", topicID, "has been delete!")
+}
+
+func DeleteReportsFromTopic(topicID string) {
+	res := AddDeleteUpdateDB("DELETE FROM Reports WHERE TopicID = ?", topicID)
+	_, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("All reports concerned by PostID:", topicID, "were delete!")
 }

@@ -326,75 +326,6 @@ func SortPosts(typOfSort string) []Posts {
 	return result
 }
 
-func GetAllReports() []Reports {
-	rows := SelectDB("SELECT * FROM Reports;")
-	defer rows.Close()
-
-	var reports []Reports
-	for rows.Next() {
-		var report Reports
-		rows.Scan(&report.ReportID, &report.PostID, &report.ReportUserID, &report.Comment, &report.TopicID)
-		reports = append(reports, report)
-	}
-
-	return reports
-}
-
-func GetAllReportedUsers() []Users {
-	rows := SelectDB("SELECT Users.* FROM Users JOIN Reports ON Users.UserID = Reports.ReportUserID;")
-	defer rows.Close()
-
-	var reportedUsers []Users
-	for rows.Next() {
-		var user Users
-		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
-		reportedUsers = append(reportedUsers, user)
-	}
-	return reportedUsers
-}
-
-func GetAllBannedUsers() []Users {
-	rows := SelectDB("SELECT * FROM Users WHERE ValidUser = false;")
-	defer rows.Close()
-
-	var bannedUsers []Users
-	for rows.Next() {
-		var user Users
-		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
-		bannedUsers = append(bannedUsers, user)
-	}
-
-	return bannedUsers
-}
-
-func GetAllReportedPosts() []Posts {
-	rows := SelectDB("SELECT Posts.* FROM Posts JOIN Reports ON Posts.PostID = Reports.PostID;")
-	defer rows.Close()
-
-	var reportedPosts []Posts
-	for rows.Next() {
-		var post Posts
-		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate)
-		reportedPosts = append(reportedPosts, post)
-	}
-
-	return reportedPosts
-}
-
-func GetAllReportedTopics() []Topics {
-	rows := SelectDB("SELECT Topics.* FROM Topics JOIN Reports ON Topics.TopicID = Reports.TopicID;")
-	defer rows.Close()
-
-	var reportedTopics []Topics
-	for rows.Next() {
-		var topic Topics
-		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows)
-		reportedTopics = append(reportedTopics, topic)
-	}
-
-	return reportedTopics
-}
-
 func GetAllBlacklistWords() []WordsBlacklist {
 	rows := SelectDB("SELECT * FROM WordsBlacklist;")
 	defer rows.Close()
@@ -494,4 +425,22 @@ func GetTopicByName(topicName string) Topics {
 	}
 
 	return topic
+}
+
+/*--------------------*/
+/* MODERATION SYSTEM: */
+/*--------------------*/
+
+func GetAllBannedUsers() []Users {
+	rows := SelectDB("SELECT * FROM Users WHERE ValidUser = false;")
+	defer rows.Close()
+
+	var bannedUsers []Users
+	for rows.Next() {
+		var user Users
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+		bannedUsers = append(bannedUsers, user)
+	}
+
+	return bannedUsers
 }
