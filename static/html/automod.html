@@ -60,7 +60,6 @@
                                 <h3 class="descriptionTopicTitle">Description</h3>
                                 <p class="descriptionTopic">{{ $report.Description }}</p>
                             </div>
-                           
                             <div class="columnContainer containerReportMsg">
                                 <h3>Report message</h3>
                                 <p>{{ $report.Reason }}</p>
@@ -95,11 +94,12 @@
                     <h2>Banned Users:</h2>
                     {{ range $user := $base.BannedUsers }}
                         <div class="user rowContainer">
-                            <img src="{{ $user.ProfilePicture }}"" alt="ProfilePicture">
-                            <h3>{{ $user.Username }}</h3>
-                            <form method="post">
-                                <input type="text" name="unbanUser" value="{{ $user.UserID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Unban {{$user.Username}}"/>
+                            <img class="imgReportPost" src="{{ $user.ProfilePicture }}"" alt="ProfilePicture">
+                            <h3 class="userReportPost">{{ $user.Username }}</h3>
+                            <form method="post" class="columnContainer alignCenter">
+                                <input type="text" name="unbanUser" value="{{ $user.UserID }}" hidden>
+                                <input id="unban" class="submitbutton" type="submit" value="Unban {{$user.Username}}" hidden/>
+                                <label for="unban"><span class="btnDelete material-symbols-outlined">gavel</span></label>
                             </form>
                         </div>
                     {{ end }}

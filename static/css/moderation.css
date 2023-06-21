@@ -63,8 +63,6 @@
 .titlePageAutomode {
     color: whitesmoke;
     font-family: 'Poppins';
-
-
 }
 
 .subtitlePage {
@@ -84,10 +82,12 @@
     background-color: #28292F;
     border-radius: 10px;
     padding: 1rem 2rem;
+
 }
 
 .containerReportPosts {
     gap: 1rem;
+    min-height: 40vh;
 }
 
 .imgReportPost {
@@ -200,6 +200,7 @@
 
 .containerReportsTopics {
     gap: 1rem;
+    min-height: 40vh;
 }
 
 .containerTopicReport {
@@ -250,6 +251,7 @@
     padding: 1rem;
     background-color: #28292F;
     border-radius: 10px;
+    min-height: 35vh;
 }
 
 .containerBannedUsers h2 {
@@ -264,12 +266,16 @@
     background-color: #32333B;
     border-radius: 10px;
     gap: 1rem;
+    padding: .5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .containerBannedwords {
     background-color: #28292F;
     border-radius: 10px;
     padding: 1rem;
+    min-height: 35vh;
 }
 
 .containerBannedwords h2 {
