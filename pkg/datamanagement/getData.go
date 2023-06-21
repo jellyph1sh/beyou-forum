@@ -221,7 +221,7 @@ func GetUserById(id string) Users {
 }
 
 func GetTopicsById(creatorID string) []Topics {
-	rows := SelectDB("SELECT * FROM Topics WHERE CreatorID = ? AND ValidTopic = true;", creatorID)
+	rows := SelectDB("SELECT * FROM Topics WHERE CreatorID = ?;", creatorID)
 	defer rows.Close()
 
 	topics := []Topics{}
