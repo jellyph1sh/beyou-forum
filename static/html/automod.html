@@ -1,3 +1,4 @@
+{{ define "automod" }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,98 @@
     <title>automod</title>
 </head>
 <body>
-    <h1>automod</h1>
+    <div class="containerAutomodPage">
+        <!-- {{ template "navBar" }} -->
+        <div class=""></div>
+        <div class="automod">
+            {{ $base := . }}
+            <div class="containerReports">
+                <div class="reportsPosts">
+                    <h1>Reports:</h1>
+                    <h2>Posts:</h2>
+                    {{ range $report := $base.ReportsPostInformations }}
+                        <div class="post">
+                            <img src="{{ $report.ProfilePicture }}" alt="ProfilePicture">
+                            <h3>Username: {{ $report.Username }}</h3>
+                            <p>Message: {{ $report.Message }}</p>
+                            <p>Reason: {{ $report.Reason }}</p>
+                            <form method="post">
+                                <input type="text" name="banUser" value="{{ $report.UserID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Ban User"/>
+                            </form>
+                            <form method="post">
+                                <input type="text" name="deletePost" value="{{ $report.PostID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Delete Post"/>
+                            </form>
+                            <form method="post">
+                                <input type="text" name="removeReport" value="{{ $report.ReportID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Remove Report"/>
+                            </form>
+                        </div>
+                    {{ end }}
+                </div>
+                <div class="reportsTopics">
+                    <h2>Topics:</h2>
+                    {{ range $report := $base.ReportsTopicInformations }}
+                        <div class="topic">
+                            <img src="{{ $report.Picture }}" alt="TopicPicture">
+                            <h3>Title : /{{ $report.Title }}</h3>
+                            <p>Description : {{ $report.Description }}</p>
+                            <p>Reason : {{ $report.Reason }}</p>
+                            <p>Creator : {{ $report.Username }}</p>
+                            <form method="post">
+                                <input type="text" name="banUser" value="{{ $report.UserID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Ban User"/>
+                            </form>
+                            <form method="post">
+                                <input type="text" name="deleteTopic" value="{{ $report.TopicID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Delete Topic"/>
+                            </form>
+                            <form method="post">
+                                <input type="text" name="removeReport" value="{{ $report.ReportID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Remove Report"/>
+                            </form>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="containerBanned">
+                <div class="bannedusers">
+                    <h2>Banned Users:</h2>
+                    {{ range $user := $base.BannedUsers }}
+                        <div class="user">
+                            <img src="{{ $user.ProfilePicture }}"" alt="ProfilePicture">
+                            <h3>{{ $user.Username }}</h3>
+                            <form method="post">
+                                <input type="text" name="unbanUser" value="{{ $user.UserID }}" style="visibility: hidden;">
+                                <input class="submitbutton" type="submit" value="Unban {{$user.Username}}"/>
+                            </form>
+                        </div>
+                    {{ end }}
+                </div>
+                <div class="bannedwords">
+                    <h2>Words Blacklist:</h2>
+                    <div class="wordsinput">
+                        <form method="post">
+                            <input class="inputLog" type="text" placeholder="Enter a word"  name="addWord" id="">
+                            <input class="submitbutton" type="submit" value="Submit"></input>
+                        </form>
+                    </div>
+                    <div class="wordslist">
+                        {{range $word := $base.WordsBlacklist }}
+                            <div class="word">
+                                <p>{{ $word.Word }}</p>
+                                <form method="post">
+                                    <input type="text" name="deleteWord" value="{{ $word.Word }}"" style="visibility: hidden;">
+                                    <input class="submitbutton" type="submit" value="Delete"/>
+                                </form>
+                            </div>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+{{ end }}
