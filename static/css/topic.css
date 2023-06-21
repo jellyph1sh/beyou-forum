@@ -147,7 +147,6 @@
 .imgTopic {
     width: 8rem;
     height: 8rem;
-    object-fit: contain;
     border: 3px solid #E2581C;
     border-radius: 999px;
 }
@@ -303,6 +302,8 @@
     height: max-content;
 }
 
+
+
 .containerAddPost h1 {
     color: whitesmoke;
     font-family: 'Poppins',sans-serif;
@@ -341,6 +342,11 @@
     border: 2px solid #D36638;
     color: white;
     cursor: pointer;
+}
+
+.addPostBtn:hover {
+    color: lightgrey;
+    transition: .5s;
 }
 
 .formReportTopic {
