@@ -124,7 +124,7 @@
                                 <form method="post">
                                     <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
                                     <input  id="like" type="submit" value="unLike" hidden>
-                                    <label for="like"><span class="material-symbols-outlined"> thumb_up</span></label>
+                                    <label for="like"><span class="isLiked material-symbols-outlined"> thumb_up</span></label>
                                 </form>
                                 {{ else }}
                                     <form method="post">
@@ -141,7 +141,7 @@
                                 <form method="post">
                                     <input type="text" name="unDislike" value="{{$Post.PostID}}" hidden>
                                     <input id="dislike" type="submit" value="unDislike" hidden>
-                                    <label for="dislike"><span class="material-symbols-outlined"> thumb_down</span></label>
+                                    <label for="dislike"><span class="isLiked material-symbols-outlined"> thumb_down</span></label>
                                 </form>
                                 {{ else }}
                                     <form method="post">
