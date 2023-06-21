@@ -69,12 +69,16 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookieIsConnected)
 		cookieIdUser := http.Cookie{Name: "idUser", Value: ""}
 		http.SetCookie(w, &cookieIdUser)
+		cookieRemenberMe := http.Cookie{Name: "Remember", Value: "false"}
+		http.SetCookie(w, &cookieRemenberMe)
 		break
 	case disconnect != "":
 		cookieIsConnected := http.Cookie{Name: "isConnected", Value: "false"}
 		http.SetCookie(w, &cookieIsConnected)
 		cookieIdUser := http.Cookie{Name: "idUser", Value: ""}
 		http.SetCookie(w, &cookieIdUser)
+		cookieRemenberMe := http.Cookie{Name: "Remember", Value: "false"}
+		http.SetCookie(w, &cookieRemenberMe)
 		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
 	case editMail != "":
 		if !datamanagement.IsEmailAlreadyExist(editMail) {
