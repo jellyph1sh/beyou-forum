@@ -64,6 +64,11 @@ func GetReportsTopicInformations() []ReportTopicInformations {
 }
 
 func Automod(w http.ResponseWriter, r *http.Request) {
+	cookieIdUser, _ := r.Cookie("idUser")
+	if !datamanagement.IsAdmin(getCookieValue(cookieIdUser)) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 	t := template.Must(template.ParseFiles("./static/html/automod.html", "./static/html/navBar.html"))
 	banPost := r.FormValue("banUser")
 	deletePost := r.FormValue("deletePost")
