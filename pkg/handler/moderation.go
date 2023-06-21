@@ -28,7 +28,7 @@ type ReportTopicInformations struct {
 	Picture     string
 }
 
-type Moderation struct {
+type ModerationInformations struct {
 	ReportsPostInformations  []ReportPostInformations
 	ReportsTopicInformations []ReportTopicInformations
 	BannedUsers              []datamanagement.Users
@@ -65,13 +65,13 @@ func GetReportsTopicInformations() []ReportTopicInformations {
 	return reportsTopics
 }
 
-func Automod(w http.ResponseWriter, r *http.Request) {
+func Moderation(w http.ResponseWriter, r *http.Request) {
 	cookieIdUser, _ := r.Cookie("idUser")
 	if !datamanagement.IsAdmin(getCookieValue(cookieIdUser)) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	t := template.Must(template.ParseFiles("./static/html/automod.html", "./static/html/navBar.html"))
+	t := template.Must(template.ParseFiles("./static/html/moderation.html", "./static/html/navBar.html"))
 	banPost := r.FormValue("banUser")
 	deletePost := r.FormValue("deletePost")
 	deleteTopic := r.FormValue("deleteTopic")
@@ -104,7 +104,7 @@ func Automod(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(deleteWord, "deleted!")
 	}
 
-	t.ExecuteTemplate(w, "automod", Moderation{
+	t.ExecuteTemplate(w, "moderation", ModerationInformations{
 		ReportsPostInformations:  GetReportsPostInformations(),
 		ReportsTopicInformations: GetReportsTopicInformations(),
 		BannedUsers:              datamanagement.GetAllBannedUsers(),

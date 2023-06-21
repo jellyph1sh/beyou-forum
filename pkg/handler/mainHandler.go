@@ -13,8 +13,8 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		Home(w, r)
 	case url[1] == "account" && len(url) == 2:
 		Account(w, r)
-	case url[1] == "automod" && len(url) == 2:
-		Automod(w, r)
+	case url[1] == "moderation" && len(url) == 2:
+		Moderation(w, r)
 	case url[1] == "explore" && len(url) == 2:
 		Explore(w, r)
 	case url[1] == "login" && len(url) == 2:
