@@ -45,7 +45,7 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 			for row.Next() {
 				row.Scan(&id)
 			}
-			destinationPath := "./static/img/" + title + fmt.Sprint(id) + "." + strings.Split(handler.Filename, ".")[1]
+			destinationPath := "./static/img/" + title + "." + strings.Split(handler.Filename, ".")[1]
 			destinationFile, err := os.Create(destinationPath)
 			if err != nil {
 				fmt.Println("Failed to create destination file")
@@ -55,10 +55,12 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 			if err != nil {
 				fmt.Println("Failed to save photo on server")
 			}
-			fileName = "../img/" + title + fmt.Sprint(id) + "." + strings.Split(handler.Filename, ".")[1]
+			fileName = "../img/" + title + "." + strings.Split(handler.Filename, ".")[1]
 		}
 		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: fileName, CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0}}
+		println("ok1")
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
+		println("ok2")
 		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetOneTopicByName(title).TopicID)
 		http.Redirect(w, r, "http://localhost:8080/topic/"+title, http.StatusSeeOther)
 	}
