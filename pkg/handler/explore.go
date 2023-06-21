@@ -28,10 +28,10 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 	description := r.FormValue("description")
 	tags := r.FormValue("tags")
 	if title != "" && (datamanagement.GetOneTopicByName(title) == datamanagement.Topics{}) {
-		fmt.Println("test")
 		if !datamanagement.CheckContentByBlackListWord(title) && !datamanagement.CheckContentByBlackListWord(description) && !datamanagement.CheckContentByBlackListWord(tags) && len(strings.Split(title, " ")) == 1 {
 			return true
 		}
+		title := strings.Title(title)
 		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: "../img/PP_wb.png", CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0}}
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
 		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetOneTopicByName(title).TopicID)

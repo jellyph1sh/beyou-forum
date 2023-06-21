@@ -125,6 +125,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	topicDisplayStruct.Tags = datamanagement.GetTagsByTopic(topicDisplayStruct.Topic.TopicID)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
+	topicDisplayStruct.IsAdmin = false
 	if isConnected == "true" {
 		cookieIdUser, _ := r.Cookie("idUser")
 		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))
