@@ -57,10 +57,12 @@ func AddLineIntoTargetTable(data DataContainer, table string) {
 }
 
 func UpvotesTopic(topicID int, idUser string) {
+	AddDeleteUpdateDB("UPDATE Topics SET Upvotes = Upvotes + 1 WHERE TopicID = ?;", topicID)
 	AddLineIntoTargetTable(DataContainer{Upvotes: Upvotes{TopicID: topicID, UserID: idUser}}, "Upvotes")
 }
 
 func UnUpvotesTopic(topicID int, idUser string) {
+	AddDeleteUpdateDB("UPDATE Topics SET Upvotes = Upvotes - 1 WHERE TopicID = ?;", topicID)
 	AddDeleteUpdateDB("DELETE FROM Upvotes WHERE TopicID = ? AND UserID = ?;", fmt.Sprint(topicID), fmt.Sprint(idUser))
 }
 

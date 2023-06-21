@@ -120,7 +120,6 @@
                         <p class="contentPost">{{$Post.Content}}</p>
                         <div class="containerLikesPost rowContainer">
                             <div class="rowContainer containerLikeComp">
-                                <p>{{$Post.PostID}}</p>
                                 {{if $Post.IsLikeByConnectedUser}}
                                 <form method="post">
                                     <input type="text" name="unLike" value="{{$Post.PostID}}" hidden>
