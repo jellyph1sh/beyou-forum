@@ -146,12 +146,25 @@ func CheckContentByBlackListWord(content string) bool {
 			}
 		}
 	}
+	if IsAnyWordToLong(content) {
+		return false
+	}
 	return true
 }
 
 func arrayContains(array []string, word string) bool {
 	for _, val := range array {
 		if word == val {
+			return true
+		}
+	}
+	return false
+}
+
+func IsAnyWordToLong(s string) bool {
+	as := strings.Split(s, " ")
+	for _, w := range as {
+		if len(w) > 20 {
 			return true
 		}
 	}

@@ -35,7 +35,7 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 		if !datamanagement.CheckContentByBlackListWord(title) && !datamanagement.CheckContentByBlackListWord(description) && !datamanagement.CheckContentByBlackListWord(tags) && len(strings.Split(title, " ")) == 1 {
 			return true
 		}
-		title := strings.Title(title)
+		title = strings.Title(title)
 		fileName := "../img/PP_wb.png"
 		if file != nil && err == nil {
 			defer file.Close()
