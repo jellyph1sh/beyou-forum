@@ -1,11 +1,13 @@
+/*------------------ Responsive ------------------*/
+
 @media screen and (max-width:600px) {
     .containerExplorePage {
         margin-top: 7rem;
      }
      .containerContentTopicPage {
+        flex-direction: column;
          justify-content: space-around;
          flex-wrap: wrap;
-         flex-direction: column;
          align-items: center;
          gap: 1rem;
      }
@@ -27,9 +29,9 @@
        margin-top: 7rem;
     }
     .containerContentTopicPage {
+        flex-direction: column;
         justify-content: space-around;
         flex-wrap: wrap;
-        flex-direction: column;
         align-items: center;
         gap: 1rem;
     }
@@ -48,14 +50,14 @@
 @media screen and (min-width:900px) {
     .containerExplorePage {
         position: absolute;
-        width: calc(100vw - 340px);
         right: 10px;
         top: 0;
+        width: calc(100vw - 340px);
     }
     .containerContentTopicPage {
-        width: var(--widthContentPage);
         flex-direction: row;
         justify-content: space-between;
+        width: var(--widthContentPage);
     }
     .containerPostsTopics {
         width: var(--widthPostsContainer) ;
@@ -69,17 +71,17 @@
     }
 }
 
-
+/*------------------ Container ------------------*/
 
 .containerHeaderTopic {
     display: flex;
     flex-direction: row;
-    padding: 1rem 3vw;
-    background-color: #28292F;
-    border-radius: 10px;
-    margin: 0.5rem 1vw;
     align-items: center;
     justify-content: space-between;
+    padding: 1rem 3vw;
+    margin: 0.5rem 1vw;
+    border-radius: 10px;
+    background-color: #28292F;
 }
 
 .containerLeftHeaderTopic {
@@ -87,8 +89,8 @@
 }
 
 .containerInformations {
-    margin: 0 4vw;
     justify-content: center;
+    margin: 0 4vw;
 }
 
 .containerHeaderInfo {
@@ -96,233 +98,98 @@
     gap: 1vw;
 }
 
-.separationCreationDate {
-    width: .4rem;
-    height: .4rem;
-    background-color: #8D8D8D;
-    border-radius: 999px;
-}
-
-.titleTopicPage {
-    color: whitesmoke;
-    font-family: 'Poppins';
-    margin: 0;
-    font-size: 34px;
-}
-
-.flagReportIcon {
-    color: #E2581C;
-    cursor: pointer;
-}
-
-.createTopicDate{
-    color: #8D8D8D;
-    font-family: 'Poppins',sans-serif;
-    font-size: 16px;
-    margin: 0;
-}
-
-.containerTags {
-    width: max-content;
-    justify-content: space-between;
-    gap: 1vw;
-}
-
-.tag {
-    border-radius: 999px;
-    color: whitesmoke;
-    font-family: 'Poppins';
-    padding: 0.2rem 1vw;
-    font-size: 12px;
-    border-top: 4px solid #393a44;
-    background-color: #2d2f36;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
-}
-
-.descriptionTopic {
-    font-family: 'Poppins-regular';
-    color: #8D8D8D;
-    margin: 0.5rem 2vw;
-    font-size: 14px;
-}
-
-.imgTopic {
-    width: 8rem;
-    height: 8rem;
-    border: 3px solid #E2581C;
-    border-radius: 999px;
-}
-
 .containerBtnTopic {
     gap: 5vh;
 }
 
-.btnFollow {
-    background-color: #D36638;
+.containerTags {
+    justify-content: space-between;
+    width: max-content;
+    gap: 1vw;
+}
+
+.tag {
+    padding: 0.2rem 1vw;
+    font-family: 'Poppins';
+    font-size: 12px;
+    border-top: 4px solid #393a44;
     border-radius: 999px;
-    padding: 0.4rem 1.5rem;
-    font-family: 'Poppins',sans-serif;
-    text-transform: uppercase;
-    color: white;
-    border: 3px solid transparent;
+    color: whitesmoke;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
+    background-color: #2d2f36;
 }
-
-.btnFollow:hover {
-    background-color: transparent;
-    transition: .5s;
-    border: 3px solid #D36638;
-    cursor: pointer;
-}
-
-.btnUpvote{
-    background-color: transparent;
-    border-radius: 999px;
-    padding: 0.4rem 1.5rem;
-    font-family: 'Poppins',sans-serif;
-    text-transform: uppercase;
-    color: white;
-    border: 3px solid #D36638;
-}
-
-.btnUpvote:hover {
-    background-color: #D36638;
-    transition: .5s;
-    cursor: pointer;
-}
-
-/* headerTopic */
 
 .containerPostsTopics {
     gap: 1.5rem;
-
     --widthPostsContainer : calc(60 * var(--widthContentPage) / 100);
-
 }
 
 .containerPostTopics {
-    background-color: #28292F;
+    margin: 0 2vw;
     padding: 1rem 5vw;
     border-radius: 10px;
-    margin: 0 2vw;
-
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
+    background-color: #28292F;
 }
 
 .containerHeaderPost {
-    gap: 1.50vw;
     align-items: center;
-}
-
-.imgPost {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 999px;
-    border: 2px solid #D36638;
-}
-
-.authorNamePost {
-    color: whitesmoke;
-    font-family: 'Poppins',sans-serif;
-}
-
-.postTopicDate{
-    color: #8D8D8D;
-    font-family: 'Poppins',sans-serif;
-    font-size: 14px;
-    margin: 0;
-}
-
-.flagReportPostIcon {
-    color: #8D8D8D;
-}
-
-.flagReportPostIcon:hover {
-    color: #6d6c6c;
-    cursor: pointer;
+    gap: 1.50vw;
 }
 
 .contentPost {
-    color: whitesmoke;
-    font-family: 'Poppins-regular',sans-serif;
-    font-size: 14px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    font-family: 'Poppins-regular',sans-serif;
+    font-size: 14px;
+    color: whitesmoke;
 }
 
 .containerLikesPost {
-    gap: .5vw;
     align-self: flex-end;
-    border-radius: 999px;
     overflow: hidden;
     margin-right: -3vw;
-}
-
-.containerLikesPost p {
-    color: whitesmoke;
-    font-family: 'Poppins';
-    margin: 0;
-    text-align: center;
-    height: 100%;
+    gap: .5vw;
+    border-radius: 999px;
 }
 
 .containerLikeComp {
-    background-color: #38393F;
     align-items: center;
     justify-content: center;
     padding: 0.2rem 1vw;
     padding-top: 0.3rem;
     gap: 0.5vw;
-}
-
-
-.containerLikeComp span {
-    color: whitesmoke;
-    cursor: pointer;
-}
-
-.containerLikeComp span:hover {
-    color: rgb(202, 202, 202);
-    cursor: pointer;
+    background-color: #38393F;
 }
 
 .containerContentTopicPage {
     display: flex;
-
     margin: 2rem 1vw;
     --widthContentPage : calc(100vw - 370px);
-
 }
 
 .containerAddPost {
+    align-items: center;
+    height: max-content;
     padding: 1rem;
     padding-bottom: 0;
-    background-color: #28292F;
     border-radius: 10px;
-    align-items: center;
-    gap: 2vh;
-    height: max-content;
-}
-
-.containerAddPost h1 {
-    color: whitesmoke;
-    font-family: 'Poppins',sans-serif;
-    text-align: center;
-    font-size: 20px;
-    margin: 0.25rem;
+    gap: 2vh; 
+    background-color: #28292F;
 }
 
 .textAreaAddPost {
+    width: 100%;
+    min-height: 25vh;
+    padding: .5rem;
+    text-align: start;
     border: 2px dashed #8D8D8D;
     border-radius: 10px;
-    background-color: transparent;
-    color: #8D8D8D;
     font-family: 'Poppins-regular';
-    padding: .5rem;
-    min-height: 25vh;
-    text-align: start;
     resize: none;
-    width: 100%;
+    color: #8D8D8D;
+    background-color: transparent;
 }
 
 .textAreaAddPost:focus {
@@ -332,29 +199,17 @@
 .containerAddPost form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     align-items: center;
     padding-bottom: 1rem;
-}
-
-.addPostBtn {
-    border-radius: 999px;
-    border: 2px solid #D36638;
-    color: white;
-    cursor: pointer;
-}
-
-.addPostBtn:hover {
-    color: lightgrey;
-    transition: .5s;
+    gap: 1rem;
 }
 
 .formReportTopic {
-    background-color: #28292F;
-    border-radius: 5px;
     width: max-content;
     overflow: hidden;
+    border-radius: 5px;
     border: 2px solid #D36638;
+    background-color: #28292F;
 }
 
 #popupReport {
@@ -371,41 +226,9 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.formReportTopic h4 {
-    color: #D36638;
-    font-family: 'Poppins',sans-serif;
-    text-align: start;
-    width: 100%;
-    background-color: #373845 ;
-    padding: .5rem 1vw;
-    margin: 0;
-    padding: .5rem 1vw;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.formReportTopic h5 {
-    color: white;
-    padding: .5rem 1vw;
-    font-family: 'Poppins';
-    margin: .1rem;
-}
-
 .containerInfoReportTopic {
     justify-content: space-between;
     padding: .5rem 1vw;
-}
-
-.topInfoText {
-    padding: .5rem 1vw;
-    color: whitesmoke;
-    text-transform: uppercase;
-    font-family: 'Poppins';
-    margin: .1rem;
-}
-
-.textInfo {
-    color: lightgray;
-    font-family: 'Poppins-regular';
 }
 
 .formReportTopic form {
@@ -414,19 +237,15 @@
 }
 
 .inputDescriptionReport {
-    color: #D3D3D3;
+    height: 3rem;
+    padding: 1rem;
     font-family: 'Poppins-regular';
     background-color: transparent;
     border-radius: 1.5px;
     font-size: 12px;
     resize: none;
-    padding: 1rem;
     outline: none;
-    height: 3rem;
-}
-
-.inputDescriptionReport:focus {
-    outline: none;
+    color: #D3D3D3;
 }
 
 .labelReportTopic {
@@ -434,33 +253,13 @@
     font-family: 'Poppins',sans-serif;
 }
 
+.inputDescriptionReport:focus {
+    outline: none;
+}
+
 .containerBtnRpTopic {
     align-self: flex-end;
     gap: 1rem;
-}
-
-.btnCancel {
-    background-color: transparent;
-    color: #B39D9D;
-    font-family: 'Poppins';
-    border: none;
-    outline: none;
-    cursor: pointer;
-}
-
-.btnSubmitRp {
-    background-color: #D36638;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border: 2px solid #D36638;
-    color: black;
-    font-family: 'Poppins';
-    cursor: pointer;
-}
-
-.btnSubmitRp:hover {
-    background-color: transparent;
-    transition: .5s;
 }
 
 #popupReportPost {
@@ -477,22 +276,221 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.contentPostReport {
+
+/*------------------ Texts ------------------*/
+
+.titleTopicPage {
+    margin: 0;
+    font-family: 'Poppins';
+    font-size: 34px;
+    color: whitesmoke;
+}
+
+.createTopicDate{
+    margin: 0;
+    font-family: 'Poppins',sans-serif;
+    font-size: 16px;
     color: #8D8D8D;
+}
+
+.descriptionTopic {
+    margin: 0.5rem 2vw;
+    font-size: 14px;
     font-family: 'Poppins-regular';
+    color: #8D8D8D;
+}
+
+.authorNamePost {
+    font-family: 'Poppins',sans-serif;
+    color: whitesmoke;
+}
+
+.postTopicDate{
+    margin: 0;
+    font-size: 14px;
+    font-family: 'Poppins',sans-serif;
+    color: #8D8D8D;
+}
+
+.containerLikesPost p {
+    margin: 0;
+    height: 100%;
+    text-align: center;
+    font-family: 'Poppins';
+    color: whitesmoke;
+}
+
+.containerAddPost h1 {
+    margin: 0.25rem;
+    text-align: center;
+    font-family: 'Poppins',sans-serif;
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+.formReportTopic h4 {
+    width: 100%;
     padding: .5rem 1vw;
-    
+    margin: 0;
+    text-align: start;
+    font-family: 'Poppins',sans-serif;
+    color: #D36638;
+    background-color: #373845 ;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.formReportTopic h5 {
+    color: white;
+    padding: .5rem 1vw;
+    font-family: 'Poppins';
+    margin: .1rem;
+}
+
+.topInfoText {
+    padding: .5rem 1vw;
+    margin: .1rem;
+    text-transform: uppercase;
+    font-family: 'Poppins';
+    color: whitesmoke;
+}
+
+.textInfo {
+    color: lightgray;
+    font-family: 'Poppins-regular';
 }
 
 .coloredText {
     color: #D36638;
 }
 
+.contentPostReport {
+    padding: .5rem 1vw;
+    font-family: 'Poppins-regular';
+    color: #8D8D8D;
+}
+
+/*------------------ Buttons ------------------*/
+
+.btnFollow {
+    padding: 0.4rem 1.5rem;
+    text-transform: uppercase;
+    border-radius: 999px;
+    border: 3px solid transparent;
+    font-family: 'Poppins',sans-serif;
+    color: white;
+    background-color: #D36638;
+}
+
+.btnFollow:hover {
+    cursor: pointer;
+    transition: .5s;
+    border: 3px solid #D36638;
+    background-color: transparent;
+}
+
+.btnUpvote{
+    padding: 0.4rem 1.5rem;
+    text-transform: uppercase;
+    border-radius: 999px;
+    border: 3px solid #D36638;
+    font-family: 'Poppins',sans-serif;
+    color: white;
+    background-color: transparent;
+}
+
+.btnUpvote:hover {
+    cursor: pointer;
+    transition: .5s;
+    background-color: #D36638;
+}
+
+.addPostBtn {
+    border-radius: 999px;
+    border: 2px solid #D36638;
+    color: white;
+    cursor: pointer;
+}
+
+.addPostBtn:hover {
+    transition: .5s;
+    color: lightgrey;
+}
+
+.btnCancel {
+    font-family: 'Poppins';
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #B39D9D;
+    background-color: transparent;
+}
+
+.btnSubmitRp {
+    cursor: pointer;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 2px solid #D36638;
+    font-family: 'Poppins';
+    color: black;
+    background-color: #D36638;
+}
+
+.btnSubmitRp:hover {
+    background-color: transparent;
+    transition: .5s;
+}
+
+/*------------------ Others ------------------*/
+
+.separationCreationDate {
+    width: .4rem;
+    height: .4rem;
+    border-radius: 999px;
+    background-color: #8D8D8D;
+}
+
+.flagReportIcon {
+    cursor: pointer;
+    color: #E2581C;
+}
+
+.imgTopic {
+    width: 8rem;
+    height: 8rem;
+    border: 3px solid #E2581C;
+    border-radius: 999px;
+}
+
+.imgPost {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 999px;
+    border: 2px solid #D36638;
+}
+
+.flagReportPostIcon {
+    color: #8D8D8D;
+}
+
+.flagReportPostIcon:hover {
+    color: #6d6c6c;
+    cursor: pointer;
+}
+
+.containerLikeComp span {
+    color: whitesmoke;
+    cursor: pointer;
+}
+
+.containerLikeComp span:hover {
+    color: rgb(202, 202, 202);
+    cursor: pointer;
+}
 
 .isLiked {
-  font-variation-settings:
-  'FILL' 1,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 48
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
 }
