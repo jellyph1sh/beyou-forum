@@ -37,9 +37,9 @@
                             <img class="imgTopic" src="{{$topic.Picture}}">
                             <h2 class="nameTopic">/{{$topic.Title}}</h2>
                         </div>
-                        <div>
+                        <div class="rowContainer containerTags">
                             {{range $tag := (index $root.Tags $i)}}
-                                <p>#{{$tag}}</p>
+                                <p class="tag">#{{$tag}}</p>
                             {{end}}
                         </div>
                         <p class="datetopic">Created - {{$topic.CreationDate.Format "Jan 02, 2006"}} by {{index $root.Users $i}}</p>
@@ -53,7 +53,6 @@
                     </div>
                 {{end}}
             </div>
-        
             <!-- paging -->
             <div class="containerPagination rowContainer alignCenter">
                 <form id="previous" method="post">
@@ -76,7 +75,7 @@
                 <h2>Wanna talk about a new topic ?</h2>
                 <form method="post" class="containerFormCreate columnContainer" enctype="multipart/form-data">
                     <label>
-                        About what? <input class="aboutWhatInput" type="text" name="topicTitle" required>
+                        About what? <input placeholder="Write here without spaces" class="aboutWhatInput" type="text" name="topicTitle" required>
                     </label>
                     <div class="columnContainer">
                         <h3 class="indicationsCreateTopic">Description</h3>
@@ -86,10 +85,13 @@
                         <h3 class="indicationsCreateTopic">Tags need to be separates by spaces</h3>
                         <input class="inputTags" type="text" name="tags" placeholder="Add tags ..."/>
                     </div>
-                    <h3 class="indicationsCreateTopic indicationsCreateTopicSubmit">Press enter to create</h3>
+                    <div class="rowContainer containerBtnImgExplore">
+                        <input id="uploadTopicPicture" type="file" name="photo" hidden>
+                        <label class="uploadBtnExplore" for="uploadTopicPicture">Inport image</label>
+                        <input class="submitUploadBtnExplore" type="submit" value="Upload">
+                    </div>
+                     <h3 class="indicationsCreateTopic indicationsCreateTopicSubmit">Press enter to create</h3>
                     <input type="submit" hidden>
-                    <input type="file" name="photo">
-                    <input type="submit" value="Upload">
                 </form>
             </div>
         </div>
