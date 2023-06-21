@@ -79,7 +79,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookieIdUser)
 		cookieRemenberMe := http.Cookie{Name: "Remember", Value: "false"}
 		http.SetCookie(w, &cookieRemenberMe)
-		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
+		http.Redirect(w, r, "http://localhost:8080/", http.StatusSeeOther)
 	case editMail != "":
 		if !datamanagement.IsEmailAlreadyExist(editMail) && datamanagement.CheckContentByBlackListWord(editMail) {
 			datamanagement.AddDeleteUpdateDB("UPDATE Users SET Email = ? WHERE UserID = ?;", editMail, idUser)
