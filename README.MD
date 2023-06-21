@@ -2,11 +2,12 @@
 In a terminal: "go run main.go".
 
 Log in with :
-    admin account
-        login: admin
-        password: admin
-    user account
-        create an account at: http://localhost:8080/register
+- admin account
+    - login: admin
+    - password: admin
+- user account
+    - create an account at: http://localhost:8080/register
+
 # BEYOU FORUM
 This readme corresponds to our latest B1 IT project: FORUM
 
@@ -36,7 +37,7 @@ This page is the exploration page of our site. The user finds all topics here, a
 ## Page Topic (http://localhost:8080/topic/ + "topic name")
 This page is accessed by clicking on "check topic".
 On this page, users can read the various posts linked to a topic and/or add a new topic. They can also upvote or follow the topic. Clicking on a user's profile photo takes the user to their profile.
-## Admin page (http://localhost:8080/automod)
+## Admin page (http://localhost:8080/moderation)
 This page is accessed when you are logged in as admin and click on report in the navBar.
 On the pages, it's possible to report a post or topic thanks to the little flag.
 All reports appear on this page, and the admin can ban the user (hammer icon), delete the post (trash can icon), and delete the report (cross icon).
