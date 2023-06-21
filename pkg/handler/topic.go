@@ -134,11 +134,10 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			if datamanagement.CheckContentByBlackListWord(newPost) {
 				post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now()}}
 				datamanagement.AddLineIntoTargetTable(post, "Posts")
+				http.Redirect(w, r, r.URL.String(), http.StatusSeeOther)
 			} else {
 				topicDisplayStruct.IsNotValid = true
 			}
-
-			http.Redirect(w, r, r.URL.String(), http.StatusSeeOther)
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
