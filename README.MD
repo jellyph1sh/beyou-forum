@@ -1,4 +1,5 @@
 ## LAUNCHING THE SERVER
+**YOU NEED GOLANG VERSION >= 1.20!**
 In a terminal: "go run main.go".
 
 Log in with :
