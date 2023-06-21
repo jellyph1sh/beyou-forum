@@ -5,79 +5,106 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/moderation.css">
+    <link rel="stylesheet" href="../css/easyCss.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <title>automod</title>
 </head>
 <body>
     <div class="containerAutomodPage">
-        <!-- {{ template "navBar" }} -->
-        <div class=""></div>
-        <div class="automod">
+        {{ template "navBar" }}
+        <div class="containerModerationPage ">
             {{ $base := . }}
-            <div class="containerReports">
-                <div class="reportsPosts">
-                    <h1>Reports:</h1>
-                    <h2>Posts:</h2>
+            <div class="containerReports columnContainer">
+                <div class="containerReportPosts columnContainer">
+                    <h1 class="titlePageAutomode">Reports:</h1>
+                    <h2 class="subtitlePage">Posts:</h2>
                     {{ range $report := $base.ReportsPostInformations }}
-                        <div class="post">
-                            <img src="{{ $report.ProfilePicture }}" alt="ProfilePicture">
-                            <h3>Username: {{ $report.Username }}</h3>
-                            <p>Message: {{ $report.Message }}</p>
-                            <p>Reason: {{ $report.Reason }}</p>
-                            <form method="post">
-                                <input type="text" name="banUser" value="{{ $report.UserID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Ban User"/>
-                            </form>
-                            <form method="post">
-                                <input type="text" name="deletePost" value="{{ $report.PostID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Delete Post"/>
-                            </form>
-                            <form method="post">
-                                <input type="text" name="removeReport" value="{{ $report.ReportID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Remove Report"/>
-                            </form>
+                        <div class="containerReportPost rowContainer">
+                            <div class="columnContainer">
+                                <img class="imgReportPost" src="{{ $report.ProfilePicture }}" alt="ProfilePicture">
+                                <h3 class="userReportPost">{{ $report.Username }}</h3>
+                            </div>
+                            <p class="contentReportPost">{{ $report.Message }}</p>
+                            <div class="columnContainer containerReportMsg">
+                                <h3>Report message</h3>
+                                <p>{{ $report.Reason }}</p>
+                            </div>
+                            <div class="rowContainer containerBtnBanPost">
+                                <form method="post">
+                                    <input type="text" name="banUser" value="{{ $report.UserID }}" hidden>
+                                    <input id="ban" class="submitbutton" type="submit" value="Ban User" hidden/>
+                                    <label for="ban"><span class="btnBan material-symbols-outlined">gavel</span></label>
+                                </form>
+                                <form method="post">
+                                    <input type="text" name="deletePost" value="{{ $report.PostID }}" hidden>
+                                    <input id="deletePost" class="submitbutton" type="submit" value="Delete Post" hidden/>
+                                    <label for="deletePost"><span class="btnDelete material-symbols-outlined">delete_forever</span></label>
+                                </form>
+                                <form method="post">
+                                    <input type="text" name="removeReport" value="{{ $report.ReportID }}" hidden>
+                                    <input id="remove" class="submitbutton" type="submit" value="Remove Report" hidden/>
+                                    <label for="remove"><span class="btnCancel material-symbols-outlined">cancel</span></label>
+                                </form>
+                            </div>
                         </div>
                     {{ end }}
                 </div>
-                <div class="reportsTopics">
-                    <h2>Topics:</h2>
+                <div class="containerReportsTopics columnContainer">
+                    <h2 class="subtitlePage">Topics:</h2>
                     {{ range $report := $base.ReportsTopicInformations }}
-                        <div class="topic">
-                            <img src="{{ $report.Picture }}" alt="TopicPicture">
-                            <h3>Title : /{{ $report.Title }}</h3>
-                            <p>Description : {{ $report.Description }}</p>
-                            <p>Reason : {{ $report.Reason }}</p>
-                            <p>Creator : {{ $report.Username }}</p>
-                            <form method="post">
-                                <input type="text" name="banUser" value="{{ $report.UserID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Ban User"/>
-                            </form>
-                            <form method="post">
-                                <input type="text" name="deleteTopic" value="{{ $report.TopicID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Delete Topic"/>
-                            </form>
-                            <form method="post">
-                                <input type="text" name="removeReport" value="{{ $report.ReportID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Remove Report"/>
-                            </form>
+                        <div class="containerTopicReport rowContainer">
+                            <img class="imgReportTopics" src="{{ $report.Picture }}" alt="TopicPicture">
+                            <h3 class="titleTopicReport">/{{ $report.Title }}</h3>
+                            <div class="columnContainer">
+                                <h3 class="descriptionTopicTitle">Description</h3>
+                                <p class="descriptionTopic">{{ $report.Description }}</p>
+                            </div>
+                            <div class="columnContainer containerReportMsg">
+                                <h3>Report message</h3>
+                                <p>{{ $report.Reason }}</p>
+                            </div>
+                            <div class="columnContainer containerReportMsg">
+                                <h3>Creator topic</h3>
+                                <p>{{ $report.Username }}</p>
+                            </div>
+                            <div class="rowContainer containerBtnBanPost">
+                                <form method="post">
+                                    <input type="text" name="banUser" value="{{ $report.UserID }}" hidden>
+                                    <input id="ban" class="submitbutton" type="submit" value="Ban User" hidden/>
+                                    <label for="ban"><span class="btnBan material-symbols-outlined">gavel</span></label>
+                                </form>
+                                <form method="post">
+                                    <input type="text" name="deleteTopic" value="{{ $report.TopicID }}" hidden>
+                                    <input id="deleteTopic" class="submitbutton" type="submit" value="Delete Topic" hidden/>
+                                    <label for="deleteTopic"><span class="btnDelete material-symbols-outlined">delete_forever</span></label>
+                                </form>
+                                <form method="post">
+                                    <input type="text" name="removeReport" value="{{ $report.ReportID }}" hidden>
+                                    <input id="remove" class="submitbutton" type="submit" value="Remove Report" hidden/>
+                                    <label for="remove"><span class="btnCancel material-symbols-outlined">cancel</span></label>
+                                </form>
+                            </div>
                         </div>
                     {{ end }}
                 </div>
             </div>
-            <div class="containerBanned">
-                <div class="bannedusers">
+            <div class="containerBanned columnContainer">
+                <div class="containerBannedUsers columnContainer">
                     <h2>Banned Users:</h2>
                     {{ range $user := $base.BannedUsers }}
-                        <div class="user">
-                            <img src="{{ $user.ProfilePicture }}"" alt="ProfilePicture">
-                            <h3>{{ $user.Username }}</h3>
-                            <form method="post">
-                                <input type="text" name="unbanUser" value="{{ $user.UserID }}" style="visibility: hidden;">
-                                <input class="submitbutton" type="submit" value="Unban {{$user.Username}}"/>
+                        <div class="user rowContainer">
+                            <img class="imgReportPost" src="{{ $user.ProfilePicture }}"" alt="ProfilePicture">
+                            <h3 class="userReportPost">{{ $user.Username }}</h3>
+                            <form method="post" class="columnContainer alignCenter">
+                                <input type="text" name="unbanUser" value="{{ $user.UserID }}" hidden>
+                                <input id="unban" class="submitbutton" type="submit" value="Unban {{$user.Username}}" hidden/>
+                                <label for="unban"><span class="btnDelete material-symbols-outlined">gavel</span></label>
                             </form>
                         </div>
                     {{ end }}
                 </div>
-                <div class="bannedwords">
+                <div class="containerBannedwords columnContainer">
                     <h2>Words Blacklist:</h2>
                     <div class="wordsinput">
                         <form method="post">
@@ -85,13 +112,14 @@
                             <input class="submitbutton" type="submit" value="Submit"></input>
                         </form>
                     </div>
-                    <div class="wordslist">
+                    <div class="wordslist columnContainer">
                         {{range $word := $base.WordsBlacklist }}
-                            <div class="word">
-                                <p>{{ $word.Word }}</p>
+                            <div class="rowContainer containerWord">
+                                <p class="word">{{ $word.Word }}</p>
                                 <form method="post">
-                                    <input type="text" name="deleteWord" value="{{ $word.Word }}"" style="visibility: hidden;">
-                                    <input class="submitbutton" type="submit" value="Delete"/>
+                                    <input type="text" name="deleteWord" value="{{ $word.Word }}" hidden>
+                                    <input id="deleteWord" class="submitbutton" type="submit" value="Delete" hidden/>
+                                    <label for="deleteWord"><span class="btnDelete material-symbols-outlined">delete_forever</span></label>
                                 </form>
                             </div>
                         {{ end }}
