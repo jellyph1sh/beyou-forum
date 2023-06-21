@@ -79,17 +79,15 @@ func isFollowTopic(topicName string, topicDisplayStruct DataTopicPage, idUser st
 	return topicDisplayStruct
 }
 
-func isUpvoteTopic(topicName string, topicDisplayStruct DataTopicPage, idUser string) DataTopicPage {
+func isUpvoteTopic(topicID int, idUser string) bool {
 	if idUser != "" {
-		rows := datamanagement.SelectDB("SELECT * FROM Upvotes WHERE UserID LIKE ? AND TopicID LIKE ?;", idUser, strconv.Itoa(topicDisplayStruct.Topic.TopicID))
+		rows := datamanagement.SelectDB("SELECT TopicID FROM Upvotes WHERE UserID = ? AND TopicID = ?;", idUser, topicID)
 		defer rows.Close()
-		if !rows.Next() {
-			topicDisplayStruct.IsUpvote = false
-		} else {
-			topicDisplayStruct.IsUpvote = true
+		if rows.Next() {
+			return true
 		}
 	}
-	return topicDisplayStruct
+	return false
 }
 func Topic(w http.ResponseWriter, r *http.Request) {
 	url := strings.Split(r.URL.String(), "/")
@@ -122,7 +120,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	}
 	topicDisplayStruct.Tags = datamanagement.GetTagsByTopic(topicDisplayStruct.Topic.TopicID)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
-	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
+	topicDisplayStruct.IsUpvote = isUpvoteTopic(topic.TopicID, idUser)
 	topicDisplayStruct.IsAdmin = false
 	if isConnected == "true" {
 		cookieIdUser, _ := r.Cookie("idUser")
@@ -137,12 +135,12 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
-				datamanagement.AddDeleteUpdateDB("UPDATE Topics SET Follows = Follows + 1 WHERE TopicID = ?;", topicDisplayStruct.Topic.TopicID)
+				datamanagement.AddDeleteUpdateDB("UPDATE Topics SET Follows = Follows - 1 WHERE TopicID = ?;", topicDisplayStruct.Topic.TopicID)
 				datamanagement.AddDeleteUpdateDB("DELETE FROM Follows WHERE UserID = ?;", idUser)
 				topicDisplayStruct.IsFollow = false
 			} else {
 				line := datamanagement.DataContainer{Follows: datamanagement.Follows{TopicID: topicDisplayStruct.Topic.TopicID, UserID: idUser}}
-				datamanagement.AddDeleteUpdateDB("UPDATE Topics SET Follows = Follows - 1 WHERE TopicID = ?;", topicDisplayStruct.Topic.TopicID)
+				datamanagement.AddDeleteUpdateDB("UPDATE Topics SET Follows = Follows + 1 WHERE TopicID = ?;", topicDisplayStruct.Topic.TopicID)
 				datamanagement.AddLineIntoTargetTable(line, "Follows")
 				topicDisplayStruct.IsFollow = true
 			}
