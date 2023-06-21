@@ -16,30 +16,30 @@
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">GLOBAL</h3>
         <div class="columnContainer containerCatNav">
-                <div class="btnCatContainer rowContainer">
-                    <span class="googleSpan material-symbols-outlined">explore</span>
+                <div class="rowContainer">
                     <form action="/explore" method="post">
                         <input type="text" value="default" name="sort" hidden>
-                        <input type="submit" value="Explore Topics" class="bntCatFollows">
+                        <input type="submit" value="Explore Topics" id="explore" class="bntCatFollows" hidden>
+                        <label for="explore" class="bntCatFollowsContainer flexSpan"><span class="googleSpan material-symbols-outlined">explore</span><span class="bntCatFollows">Explore Topics</span></label>
                     </form>
                 </div>
         </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">MY FOLLOWS</h3>
-        <div class="bntCatFollowsContainer marginCat rowContainer">
-            <span class="googleSpan material-symbols-outlined"> favorite </span>
+        <div class="marginCat rowContainer">
             <form action="/explore" method="post">
                 <input type="text" value="Follows" name="sort" hidden>
-                <input type="submit" value="Topics followed" class="bntCatFollows">
+                <input type="submit" value="Topics followed" class="bntCatFollows" id="follows" hidden>
+                <label for="follows" class="bntCatFollowsContainer flexSpan"><span class="googleSpan material-symbols-outlined">favorite</span><span class="bntCatFollows">Topics followed</span></label>
             </form>
         </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">CREATE</h3>
-            <div class="btnCatContainer btnCatContainerAdd marginCat rowContainer">
-                <img class="upvoteIcon" src="../img/add_icon.png" alt="">
+            <div class="marginCat rowContainer">
                 <form action="/explore#create" method="post">
                     <input type="text" value="default" name="sort" hidden>
-                    <input type="submit" value="Create topic" class="bntCatFollows">
+                    <input type="submit" value="Create topic" class="bntCatFollows" id="topic" hidden>
+                    <label for="topic" class="bntCatFollowsContainer btnCatContainerAdd flexSpan"><img class="upvoteIcon" src="../img/add_icon.png" alt=""><span class="bntCatFollows">Create topic</span></label>
                 </form>
             </div>
         {{ if .IsAdmin}}
