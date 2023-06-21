@@ -393,3 +393,28 @@
     background-color: transparent;
     transition: .5s;
 }
+
+#popupReportPost {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    visibility: hidden;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.contentPostReport {
+    color: #8D8D8D;
+    font-family: 'Poppins-regular';
+    padding: .5rem 1vw;
+    
+}
+
+.coloredText {
+    color: #D36638;
+}
