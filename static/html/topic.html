@@ -17,9 +17,15 @@
         function hidePopup(id) {
           document.getElementById(id).style.visibility = 'hidden';
         }
+        function errorPopup(errorMsg){
+            let content = document.getElementById('popupWords').innerText = errorMsg
+            document.getElementById('popupWords').style.visibility = 'visible';
+        }
     </script>
     {{ template "navBar" .}}
     <div id="main-container" class="containerExplorePage">
+     
+
         <div id="header-topic" class="containerHeaderTopic">
             <div class="rowContainer containerLeftHeaderTopic">
                 <img class="imgTopic" src="{{.Topic.Picture}}" alt="topic_img">
@@ -169,6 +175,19 @@
                 </form>
             </div>
         </div>
+        <div id="popupWords">
+            <div class="containerPopupError columnContainer">
+                <span onclick="hidePopup('popupWords')"  class="closeSpan material-symbols-outlined">close</span>
+                <div class="containerTopError rowContainer">
+                    <h2>It seems that something went <span class="coloredText">wrong</span></h2>
+                    <img src="../img/wrong.png" alt="invalid_img">
+                </div>
+                <h2 id="msgError" class="errorMsgEdit">Invalid Words Used</h2>
+            </div>
+        </div>
+        {{if .IsNotValid}}
+            <script>showPopup('popupWords')</script>
+        {{end}}
     </div>
 </body>
 </html>

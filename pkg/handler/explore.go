@@ -57,6 +57,9 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 			}
 			fileName = "../img/" + title + "." + strings.Split(handler.Filename, ".")[1]
 		}
+		if string(tags[len(tags)-1]) == " " {
+			tags = tags[:len(tags)-1]
+		}
 		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: fileName, CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0}}
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
 		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetOneTopicByName(title).TopicID)

@@ -29,6 +29,7 @@ type DataTopicPage struct {
 	IsUpvote    bool
 	IsConnected string
 	IsAdmin     bool
+	IsNotValid  bool
 }
 
 type PostInTopicPage struct {
@@ -108,6 +109,7 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
 	topicDisplayStruct := DataTopicPage{}
+	topicDisplayStruct.IsNotValid = false
 	topic := datamanagement.GetOneTopicByName(topicName)
 	topicDisplayStruct.Topic = TopicsDate{
 		TopicID:      topic.TopicID,
@@ -129,10 +131,14 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		topicDisplayStruct.IsAdmin = currentUser.IsAdmin
 		topicDisplayStruct.IsConnected = isConnected
 		switch true {
-		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
-			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now()}}
-			datamanagement.AddLineIntoTargetTable(post, "Posts")
-			http.Redirect(w, r, r.URL.String(), http.StatusSeeOther)
+		case len(newPost) > 0 && len(newPost) <= 500:
+			if datamanagement.CheckContentByBlackListWord(newPost) {
+				post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now()}}
+				datamanagement.AddLineIntoTargetTable(post, "Posts")
+				http.Redirect(w, r, r.URL.String(), http.StatusSeeOther)
+			} else {
+				topicDisplayStruct.IsNotValid = true
+			}
 			break
 		case clickFollow != "":
 			if topicDisplayStruct.IsFollow {
