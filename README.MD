@@ -1,5 +1,5 @@
 ## LAUNCHING THE SERVER
-In a wsl terminal: "go run main.go".
+In a terminal: "go run main.go".
 
 Log in with :
     admin account
