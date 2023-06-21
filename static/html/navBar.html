@@ -16,12 +16,13 @@
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">GLOBAL</h3>
         <div class="columnContainer containerCatNav">
-            <a href="/explore">
                 <div class="btnCatContainer rowContainer">
                     <span class="googleSpan material-symbols-outlined">explore</span>
-                    <h1 class="nameCatNav">Explore Topics</h1>
+                    <form action="/explore" method="post">
+                        <input type="text" value="default" name="sort" hidden>
+                        <input type="submit" value="Explore Topics" class="bntCatFollows">
+                    </form>
                 </div>
-            </a>
         </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">MY FOLLOWS</h3>
@@ -34,12 +35,13 @@
         </div>
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">CREATE</h3>
-        <a href="/explore#create">
             <div class="btnCatContainer btnCatContainerAdd marginCat rowContainer">
                 <img class="upvoteIcon" src="../img/add_icon.png" alt="">
-                <h1 class="nameCatNav">Create topic</h1>
+                <form action="/explore#create" method="post">
+                    <input type="text" value="default" name="sort" hidden>
+                    <input type="submit" value="Create topic" class="bntCatFollows">
+                </form>
             </div>
-        </a>
         {{ if .IsAdmin}}
         <span class="underlineNav"></span>
         <h3 class="titleCatNav">ADMIN</h3>
