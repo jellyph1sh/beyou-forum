@@ -10,6 +10,12 @@ nav{
     background-color: #28292F;
 }
 
+.flexSpan {
+    display: flex;
+    gap: 1vw;
+    flex-direction: row;
+}
+
 .bntCatFollowsContainer {
     padding: 0.8rem 1rem ;
     align-items: center;
