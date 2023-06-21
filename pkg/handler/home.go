@@ -45,7 +45,6 @@ type structDisplayHome struct {
 func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWithUserInfo {
 	result := []TopicsWithUserInfo{}
 	for _, element := range topics {
-		// fmt.Println("element.CreatorID", element.CreatorID)
 		var topic TopicsWithUserInfo
 		topic.TopicID = element.TopicID
 		topic.Title = element.Title
@@ -57,8 +56,6 @@ func updateTopicsInTopicsWithUserInfo(topics []datamanagement.Topics) []TopicsWi
 		topic.CreationDate = fmt.Sprint(element.CreationDate.Day()) + " " + fmt.Sprint(element.CreationDate.Month()) + " " + fmt.Sprint(element.CreationDate.Year())
 		user := datamanagement.GetUserById(topic.CreatorID)
 		topic.CreatorName = user.Username
-		// fmt.Println(topic.CreationDate)
-		// fmt.Println(element.CreationDate.Day(), element.CreationDate.Month(), element.CreationDate.Year(), element.CreationDate)
 		result = append(result, topic)
 	}
 	return result

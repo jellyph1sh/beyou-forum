@@ -11,7 +11,7 @@ func GetPostFromUser(idUser string) []Posts {
 	rows := SelectDB("SELECT * FROM Posts WHERE AuthorID = ?;", idUser)
 	defer rows.Close()
 	result := []Posts{}
-	for rows.Next() { // Iterate and fetch the records from result cursor
+	for rows.Next() {
 		var post Posts
 		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate)
 		result = append(result, post)
@@ -338,6 +338,6 @@ func GetTopicByTagAndTitle(search string) []Topics {
 		topicsRow.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows)
 		result = append(result, topic)
 	}
-	fmt.Println(result)
+
 	return result
 }

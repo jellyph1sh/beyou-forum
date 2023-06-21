@@ -30,7 +30,6 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 	description := r.FormValue("description")
 	tags := r.FormValue("tags")
 	file, handler, err := r.FormFile("photo")
-	fmt.Println(title, description, tags)
 	if title != "" && (datamanagement.GetOneTopicByName(title) == datamanagement.Topics{}) {
 		if !datamanagement.CheckContentByBlackListWord(title) && !datamanagement.CheckContentByBlackListWord(description) && !datamanagement.CheckContentByBlackListWord(tags) && len(strings.Split(title, " ")) == 1 {
 			return true

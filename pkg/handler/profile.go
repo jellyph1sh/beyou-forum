@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"forum/pkg/datamanagement"
 	"net/http"
 	"strings"
@@ -22,8 +21,6 @@ type PostWithStructuredDate struct {
 	AuthorName     string
 }
 
-// post du mec (date, contenu, nbrLike, nbrDislike)
-// topic du mec (ppTopic, nom du topic)
 type profile struct {
 	UserInfo         datamanagement.Users
 	UserCreationDate string
@@ -82,6 +79,5 @@ func Profile(w http.ResponseWriter, r *http.Request, isMyProfile bool) {
 		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))
 		displayStructProfile.IsAdmin = currentUser.IsAdmin
 	}
-	fmt.Println(displayStructProfile)
 	t.ExecuteTemplate(w, "profile", displayStructProfile)
 }
