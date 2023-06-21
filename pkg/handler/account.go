@@ -47,6 +47,17 @@ func setDefaultValue(displayStructAccountPage AccountPage) AccountPage {
 }
 
 func Account(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("isConnected")
+	if err != nil {
+		fmt.Println("Cookie does not exist so redirect.")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	isConnected := getCookieValue(cookie)
+	if isConnected == "false" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 	t := template.Must(template.ParseFiles("./static/html/account.html", "./static/html/navBar.html"))
 	delAccount := r.FormValue("delAccount")
 	file, handler, err := r.FormFile("photo")
@@ -135,7 +146,7 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	displayStructAccountPage = setDisplayStructAccount(displayStructAccountPage, currentUser)
 	displayStructAccountPage.Profile_picture = currentUser.ProfilePicture
 	cookieIsConnected, _ := r.Cookie("isConnected")
-	isConnected := getCookieValue(cookieIsConnected)
+	isConnected = getCookieValue(cookieIsConnected)
 	if isConnected != "true" {
 		displayStructAccountPage = setDefaultValue(displayStructAccountPage)
 		displayStructAccountPage.IsConnected = false
