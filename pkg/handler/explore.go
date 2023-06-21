@@ -17,7 +17,7 @@ type DataExplorePage struct {
 	CanPrevious  bool
 	CanNext      bool
 	InvalidTopic bool
-	IsConnected  string
+	IsConnected  bool
 	IsAdmin      bool
 	Tags         [][]string
 }
@@ -53,7 +53,10 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend := DataExplorePage{}
 	dataToSend.IsAdmin = false
 	dataToSend.InvalidTopic = false
+	dataToSend.IsConnected = false
 	if userId != "" {
+		dataToSend.IsConnected = true
+		fmt.Println(userId)
 		currentUser := datamanagement.GetUserById(userId)
 		dataToSend.IsAdmin = currentUser.IsAdmin
 		if createTopic(w, r, userId) {
@@ -111,9 +114,6 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	dataToSend.CanNext = true
 	dataToSend.CanPrevious = true
 	dataToSend.InvalidTopic = false
-	cookieConnected, _ := r.Cookie("isConnected")
-	IsConnected := getCookieValue(cookieConnected)
-	dataToSend.IsConnected = IsConnected
 	if next != "" && pagingInt*2 < len(dataToSend.Topics) {
 		cookiePaging = &http.Cookie{Name: "paging", Value: strconv.Itoa(pagingInt + 1)}
 		pagingInt++

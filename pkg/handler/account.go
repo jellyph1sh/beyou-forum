@@ -65,10 +65,16 @@ func Account(w http.ResponseWriter, r *http.Request) {
 	switch true {
 	case delAccount != "":
 		datamanagement.AddDeleteUpdateDB("DELETE FROM Users WHERE UserID = ?;", idUser)
+		cookieIsConnected := http.Cookie{Name: "isConnected", Value: "false"}
+		http.SetCookie(w, &cookieIsConnected)
+		cookieIdUser := http.Cookie{Name: "idUser", Value: ""}
+		http.SetCookie(w, &cookieIdUser)
 		break
 	case disconnect != "":
 		cookieIsConnected := http.Cookie{Name: "isConnected", Value: "false"}
 		http.SetCookie(w, &cookieIsConnected)
+		cookieIdUser := http.Cookie{Name: "idUser", Value: ""}
+		http.SetCookie(w, &cookieIdUser)
 		http.Redirect(w, r, "http://localhost:8080/account", http.StatusSeeOther)
 	case editMail != "":
 		if !datamanagement.IsEmailAlreadyExist(editMail) {
