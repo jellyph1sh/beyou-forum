@@ -2,11 +2,11 @@
 In a terminal: "go run main.go".
 
 Log in with :
-- admin account
-    - login: admin
-    - password: admin
-- user account
-    - create an account at: http://localhost:8080/register
+- **Admin account:**
+    - **Login:** *admin*
+    - **Password:** *admin*
+- **User account:**
+    - Create an account at: http://localhost:8080/register
 
 # BEYOU FORUM
 This readme corresponds to our latest B1 IT project: FORUM
