@@ -91,6 +91,9 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	unDislike := r.FormValue("unDislike")
 	like := r.FormValue("like")
 	dislike := r.FormValue("dislike")
+	reportPostID := r.FormValue("reportPostID")
+	reportTopicID := r.FormValue("reportTopicID")
+	reportReason := r.FormValue("reportReason")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
 
@@ -143,6 +146,12 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		case unDislike != "":
 			idPost, _ := strconv.Atoi(unDislike)
 			datamanagement.UnLikePostManager(idPost, idUser, "unDislike")
+			break
+		case reportPostID != "" && reportReason != "":
+			datamanagement.AddPostReport(reportPostID, reportReason)
+			break
+		case reportTopicID != "" && reportReason != "":
+			datamanagement.AddTopicReport(reportTopicID, reportReason)
 			break
 		}
 	}

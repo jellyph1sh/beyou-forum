@@ -21,6 +21,20 @@
                         <span class="separationCreationDate"></span>
                         <h2 class="createTopicDate">Created 8 Jul 2015</h2> 
                         <span class="flagReportIcon material-symbols-outlined">flag</span>
+                        <div class="FORMREPORTTOPIC">
+                            <h4>Report</h4>
+                            <h5>Are you sure you want to report this topic?</h5>
+                            <p>TOPIC INFORMATIONS</p>
+                            <p>Title: {{.Topic.Title}}</p>
+                            <p>Description: {{.Topic.Description}}</p>
+                            <form method="post">
+                                <input type="text" name="reportTopicID" value="{{ .Topic.TopicID }}" style="visibility: hidden;">
+                                <label for="reportReason">What's your reason to report this topic?</label>
+                                <input type="text" name="reportReason" value="Your reason">
+                                <button>Cancel</button>
+                                <input type="submit" value="Send">
+                            </form>
+                        </div>
                     </div>
                     <h3 class="descriptionTopic">Le topic où on dit la vérité de la vérité {{.Topic.Description}}</h3>
                     <div class="containerTags rowContainer">
@@ -65,6 +79,19 @@
                             <span class="separationCreationDate"></span>
                             <p class="postTopicDate">{{$Post.StructuredDate}}</p>
                             <span class="flagReportPostIcon material-symbols-outlined">flag</span>
+                            <div class="FORMREPORTPOST">
+                                <h4>Report</h4>
+                                <h5>Are you sure you want to report:"{{ $Post.AuthorName }}"?</h5>
+                                <p>POST CONTENT</p>
+                                <p>{{ $Post.Content }}</p>
+                                <form method="post">
+                                    <input type="text" name="reportPostID" value="{{ $Post.PostID }}" style="visibility: hidden;">
+                                    <label for="reportReason">What's your reason to report this user?</label>
+                                    <input type="text" name="reportReason" value="Your reason">
+                                    <button>Cancel</button>
+                                    <input type="submit" value="Send">
+                                </form>
+                            </div>
                         </div>
                         <p class="contentPost">{{$Post.Content}}</p>
                         <div class="containerLikesPost rowContainer">

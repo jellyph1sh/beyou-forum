@@ -217,3 +217,53 @@ func DeleteReportsFromTopic(topicID string) {
 	}
 	fmt.Println("All reports concerned by PostID:", topicID, "were delete!")
 }
+
+func AddPostReport(postID string, reason string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
+
+	row := db.QueryRow("SELECT AuthorID FROM Posts WHERE PostID = ?;", postID)
+
+	var userID string
+	if err := row.Scan(&userID); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res := AddDeleteUpdateDB("INSERT INTO Reports (ReportID, PostID, ReportUserID, Comment, TopicID) VALUES(?,?,?,?,?);", nil, postID, userID, reason, nil)
+	_, err = res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("New post report! PostID:", postID, "Reason:", reason)
+}
+
+func AddTopicReport(topicID string, reason string) {
+	db, err := sql.Open("sqlite3", "./DB-Forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
+
+	row := db.QueryRow("SELECT CreatorID FROM Topics WHERE TopicID = ?;", topicID)
+
+	var userID string
+	if err := row.Scan(&userID); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res := AddDeleteUpdateDB("INSERT INTO Reports (ReportID, PostID, ReportUserID, Comment, TopicID) VALUES(?,?,?,?,?);", nil, nil, userID, reason, topicID)
+	_, err = res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("New topic report! TopicID:", topicID, "Reason:", reason)
+}
