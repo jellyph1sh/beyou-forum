@@ -77,7 +77,7 @@
         padding: 1rem 30px;
     }
     .containerCreateComp {
-        margin-top: 8rem;
+        margin-top: 6rem;
     }
     .exploreTitle {
         width: 90%;
@@ -173,6 +173,24 @@
     gap: 1rem;
 }
 
+.tag {
+    padding: 0.2rem 1vw;
+    font-family: 'Poppins';
+    font-size: 12px;
+    border-top: 2.5px solid #393a44;
+    border-radius: 999px;
+    color: whitesmoke;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
+    background-color: #2d2f36;
+}
+
+.containerTags {
+    gap: 1rem;
+    padding: 0rem 2rem;
+    padding-top: 0.5em;
+    margin-bottom: -0.5rem;
+}
+
 /*------------------ Texts ------------------*/
 
 .titleCatExplore {
@@ -253,7 +271,56 @@ a {
     animation-fill-mode: forwards;
 }
 
+.submitUploadBtnExplore {
+    margin-top: 2vh;
+    padding: 0.5rem 1rem;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 2px solid #D36638;
+    cursor: pointer;
+    font-family: 'Poppins';
+    cursor: pointer;
+    background-color: #D36638;
+}
+
+.submitUploadBtnExplore:hover {
+    background-color: transparent;
+    transition: .8s;
+    color: whitesmoke;
+}
+
+.containerBtnImgExplore {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-top: -2vh;
+    gap: 1rem;
+}
+
+.uploadBtnExplore {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border: 2px solid #D36638;
+    border-radius: 5px;
+    background-color: transparent;
+}
+
+.uploadBtnExplore:hover {
+    background-color: #D36638;
+    transition: .8s;
+}
+
 /*------------------ Inputs ------------------*/
+
+input[type="file"] { 
+    opacity: 0; 
+    z-index: -1; 
+    position: absolute; 
+}
+
+input[type="file"]:focus + label {
+    outline: 2px solid;  
+}
 
 .containerFormCreate label input[type="text"]:focus  {
     border: none;
