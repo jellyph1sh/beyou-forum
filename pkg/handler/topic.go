@@ -10,10 +10,12 @@ import (
 )
 
 type DataTopicPage struct {
-	Topic    datamanagement.Topics
-	Posts    []PostInTopicPage
-	IsFollow bool
-	IsUpvote bool
+	Topic       datamanagement.Topics
+	Posts       []PostInTopicPage
+	IsFollow    bool
+	IsUpvote    bool
+	IsConnected string
+	IsAdmin     bool
 }
 
 type PostInTopicPage struct {
@@ -91,11 +93,16 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 	dislike := r.FormValue("dislike")
 	cookieIsConnected, _ := r.Cookie("isConnected")
 	isConnected := getCookieValue(cookieIsConnected)
+
 	topicDisplayStruct := DataTopicPage{}
 	topicDisplayStruct.Topic = datamanagement.GetTopicByName(topicName)
 	topicDisplayStruct = isFollowTopic(topicName, topicDisplayStruct, idUser)
 	topicDisplayStruct = isUpvoteTopic(topicName, topicDisplayStruct, idUser)
 	if isConnected == "true" {
+		cookieIdUser, _ := r.Cookie("idUser")
+		currentUser := datamanagement.GetUserById(getCookieValue(cookieIdUser))
+		topicDisplayStruct.IsAdmin = currentUser.IsAdmin
+		topicDisplayStruct.IsConnected = isConnected
 		switch true {
 		case len(newPost) > 0 && len(newPost) <= 500 && datamanagement.CheckContentByBlackListWord(newPost):
 			post := datamanagement.DataContainer{Posts: datamanagement.Posts{Content: newPost, AuthorID: idUser, TopicID: topicDisplayStruct.Topic.TopicID, Likes: 0, Dislikes: 0, CreationDate: time.Now()}}
@@ -140,6 +147,6 @@ func Topic(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	topicDisplayStruct.Posts = transformPostInPostInTopicPage(datamanagement.GetPostByTopic(datamanagement.GetTopicId(topicName)), idUser)
-	t := template.Must(template.ParseFiles("./static/html/topic.html"))
-	t.Execute(w, topicDisplayStruct)
+	t := template.Must(template.ParseFiles("./static/html/topic.html", "./static/html/navBar.html"))
+	t.ExecuteTemplate(w, "topic", topicDisplayStruct)
 }
