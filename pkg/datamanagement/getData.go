@@ -14,7 +14,7 @@ func GetPostFromUser(idUser string) []Posts {
 	result := []Posts{}
 	for rows.Next() { // Iterate and fetch the records from result cursor
 		var post Posts
-		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate)
 		result = append(result, post)
 	}
 	return result
@@ -31,7 +31,7 @@ func GetPostData(idPost int) Posts {
 	row := db.QueryRow("SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = ?;", strconv.Itoa(idPost))
 
 	var post Posts
-	if err := row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost); err != nil {
+	if err := row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate); err != nil {
 		fmt.Println(err)
 		return Posts{}
 	}
@@ -46,7 +46,7 @@ func GetSortPost() []Posts {
 	result := []Posts{}
 	for rows.Next() {
 		var post Posts
-		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate)
 		result = append(result, post)
 	}
 
@@ -105,7 +105,7 @@ func GetPostByTopic(topic int) []Posts {
 	result := []Posts{}
 	for rows.Next() {
 		var post Posts
-		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate, &post.IsValidPost)
+		rows.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate)
 		result = append(result, post)
 	}
 
@@ -125,10 +125,10 @@ func GetAllFromTable(table string) []DataContainer {
 			rows.Scan(&line.Users.UserID, &line.Users.Username, &line.Users.Email, &line.Users.Password, &line.Users.Firstname, &line.Users.Lastname, &line.Users.Description, &line.Users.CreationDate, &line.Users.ProfilePicture, &line.Users.IsAdmin, &line.Users.ValidUser)
 			break
 		case table == "Posts":
-			rows.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate, &line.Posts.IsValidPost)
+			rows.Scan(&line.Posts.PostID, &line.Posts.Content, &line.Posts.AuthorID, &line.Posts.TopicID, &line.Posts.Likes, &line.Posts.Dislikes, &line.Posts.CreationDate)
 			break
 		case table == "Topics":
-			rows.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.CreationDate, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows, &line.Topics.ValidTopic)
+			rows.Scan(&line.Topics.TopicID, &line.Topics.Title, &line.Topics.Description, &line.Topics.Picture, &line.CreationDate, &line.Topics.CreatorID, &line.Topics.Upvotes, &line.Topics.Follows)
 			break
 		case table == "Tags":
 			rows.Scan(&line.Tags.TagID, &line.Tags.Title, &line.Tags.CreatorID)
@@ -199,7 +199,7 @@ func SortTopics(typOfSort string) []Topics {
 	var result []Topics
 	for rows.Next() {
 		var line Topics
-		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows)
 		result = append(result, line)
 	}
 
@@ -239,7 +239,7 @@ func FilterTopics(condition string, data DataFilter) []Topics {
 	var result []Topics
 	for rows.Next() {
 		var line Topics
-		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows, &line.ValidTopic)
+		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows)
 		result = append(result, line)
 	}
 
@@ -281,7 +281,7 @@ func FilterPosts(condition string, data DataFilter) []Posts {
 	var result []Posts
 	for rows.Next() {
 		var line Posts
-		rows.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
+		rows.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate)
 		result = append(result, line)
 	}
 
@@ -295,19 +295,19 @@ func SortPosts(typOfSort string) []Posts {
 	var query string
 	switch typOfSort {
 	case "a-z":
-		query = "SELECT * FROM Posts ORDER BY Title ASC AND IsValidPost = true;"
+		query = "SELECT * FROM Posts ORDER BY Title ASC;"
 		break
 	case "z-a":
-		query = "SELECT * FROM Posts ORDER BY Title DESC AND IsValidPost = true;"
+		query = "SELECT * FROM Posts ORDER BY Title DESC;"
 		break
 	case "like":
-		query = "SELECT * FROM Posts ORDER BY Likes DESC AND IsValidPost = true;"
+		query = "SELECT * FROM Posts ORDER BY Likes DESC;"
 		break
 	case "dislike":
-		query = "SELECT * FROM Posts ORDER BY Dislikes DESC AND IsValidPost = true;"
+		query = "SELECT * FROM Posts ORDER BY Dislikes DESC;"
 		break
 	case "creator":
-		query = "SELECT * FROM Posts ORDER BY CreatorID DESC AND IsValidPost = true;"
+		query = "SELECT * FROM Posts ORDER BY CreatorID DESC;"
 		break
 	default:
 		fmt.Println("invalid type of sort")
@@ -320,11 +320,25 @@ func SortPosts(typOfSort string) []Posts {
 	var result []Posts
 	for rows.Next() {
 		var line Posts
-		rows.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate, &line.IsValidPost)
+		rows.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate)
 		result = append(result, line)
 	}
 
 	return result
+}
+
+func GetAllBlacklistWords() []WordsBlacklist {
+	rows := SelectDB("SELECT * FROM WordsBlacklist;")
+	defer rows.Close()
+
+	var blackListWords []WordsBlacklist
+	for rows.Next() {
+		var word WordsBlacklist
+		rows.Scan(&word.WordID, &word.Word)
+		blackListWords = append(blackListWords, word)
+	}
+
+	return blackListWords
 }
 
 func GetUserById(id string) Users {
@@ -353,7 +367,7 @@ func GetTopicsById(creatorID string) []Topics {
 	topics := []Topics{}
 	for rows.Next() {
 		var topic Topics
-		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows)
 		topics = append(topics, topic)
 	}
 	return topics
@@ -365,7 +379,7 @@ func GetTopicsByName(search string) []Topics {
 	result := []Topics{}
 	for rows.Next() {
 		var topic Topics
-		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		rows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows)
 		result = append(result, topic)
 	}
 	return result
@@ -377,7 +391,7 @@ func GetOneTopicByName(search string) Topics {
 
 	result := Topics{}
 	for rows.Next() {
-		rows.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
+		rows.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows)
 	}
 	return result
 }
@@ -404,12 +418,30 @@ func GetTopicByName(topicName string) Topics {
 	row := db.QueryRow("SELECT * FROM Topics WHERE Title Like ?;", topicName)
 
 	var topic Topics
-	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic); err != nil {
+	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows); err != nil {
 		fmt.Println(err)
 		return Topics{}
 	}
 
 	return topic
+}
+
+/*--------------------*/
+/* MODERATION SYSTEM: */
+/*--------------------*/
+
+func GetAllBannedUsers() []Users {
+	rows := SelectDB("SELECT * FROM Users WHERE ValidUser = false;")
+	defer rows.Close()
+
+	var bannedUsers []Users
+	for rows.Next() {
+		var user Users
+		rows.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
+		bannedUsers = append(bannedUsers, user)
+	}
+
+	return bannedUsers
 }
 
 func GetTopicsByUser(userId string) []Topics {
@@ -433,7 +465,7 @@ func GetTopicID(topicID int) Topics {
 	defer topicRow.Close()
 	result := Topics{}
 	for topicRow.Next() {
-		topicRow.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows, &result.ValidTopic)
+		topicRow.Scan(&result.TopicID, &result.Title, &result.Description, &result.Picture, &result.CreationDate, &result.CreatorID, &result.Upvotes, &result.Follows)
 	}
 	return result
 }
@@ -461,12 +493,12 @@ func GetTagsByTopic(topicID int) []Tags {
 }
 
 func GetTopicByTagAndTitle(search string) []Topics {
-	topicsRow := SelectDB("SELECT DISTINCT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows, t.ValidTopic FROM Topics AS t LEFT JOIN TopicsTags AS tt ON tt.TopicID = t.TopicID WHERE t.Title LIKE '%"+search+"%' OR tt.TagID IN (SELECT TagID FROM Tags WHERE Title = ?)", search)
+	topicsRow := SelectDB("SELECT DISTINCT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows FROM Topics AS t LEFT JOIN TopicsTags AS tt ON tt.TopicID = t.TopicID WHERE t.Title LIKE '%"+search+"%' OR tt.TagID IN (SELECT TagID FROM Tags WHERE Title = ?)", search)
 	defer topicsRow.Close()
 	result := []Topics{}
 	for topicsRow.Next() {
 		var topic Topics
-		topicsRow.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows, &topic.ValidTopic)
+		topicsRow.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows)
 		result = append(result, topic)
 	}
 	fmt.Println(result)
