@@ -33,7 +33,7 @@ On this page, users can change all their information (profile photo, last name, 
 Here users can view their topics and posts
 ### Explore page (http://localhost:8080/explore)
 This page is the exploration page of our site. The user finds all topics here, and has the option of sorting them, or searching for a specific topic by name, or by the tags the topic contains. This is also where you can create a topic (if you're logged in).
-## Page Topic (http://localhost:8080/topic/ + "nom_de_topic")
+## Page Topic (http://localhost:8080/topic/ + "topic name")
 This page is accessed by clicking on "check topic".
 On this page, users can read the various posts linked to a topic and/or add a new topic. They can also upvote or follow the topic. Clicking on a user's profile photo takes the user to their profile.
 ## Admin page (http://localhost:8080/automod)
