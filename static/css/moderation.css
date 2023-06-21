@@ -1,0 +1,146 @@
+.containerModerationPage {
+    width: calc(100vw - 350px);
+    position: absolute;
+    right: 0;
+    top: 0;
+    justify-content: space-between;
+}
+
+.titlePageAutomode {
+    color: whitesmoke;
+    font-family: 'Poppins';
+}
+
+.subtitlePage {
+    color: whitesmoke;
+    font-family: 'Poppins';
+}
+
+.containerReports {
+    gap: 1rem;
+}
+
+.containerReportPost {
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.containerReportPosts {
+    gap: 1rem;
+}
+
+.containerReportPost {
+    background-color: #28292F;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.imgReportPost {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 999px;
+    border: 2px solid #D36638;
+}
+
+.userReportPost {
+    color: whitesmoke;
+    font-family: 'Poppins';
+    text-align: center;
+    font-size: 18px;
+}
+
+.contentReportPost {
+    color: whitesmoke;
+    font-family: 'Poppins-regular';
+    text-align: justify;
+    font-size: 14px;
+}
+
+.containerReportMsg {
+    justify-content: space-between;
+}
+
+.containerReportMsg h3 {
+    color: #D36638 ;
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+.containerReportMsg p {
+    color: whitesmoke;
+    font-family: 'Poppins-regular';
+    font-size: 14px;
+}
+
+.containerBtnBanPost {
+    gap: 1rem;
+}
+
+.btnBan {
+    color: white ;
+    background-color: #D36638;
+    border-radius: 8px;
+    padding: 0.2rem;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.btnBan:hover {
+    background-color: transparent;
+    border: 3px solid #D36638;
+    transition: 0.3s;
+}
+
+.btnBan {
+    color: white ;
+    background-color: #D36638;
+    border-radius: 8px;
+    padding: 0.2rem;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.btnBan:hover {
+    background-color: transparent;
+    border: 3px solid #D36638;
+    transition: 0.3s;
+}
+
+.btnDelete{
+    color: white ;
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 0.2rem;
+    cursor: pointer;
+    border: 3px solid #D36638;
+}
+
+.btnDelete:hover {
+    background-color: #D36638;
+    transition: 0.3s;
+}
+
+.btnCancel {
+    color: white ;
+    background-color: transparent;
+    padding: 0.2rem;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+
+.btnCancel {
+    color: white ;
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 0.2rem;
+    cursor: pointer;
+    border: 3px solid #D36638;
+}
+
+.btnCancel:hover {
+    color: #D36638 ;
+    transition: 0.3s;
+}
+
