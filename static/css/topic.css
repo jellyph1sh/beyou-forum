@@ -279,3 +279,117 @@
     color: white;
     cursor: pointer;
 }
+
+.formReportTopic {
+    background-color: #28292F;
+    border-radius: 5px;
+    width: max-content;
+    overflow: hidden;
+    border: 2px solid #D36638;
+}
+
+#popupReport {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    visibility: hidden;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.formReportTopic h4 {
+    color: #D36638;
+    font-family: 'Poppins',sans-serif;
+    text-align: start;
+    width: 100%;
+    background-color: #373845 ;
+    padding: .5rem 1vw;
+    margin: 0;
+    padding: .5rem 1vw;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.formReportTopic h5 {
+    color: white;
+    padding: .5rem 1vw;
+    font-family: 'Poppins';
+    margin: .1rem;
+}
+
+.containerInfoReportTopic {
+    justify-content: space-between;
+    padding: .5rem 1vw;
+}
+
+.topInfoText {
+    padding: .5rem 1vw;
+    color: whitesmoke;
+    text-transform: uppercase;
+    font-family: 'Poppins';
+    margin: .1rem;
+}
+
+.textInfo {
+    color: lightgray;
+    font-family: 'Poppins-regular';
+}
+
+.formReportTopic form {
+    gap: 1rem;
+    padding: .5rem 1vw;
+}
+
+.inputDescriptionReport {
+    color: #D3D3D3;
+    font-family: 'Poppins-regular';
+    background-color: transparent;
+    border-radius: 1.5px;
+    font-size: 12px;
+    resize: none;
+    padding: 1rem;
+    outline: none;
+    height: 3rem;
+}
+
+.inputDescriptionReport:focus {
+    outline: none;
+}
+
+.labelReportTopic {
+    color: white;
+    font-family: 'Poppins',sans-serif;
+}
+
+.containerBtnRpTopic {
+    align-self: flex-end;
+    gap: 1rem;
+}
+
+.btnCancel {
+    background-color: transparent;
+    color: #B39D9D;
+    font-family: 'Poppins';
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.btnSubmitRp {
+    background-color: #D36638;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 2px solid #D36638;
+    color: black;
+    font-family: 'Poppins';
+    cursor: pointer;
+}
+
+.btnSubmitRp:hover {
+    background-color: transparent;
+    transition: .5s;
+}
