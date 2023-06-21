@@ -28,13 +28,13 @@ func createTopic(w http.ResponseWriter, r *http.Request, creatorID string) bool 
 	description := r.FormValue("description")
 	tags := r.FormValue("tags")
 	if title != "" && (datamanagement.GetOneTopicByName(title) == datamanagement.Topics{}) {
-		fmt.Println("test")
 		if !datamanagement.CheckContentByBlackListWord(title) && !datamanagement.CheckContentByBlackListWord(description) && !datamanagement.CheckContentByBlackListWord(tags) && len(strings.Split(title, " ")) == 1 {
 			return true
 		}
+		title := strings.Title(title)
 		topic := datamanagement.DataContainer{Topics: datamanagement.Topics{Title: title, Description: description, Picture: "../img/PP_wb.png", CreationDate: time.Now(), CreatorID: creatorID, Upvotes: 0, Follows: 0}}
 		datamanagement.AddLineIntoTargetTable(topic, "Topics")
-		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetTopicByName(title).TopicID)
+		datamanagement.AddTagsToTopic(tags, creatorID, datamanagement.GetOneTopicByName(title).TopicID)
 		http.Redirect(w, r, "http://localhost:8080/topic/"+title, http.StatusSeeOther)
 	}
 	return false
@@ -96,8 +96,14 @@ func Explore(w http.ResponseWriter, r *http.Request) {
 	} else {
 		if sort == "Follows" {
 			sort = "default"
+			cookieFilter = &http.Cookie{Name: "filter", Value: "default"}
+			http.SetCookie(w, cookieFilter)
 		}
-		dataToSend.Topics = datamanagement.SortTopics(getCookieValue(cookieFilter))
+		if getCookieValue(cookieFilter) == "Follows" {
+			dataToSend.Topics = datamanagement.GetTopicsByUser(userId)
+		} else {
+			dataToSend.Topics = datamanagement.SortTopics(getCookieValue(cookieFilter))
+		}
 	}
 	prev := r.FormValue("previous")
 	next := r.FormValue("next")

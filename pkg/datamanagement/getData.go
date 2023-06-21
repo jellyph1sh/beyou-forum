@@ -1,7 +1,6 @@
 package datamanagement
 
 import (
-	"database/sql"
 	"fmt"
 	"strconv"
 
@@ -20,22 +19,13 @@ func GetPostFromUser(idUser string) []Posts {
 	return result
 }
 
-func GetPostData(idPost int) Posts {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println(err)
-		return Posts{}
-	}
-	defer db.Close()
-
-	row := db.QueryRow("SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = ?;", strconv.Itoa(idPost))
-
+func GetPostById(idPost int) Posts {
+	row := SelectDB("SELECT * FROM Posts LEFT JOIN Users ON AuthorID = UserID LEFT JOIN Topics ON Posts.TopicID = Topics.TopicID WHERE PostID = ?;", strconv.Itoa(idPost))
+	defer row.Close()
 	var post Posts
-	if err := row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate); err != nil {
-		fmt.Println(err)
-		return Posts{}
+	for row.Next() {
+		row.Scan(&post.PostID, &post.Content, &post.AuthorID, &post.TopicID, &post.Likes, &post.Dislikes, &post.CreationDate)
 	}
-
 	return post
 }
 
@@ -206,127 +196,6 @@ func SortTopics(typOfSort string) []Topics {
 	return result
 }
 
-/*
-condition: 'min upvote'-'max upvote'-'creator'-'max follow'-'min follow'.
-refer a number in data for these conditions
-*/
-func FilterTopics(condition string, data DataFilter) []Topics {
-	var query string
-	switch condition {
-	case "min upvote":
-		query = "SELECT * FROM Topics WHERE Upvotes >= ?;"
-		break
-	case "max upvote":
-		query = "SELECT * FROM Topics WHERE Upvotes <= ?;"
-		break
-	case "creator":
-		query = "SELECT * FROM Topics WHERE CreatorID = ?;"
-		break
-	case "max follow":
-		query = "SELECT * FROM Topics WHERE Follows >= ?;"
-		break
-	case "min follow":
-		query = "SELECT * FROM Topics WHERE Follows <= ?;"
-		break
-	default:
-		fmt.Println("Invalid condition")
-		return nil
-	}
-
-	rows := SelectDB(query, fmt.Sprint(data.Number))
-	defer rows.Close()
-
-	var result []Topics
-	for rows.Next() {
-		var line Topics
-		rows.Scan(&line.TopicID, &line.Title, &line.Description, &line.Picture, &line.CreationDate, &line.CreatorID, &line.Upvotes, &line.Follows)
-		result = append(result, line)
-	}
-
-	return result
-}
-
-func FilterPosts(condition string, data DataFilter) []Posts {
-	var query string
-	switch condition {
-	case "min like":
-		query = "SELECT * FROM Posts WHERE Likes >= ?;"
-		break
-	case "max like":
-		query = "SELECT * FROM Posts WHERE Like <= ?;"
-		break
-	case "min dislike":
-		query = "SELECT * FROM Posts WHERE Dislikes >= ?;"
-		break
-	case "max dislike":
-		query = "SELECT * FROM Posts WHERE Dislike <= ?;"
-		break
-	case "creator":
-		query = "SELECT * FROM Posts WHERE CreatorID = ?;"
-		break
-	case "max follow":
-		query = "SELECT * FROM Posts WHERE Follows >= ?;"
-		break
-	case "min follow":
-		query = "SELECT * FROM Posts WHERE Follows <= ?;"
-		break
-	default:
-		fmt.Println("Invalid condition")
-		return nil
-	}
-
-	rows := SelectDB(query, fmt.Sprint(data.Number))
-	defer rows.Close()
-
-	var result []Posts
-	for rows.Next() {
-		var line Posts
-		rows.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate)
-		result = append(result, line)
-	}
-
-	return result
-}
-
-/*
-typofsort: 'a-z' - 'z-a' - 'like' - 'dislike' - 'creator'
-*/
-func SortPosts(typOfSort string) []Posts {
-	var query string
-	switch typOfSort {
-	case "a-z":
-		query = "SELECT * FROM Posts ORDER BY Title ASC;"
-		break
-	case "z-a":
-		query = "SELECT * FROM Posts ORDER BY Title DESC;"
-		break
-	case "like":
-		query = "SELECT * FROM Posts ORDER BY Likes DESC;"
-		break
-	case "dislike":
-		query = "SELECT * FROM Posts ORDER BY Dislikes DESC;"
-		break
-	case "creator":
-		query = "SELECT * FROM Posts ORDER BY CreatorID DESC;"
-		break
-	default:
-		fmt.Println("invalid type of sort")
-		return nil
-	}
-
-	rows := SelectDB(query)
-	defer rows.Close()
-
-	var result []Posts
-	for rows.Next() {
-		var line Posts
-		rows.Scan(&line.PostID, &line.Content, &line.AuthorID, &line.TopicID, &line.Likes, &line.Dislikes, &line.CreationDate)
-		result = append(result, line)
-	}
-
-	return result
-}
-
 func GetAllBlacklistWords() []WordsBlacklist {
 	rows := SelectDB("SELECT * FROM WordsBlacklist;")
 	defer rows.Close()
@@ -342,21 +211,12 @@ func GetAllBlacklistWords() []WordsBlacklist {
 }
 
 func GetUserById(id string) Users {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println(err)
-		return Users{}
-	}
-	defer db.Close()
-
-	row := db.QueryRow("SELECT * FROM Users WHERE UserID = ?;", id)
-
+	row := SelectDB("SELECT * FROM Users WHERE UserID = ?;", id)
+	defer row.Close()
 	var user Users
-	if err := row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser); err != nil {
-		fmt.Println(err)
-		return Users{}
+	for row.Next() {
+		row.Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.Firstname, &user.Lastname, &user.Description, &user.CreationDate, &user.ProfilePicture, &user.IsAdmin, &user.ValidUser)
 	}
-
 	return user
 }
 
@@ -407,25 +267,6 @@ func GetTagByName(search string) Tags {
 	return result
 }
 
-func GetTopicByName(topicName string) Topics {
-	db, err := sql.Open("sqlite3", "./DB-Forum.db")
-	if err != nil {
-		fmt.Println(err)
-		return Topics{}
-	}
-	defer db.Close()
-
-	row := db.QueryRow("SELECT * FROM Topics WHERE Title Like ?;", topicName)
-
-	var topic Topics
-	if err := row.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows); err != nil {
-		fmt.Println(err)
-		return Topics{}
-	}
-
-	return topic
-}
-
 /*--------------------*/
 /* MODERATION SYSTEM: */
 /*--------------------*/
@@ -445,17 +286,13 @@ func GetAllBannedUsers() []Users {
 }
 
 func GetTopicsByUser(userId string) []Topics {
-	IDrows := SelectDB("SELECT TopicID FROM Follows WHERE UserID=?;", userId)
-	defer IDrows.Close()
-	topicsID := []int{}
-	for IDrows.Next() {
-		var id int
-		IDrows.Scan(&id)
-		topicsID = append(topicsID, id)
-	}
+	topicsRows := SelectDB("SELECT DISTINCT t.TopicID, t.Title, t.Description, t.Picture, t.CreationDate, t.CreatorID, t.Upvotes, t.Follows FROM Topics AS t INNER JOIN Follows AS f ON f.TopicID = t.TopicID WHERE UserID=?;", userId)
+	defer topicsRows.Close()
 	result := []Topics{}
-	for _, id := range topicsID {
-		result = append(result, GetTopicID(id))
+	for topicsRows.Next() {
+		var topic Topics
+		topicsRows.Scan(&topic.TopicID, &topic.Title, &topic.Description, &topic.Picture, &topic.CreationDate, &topic.CreatorID, &topic.Upvotes, &topic.Follows)
+		result = append(result, topic)
 	}
 	return result
 }
