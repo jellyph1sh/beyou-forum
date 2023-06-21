@@ -44,7 +44,10 @@
                         </div>
                         <p class="datetopic">Created - {{$topic.CreationDate.Format "Jan 02, 2006"}} by {{index $root.Users $i}}</p>
                         <div class="rowContainer containerFooterTopic">
-                            <p class="nbUpvotes">{{index $root.Upvotes $i}} upvotes</p>
+                            <div class="rowContainer flexSpan">
+                                <p class="nbUpvotes">{{index $root.Upvotes $i}} upvotes</p>
+                                <p class="nbUpvotes">{{ $topic.Follows }} follows</p>
+                            </div>
                             <a class="bntCheckTopicExplore rowContainer" href="http://localhost:8080/topic/{{$topic.Title}}">CHECK TOPIC<span class="material-symbols-outlined">arrow_forward</span></a>
                         </div>
                     </div>
