@@ -142,7 +142,6 @@ func CheckContentByBlackListWord(content string) bool {
 	for _, c := range content {
 		for _, cb := range blackListCaracter {
 			if string(c) == cb {
-				fmt.Println(cb)
 				return false
 			}
 		}
