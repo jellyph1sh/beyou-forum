@@ -104,8 +104,8 @@
                             <p class="authorNamePost">{{$Post.AuthorName}}</p>
                             <span class="separationCreationDate"></span>
                             <p class="postTopicDate">{{$Post.StructuredDate}}</p>
-                            <span onclick="showPopup('popupReportPost')" class="flagReportPostIcon material-symbols-outlined">flag</span>
-                            <div id="popupReportPost">
+                            <span id="reportSpan{{$Post.PostID}}" class="flagReportPostIcon material-symbols-outlined">flag</span>
+                            <div id="reportDiv{{$Post.PostID}}" class="popupReport">
                                 <div class="formReportTopic columnContainer">
                                     <h4>Report</h4>
                                     <h5>Are you sure you want to report: " <span class="coloredText">{{ $Post.AuthorName }}</span> "?</h5>
@@ -113,15 +113,20 @@
                                     <p class="contentPostReport">{{ $Post.Content }}</p>
                                     <form method="post" class="columnContainer">
                                         <input type="text" name="reportPostID" value="{{ $Post.PostID }}" hidden>
-                                        <label class="labelReportTopic" for="reportReason">What's your reason to report this topic?</label>
+                                        <label class="labelReportTopic" for="reportReason">What's your reason to report this post?</label>
                                         <textarea class="inputDescriptionReport" name="reportReason" id="" cols="30" rows="10"></textarea>
                                         <div class="rowContainer containerBtnRpTopic">
-                                            <button class="btnCancel" onclick="hidePopup('popupReportPost')">Cancel</button>
+                                            <button class="btnCancel">Cancel</button>
                                             <input class="btnSubmitRp" type="submit" value="Send">
                                         </div>
                                     </form>
                                 </div>
                             </div>
+                            <script>
+                                document.getElementById("reportDiv{{$Post.PostID}}").style.visibility = "hidden";
+                                document.getElementById("reportSpan{{$Post.PostID}}").onclick = function() {showPopup("reportDiv{{$Post.PostID}}")};
+                                document.getElementById("reportCancel{{$Post.PostID}}").onclick = function() {hidePopup("reportDiv{{$Post.PostID}}")};
+                            </script>
                         </div>
                         <p class="contentPost">{{$Post.Content}}</p>
                         <div class="containerLikesPost rowContainer">
